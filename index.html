@@ -7,39 +7,62 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        .file-row:hover .print-btn { opacity: 1; }
-        @media print { .no-print { display: none; } }
+        .file-row { transition: all 0.3s ease; }
+        .file-row:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .icon-bounce { transition: transform 0.3s ease; }
+        .file-row:hover .icon-bounce { transform: scale(1.2); }
+        /* Esconder scrollbar para um visual mais limpo */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
     </style>
 </head>
-<body class="bg-gray-100 min-h-screen">
+<body class="bg-slate-50 min-h-screen font-sans">
 
-    <nav class="bg-slate-800 text-white shadow-lg p-4 no-print">
-        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-            <h1 class="text-2xl font-bold tracking-tight">INTRANET <span class="text-blue-400">SONO SHOW</span></h1>
-            
-            <div class="relative w-full md:w-96">
-                <input type="text" id="search" placeholder="Buscar manuais ou documentos..." 
-                    class="w-full bg-slate-700 text-white rounded-full py-2 px-10 focus:outline-none focus:ring-2 focus:ring-blue-400 border-none">
-                <i class="fas fa-search absolute left-4 top-3 text-gray-400"></i>
+    <header class="bg-white border-b border-gray-200 sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex flex-col items-center justify-center gap-4">
+                <img src="https://sonoshowmoveis.vtexassets.com/assets/vtex.file-manager-graphql/images/9c25daff-344c-4bbf-9adf-054dba3b5137___c25ce75d1124b3ba71eebaaf2a2527e2.png" 
+                     alt="Logo Sono Show" class="h-12 md:h-16 object-contain">
+                <h1 class="text-sm font-bold text-slate-500 tracking-[0.2em] uppercase">Intranet de Manuais</h1>
             </div>
         </div>
-    </nav>
+    </header>
 
-    <main class="container mx-auto mt-8 p-4">
-        <div class="bg-white rounded-xl shadow-md overflow-hidden">
-            <div class="bg-gray-50 p-4 border-b flex items-center justify-between no-print">
-                <div class="flex items-center gap-4">
-                    <button onclick="goBack()" id="btn-back" class="hidden text-blue-600 hover:text-blue-800 font-medium">
-                        <i class="fas fa-arrow-left mr-2"></i> Voltar
+    <section class="bg-slate-800 p-4 shadow-inner">
+        <div class="container mx-auto flex flex-col md:flex-row gap-4 items-center">
+            <div class="relative flex-grow w-full">
+                <input type="text" id="search" placeholder="O que você está procurando hoje?" 
+                    class="w-full bg-slate-700 text-white rounded-xl py-3 px-12 focus:outline-none focus:ring-2 focus:ring-blue-500 border-none placeholder-slate-400">
+                <i class="fas fa-search absolute left-4 top-4 text-slate-400 text-lg"></i>
+            </div>
+            
+            <button onclick="toggleSort()" class="flex items-center gap-2 bg-slate-700 hover:bg-slate-600 text-white px-6 py-3 rounded-xl transition font-medium w-full md:w-auto justify-center">
+                <i id="sort-icon" class="fas fa-sort-alpha-down text-blue-400"></i>
+                <span id="sort-text">Ordenar A-Z</span>
+            </button>
+        </div>
+    </section>
+
+    <main class="container mx-auto mt-6 p-4">
+        <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+            <div class="bg-gray-50/50 px-6 py-4 border-b flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <button onclick="goBack()" id="btn-back" class="hidden h-10 w-10 flex items-center justify-center rounded-full bg-white border shadow-sm text-blue-600 hover:bg-blue-50 transition">
+                        <i class="fas fa-arrow-left"></i>
                     </button>
-                    <span id="current-path" class="text-gray-500 font-mono text-sm">/Manuais</span>
+                    <div class="flex flex-col">
+                        <span class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Caminho atual</span>
+                        <span id="current-path" class="text-slate-700 font-medium italic">/Manuais</span>
+                    </div>
                 </div>
-                <div class="text-xs text-gray-400 italic">Clique para abrir • Use Ctrl+P para imprimir o arquivo aberto</div>
             </div>
 
-            <div id="explorer" class="divide-y divide-gray-100">
-                <div class="p-8 text-center text-gray-500">
-                    <i class="fas fa-spinner fa-spin mr-2"></i> Carregando arquivos...
+            <div id="explorer" class="divide-y divide-gray-50">
+                <div class="p-20 text-center">
+                    <div class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-blue-500 border-t-transparent"></div>
+                    <p class="mt-4 text-slate-500 font-medium">Buscando documentos na nuvem...</p>
                 </div>
             </div>
         </div>
@@ -50,7 +73,8 @@
         const REPO = 'Sono-Show';
         const BASE_PATH = 'Manuais';
         let currentPath = BASE_PATH;
-        let allItems = []; // Cache para busca
+        let allItems = [];
+        let isAscending = true;
 
         async function loadFolder(path) {
             const explorer = document.getElementById('explorer');
@@ -64,10 +88,33 @@
             try {
                 const response = await fetch(`https://api.github.com/repos/${USER}/${REPO}/contents/${path}`);
                 allItems = await response.json();
-                renderItems(allItems);
+                sortAndRender();
             } catch (error) {
-                explorer.innerHTML = '<div class="p-8 text-center text-red-500">Erro ao carregar arquivos. Verifique se a pasta "Manuais" existe.</div>';
+                explorer.innerHTML = '<div class="p-20 text-center text-red-500"><i class="fas fa-exclamation-triangle text-4xl mb-4"></i><br>Erro ao carregar arquivos.</div>';
             }
+        }
+
+        function sortAndRender() {
+            const term = document.getElementById('search').value.toLowerCase();
+            let filtered = allItems.filter(item => item.name.toLowerCase().includes(term));
+            
+            filtered.sort((a, b) => {
+                const nameA = a.name.toLowerCase();
+                const nameB = b.name.toLowerCase();
+                return isAscending ? nameA.localeCompare(nameB) : nameB.localeCompare(nameA);
+            });
+
+            renderItems(filtered);
+        }
+
+        function toggleSort() {
+            isAscending = !isAscending;
+            const icon = document.getElementById('sort-icon');
+            const text = document.getElementById('sort-text');
+            
+            icon.className = isAscending ? "fas fa-sort-alpha-down text-blue-400" : "fas fa-sort-alpha-up text-blue-400";
+            text.innerText = isAscending ? "Ordenar A-Z" : "Ordenar Z-A";
+            sortAndRender();
         }
 
         function renderItems(items) {
@@ -75,7 +122,7 @@
             explorer.innerHTML = '';
 
             if (items.length === 0) {
-                explorer.innerHTML = '<div class="p-8 text-center text-gray-400">Nenhum arquivo encontrado.</div>';
+                explorer.innerHTML = '<div class="p-20 text-center text-slate-400"><i class="fas fa-search text-3xl mb-2"></i><br>Nenhum resultado encontrado.</div>';
                 return;
             }
 
@@ -83,49 +130,46 @@
                 const isFolder = item.type === 'dir';
                 const isHtml = item.name.toLowerCase().endsWith('.html');
                 const isPdf = item.name.toLowerCase().endsWith('.pdf');
-                
-                // LINK CORRETO PARA GITHUB PAGES (Evita interface do GitHub)
                 const renderUrl = `https://${USER}.github.io/${REPO}/${item.path}`;
 
                 const row = document.createElement('div');
-                row.className = "file-row flex items-center justify-between p-4 hover:bg-blue-50 transition-colors cursor-pointer group";
+                row.className = "file-row flex items-center justify-between p-5 hover:bg-slate-50 cursor-pointer";
                 
                 row.innerHTML = `
                     <div class="flex items-center flex-grow" onclick="${isFolder ? `loadFolder('${item.path}')` : `window.open('${renderUrl}', '_blank')`}">
-                        <div class="w-10 text-2xl text-center mr-4">
-                            ${isFolder ? '<i class="fas fa-folder text-yellow-500"></i>' : 
+                        <div class="icon-bounce w-14 h-14 flex items-center justify-center rounded-2xl ${isFolder ? 'bg-amber-50' : 'bg-slate-50'} mr-5 text-3xl">
+                            ${isFolder ? '<i class="fas fa-folder text-amber-400"></i>' : 
                               isHtml ? '<i class="fas fa-globe text-blue-500"></i>' : 
-                              isPdf ? '<i class="fas fa-file-pdf text-red-500"></i>' : 
-                              '<i class="fas fa-file text-gray-400"></i>'}
+                              isPdf ? '<i class="fas fa-file-pdf text-rose-500"></i>' : 
+                              '<i class="fas fa-file-alt text-slate-400"></i>'}
                         </div>
-                        <div>
-                            <div class="text-gray-800 font-medium group-hover:text-blue-700">${item.name}</div>
-                            <div class="text-xs text-gray-400 uppercase">${isFolder ? 'Pasta' : 'Documento'}</div>
+                        <div class="flex flex-col">
+                            <span class="text-slate-800 font-semibold text-lg leading-tight">${item.name}</span>
+                            <span class="text-xs font-bold text-slate-400 mt-1 uppercase tracking-tighter">
+                                ${isFolder ? 'Pasta de Arquivos' : isHtml ? 'Treinamento Interativo' : 'Documento Oficial'}
+                            </span>
                         </div>
                     </div>
-                    <div class="flex gap-2">
+                    <div class="ml-4">
                         ${!isFolder ? `
-                            <button onclick="window.open('${renderUrl}', '_blank')" class="px-3 py-1 bg-gray-100 text-gray-600 text-sm rounded hover:bg-blue-600 hover:text-white transition">
-                                <i class="fas fa-external-link-alt"></i>
+                            <button onclick="window.open('${renderUrl}', '_blank')" class="h-10 w-10 flex items-center justify-center rounded-xl bg-white border border-slate-200 text-slate-400 hover:text-blue-600 hover:border-blue-200 hover:bg-blue-50 transition shadow-sm">
+                                <i class="fas fa-external-link-alt text-sm"></i>
                             </button>
-                        ` : ''}
+                        ` : '<i class="fas fa-chevron-right text-slate-300 mr-2"></i>'}
                     </div>
                 `;
                 explorer.appendChild(row);
             });
         }
 
-        // Lógica de Busca
-        document.getElementById('search').addEventListener('input', (e) => {
-            const term = e.target.value.toLowerCase();
-            const filtered = allItems.filter(item => item.name.toLowerCase().includes(term));
-            renderItems(filtered);
-        });
+        document.getElementById('search').addEventListener('input', sortAndRender);
 
         function goBack() {
             const parts = currentPath.split('/');
-            parts.pop();
-            loadFolder(parts.join('/'));
+            if(parts.length > 1) {
+                parts.pop();
+                loadFolder(parts.join('/'));
+            }
         }
 
         loadFolder(BASE_PATH);
