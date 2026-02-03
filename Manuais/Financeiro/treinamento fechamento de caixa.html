@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Treinamento Oficial: Fechamento de Caixa Sono Show</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/dist/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #004a99;
+            --accent-color: #ffc107;
+            --bg-body: #f4f7fa;
+            --card-radius: 40px;
+        }
+
+        body { 
+            background-color: var(--bg-body); 
+            font-family: 'Inter', sans-serif; 
+            scroll-behavior: smooth;
+            padding-bottom: 80px;
+        }
+
+        /* Menu de Navegação Animado e Moderno */
+        .nav-modern {
+            position: sticky;
+            top: 20px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border-radius: 60px;
+            padding: 12px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            margin: 20px auto 40px;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            max-width: fit-content;
+            border: 1px solid rgba(255,255,255,0.4);
+        }
+
+        .nav-btn {
+            border: none;
+            background: transparent;
+            padding: 12px 22px;
+            border-radius: 40px;
+            color: var(--primary-color);
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-btn:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-6px) scale(1.05);
+            box-shadow: 0 10px 20px rgba(0,74,153,0.25);
+        }
+
+        /* Container do Documento (Efeito Papel Segurado) */
+        .doc-paper {
+            background: white;
+            border-radius: var(--card-radius);
+            padding: 80px 100px; /* Padding generoso */
+            box-shadow: 0 30px 80px rgba(0,0,0,0.06);
+            max-width: 1100px;
+            margin: 0 auto;
+            border: 1px solid rgba(0,0,0,0.02);
+        }
+
+        .section-header {
+            margin-top: 50px;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f2f5;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: var(--primary-color);
+        }
+
+        .image-placeholder {
+            background: #f8fafc;
+            border: 2px dashed #cbd5e1;
+            border-radius: 30px;
+            min-height: 250px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #94a3b8;
+            margin: 35px 0;
+            font-style: italic;
+            transition: 0.3s;
+        }
+
+        .rule-card {
+            background: #fdfdfd;
+            border-radius: 25px;
+            padding: 30px;
+            border-left: 10px solid var(--primary-color);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.02);
+            margin-bottom: 30px;
+        }
+
+        .checklist-item {
+            background: #f8fafc;
+            padding: 20px 30px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .checklist-item:hover { transform: translateX(10px); background: #f1f5f9; }
+
+        .form-check-input { width: 25px; height: 25px; margin-right: 20px; border-radius: 8px !important; }
+
+        @media (max-width: 768px) {
+            .doc-paper { padding: 40px 25px; }
+            .nav-modern { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container mt-3">
+    <nav class="nav-modern">
+        <a href="#regras" class="nav-btn"><i class="bi bi-shield-check"></i> Regras</a>
+        <a href="#cartoes" class="nav-btn"><i class="bi bi-credit-card"></i> Cartões</a>
+        <a href="#pix-dinheiro" class="nav-btn"><i class="bi bi-cash-stack"></i> PIX/Dinheiro</a>
+        <a href="#diferencas" class="nav-btn"><i class="bi bi-calculator"></i> Diferenças</a>
+        <a href="#checklist" class="nav-btn text-danger"><i class="bi bi-check2-all"></i> Checklist</a>
+    </nav>
+
+    <main class="doc-paper">
+        <header class="text-center mb-5">
+            <h1 class="display-4 fw-bold mb-3" style="color: var(--primary-color);">FECHAMENTO DO CAIXA</h1>
+            <p class="lead text-muted">Manual de Procedimentos Operacionais Sono Show</p>
+        </header>
+
+        <section id="regras">
+            <h2 class="section-header"><i class="bi bi-bookmark-star-fill"></i> REGRAS GERAIS</h2>
+            <div class="rule-card">
+                <p><strong>1. Igualdade de Apuração:</strong> O Total vendido no sistema FDC deve ser exatamente igual ao recebido (Espécie, PIX ou outros meios autorizados), comparando os resultados entre a apuração correspondente a cada meio de pagamento.</p>
+                <p><strong>2. Saídas Pendentes:</strong> Não é permitido o fechamento com Saídas pendentes. O gerente deverá faturar ou cancelar a saída pendente no mesmo dia obrigatoriamente.</p>
+                <p><strong>3. Comprovação de Débitos:</strong> Qualquer Débito realizado no Caixa deverá ter anexado junto a ele o seu respectivo comprovante (depósito bancário ou recibo de pagamento).</p>
+                <p><strong>4. P.O.S:</strong> Todos os dias devem ser realizados os fechamentos (Finalização) das máquinas P.O.S.</p>
+                <p><strong>5. Relatórios Adquirentes:</strong> É necessário buscar os relatórios resumidos de cada adquirente (plataforma/sistema) e compará-los com o sistema FDC. Enviar no e-mail do fechamento diariamente.</p>
+                <p class="mb-0"><strong>6. Periodicidade e PDF:</strong> O fechamento deve ser diário. Utilizaremos o relatório <strong>Extrato de Movimentação</strong> (em PDF), pois ele registra a data e hora exata do fechamento.</p>
+            </div>
+
+            <h3 class="h5 mt-4">Relatório Base de Conferência</h3>
+            <p>O relatório oficial é o <strong>Extrato de Movimentações</strong>. Nele, visualiza-se de maneira simplificada o total por Portador, saldo inicial, créditos, débitos, dinheiro e saldo final.</p>
+            <div class="image-placeholder">
+                <i class="bi bi-image mb-2"></i> [Imagem: Relatório Extrato de Movimentação - Visão Geral]
+            </div>
+        </section>
+
+        <section id="cartoes">
+            <h2 class="section-header"><i class="bi bi-credit-card-fill"></i> ETAPAS: CONFERÊNCIA DE CARTÕES</h2>
+            <p><strong>1) Conferência de Boletas:</strong> O gerente deve conferir se a soma das boletas de cartão (por bandeira e modalidade) está igual ao registrado no FDC. Para filiais com mais de um PDV, o procedimento deve ser feito <strong>caixa a caixa</strong>.</p>
+            <p><strong>2) Resumo P.O.S:</strong> Finalize as máquinas, imprima o resumo e compare o total das maquininhas com o <strong>Extrato Financeiro do FDC</strong> (selecionando todos os funcionários do dia). Os totais por bandeira devem ser idênticos.</p>
+            
+            <div class="image-placeholder">
+                <i class="bi bi-images mb-2"></i> [Imagens: Comparativo Resumo P.O.S vs Extrato FDC]
+            </div>
+
+            <h3 class="h5 text-primary mt-4">O que fazer em caso de diferença nos cartões?</h3>
+            <p>Identifique a diferença real analisando as boletas. Se for uma sobra ou falta não identificada, será gerado um vale. O valor tolerável para diferenças (para mais ou para menos) é de <strong>R$ 7,00</strong>.</p>
+            
+            <div class="p-4 bg-light rounded-4 border-start border-4 border-warning">
+                <strong>Correção de Bandeira:</strong> Se o erro for apenas o registro da bandeira (ex: finalizou Master mas era Visa), é possível corrigir no FDC via:
+                <br><br><em>Menu Mov. de Estoque > Saída de Produtos > Alterar Portador</em>
+                <br><br><strong>ATENÇÃO:</strong> Se a venda foi em 12x, você deverá alterar o portador de todos os 12 títulos individualmente. Se o erro for o número de parcelas, a venda deve ser cancelada e refeita.
+            </div>
+
+            <div class="image-placeholder">
+                <i class="bi bi-image mb-2"></i> [Imagens: Telas de Busca de Saída e Alteração de Portador]
+            </div>
+        </section>
+
+        <section id="pix-dinheiro">
+            <h2 class="section-header"><i class="bi bi-cash-stack"></i> PIX E DINHEIRO</h2>
+            
+            <h3 class="h5">Conferência de PIX</h3>
+            <p>Toda venda PIX só deve ser faturada após o cliente enviar o comprovante para o e-mail da loja. Reúna todos os comprovantes e anexe-os também ao e-mail de fechamento.</p>
+            <div class="image-placeholder">
+                <i class="bi bi-image mb-2"></i> [Imagem: Procedimento de Anexo de Comprovantes PIX]
+            </div>
+
+            <h3 class="h5 mt-5">Conferência de Dinheiro</h3>
+            <p>O dinheiro aparece no extrato (Movimentações Geradas) e também na seção <strong>“Movimentações De Caixa”</strong> (Item 2 Créditos – Dinheiro).</p>
+            
+            <div class="row g-4 mt-2">
+                <div class="col-md-6">
+                    <div class="h-100 p-4 border rounded-5 bg-white shadow-sm">
+                        <h4 class="h6 fw-bold">OPÇÃO 1: SANGRIA</h4>
+                        <p class="small text-muted">Realizar o débito (Transferência entre fontes) para a Fonte destino “Sangria”. O valor deve ser lacrado em malote com lacre numérico para coleta profissional.</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="h-100 p-4 border rounded-5 bg-white shadow-sm">
+                        <h4 class="h6 fw-bold">OPÇÃO 2: DEPÓSITO BANCÁRIO</h4>
+                        <p class="small text-muted">Feito pelo gerente acompanhado de testemunha. Depósitos preferencialmente a cada R$ 2.000,00 acumulados e até as 17h. O saldo remanescente fica para o dia seguinte.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert alert-danger mt-4 rounded-4">
+                <i class="bi bi-exclamation-triangle-fill"></i> <strong>REGRA DE REGISTRO:</strong> Se você fez 3 depósitos físicos (ex: 2mil, 2mil e 1mil), você <strong>DEVE</strong> registrar 3 transferências separadas no FDC. Nunca faça uma transferência única de valor total se os comprovantes são individuais.
+            </div>
+        </section>
+
+        <section id="diferencas">
+            <h2 class="section-header"><i class="bi bi-calculator-fill"></i> TRATAMENTO DE DIFERENÇAS EM DINHEIRO</h2>
+            <p>As diferenças são ajustadas na opção “Pagar” do Visualizar Caixa. Confira as contas abaixo conforme o limite de <strong>R$ 7,00</strong>:</p>
+            
+            <div class="table-responsive">
+                <table class="table table-bordered text-center align-middle rounded-4 overflow-hidden">
+                    <thead class="table-primary text-white">
+                        <tr>
+                            <th>Situação</th>
+                            <th>Até R$ 7,00</th>
+                            <th>Acima de R$ 7,00</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="fw-bold">SOBRA</td>
+                            <td>Sobra – Sem Desconto</td>
+                            <td>Sobra – Com Desconto</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold">FALTA</td>
+                            <td>Falta – Sem Desconto</td>
+                            <td>Falta – Com Desconto</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="p-4 bg-light rounded-4 mt-3">
+                <h4 class="h6 fw-bold">Configuração do Lançamento:</h4>
+                <ul class="small mb-0">
+                    <li><strong>Fornecedor:</strong> Código 1493 – Movimento imprevisto</li>
+                    <li><strong>Documento:</strong> Flag "Novo" + ID da Filial</li>
+                    <li><strong>Portador:</strong> DINHEIRO (Obrigatório)</li>
+                    <li><strong>Tipo Pagamento:</strong> Fiscal (se houver nota) ou Gerencial.</li>
+                    <li><strong>Descrição:</strong> Clara e objetiva (ex: ação executada e autorizador).</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="debitos">
+            <h2 class="section-header"><i class="bi bi-paperclip"></i> DÉBITOS E ANEXOS</h2>
+            <p>Todos os débitos (transferências ou despesas) <strong>OBRIGATORIAMENTE</strong> devem ter o comprovante anexado no sistema FDC (PDF ou Imagem). O sistema impedirá o fechamento caso existam débitos sem o devido anexo.</p>
+            <div class="image-placeholder">
+                <i class="bi bi-upload mb-2"></i> [Imagens: Tela de Débitos e Opção de Anexar]
+            </div>
+        </section>
+
+        <section id="checklist" class="mt-5">
+            <h2 class="text-danger fw-bold mb-4"><i class="bi bi-patch-check-fill"></i> CHECKLIST DE CONFERÊNCIA</h2>
+            <div class="checklist-item">
+                <input class="form-check-input" type="checkbox">
+                <span>Total FDC bate 100% com o físico/digital?</span>
+            </div>
+            <div class="checklist-item">
+                <input class="form-check-input" type="checkbox">
+                <span>Saídas pendentes foram todas faturadas ou canceladas?</span>
+            </div>
+            <div class="checklist-item">
+                <input class="form-check-input" type="checkbox">
+                <span>Máquinas P.O.S finalizadas e resumos conferidos?</span>
+            </div>
+            <div class="checklist-item">
+                <input class="form-check-input" type="checkbox">
+                <span>Comprovantes de PIX reunidos e anexados?</span>
+            </div>
+            <div class="checklist-item">
+                <input class="form-check-input" type="checkbox">
+                <span>Depósitos/Débitos lançados um a um com anexo no sistema?</span>
+            </div>
+            <div class="checklist-item">
+                <input class="form-check-input" type="checkbox">
+                <span>Relatório "Extrato de Movimentações" gerado em PDF para o e-mail?</span>
+            </div>
+        </section>
+
+        <footer class="text-center mt-5 pt-5 border-top">
+            <p class="text-muted small">© 2026 Sono Show - Procedimento Operacional Padrão</p>
+            <button class="btn btn-primary btn-lg rounded-pill px-5 fw-bold" onclick="window.print()">
+                <i class="bi bi-printer-fill me-2"></i> IMPRIMIR MANUAL
+            </button>
+        </footer>
+    </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
