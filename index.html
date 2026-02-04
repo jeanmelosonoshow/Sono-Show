@@ -8,23 +8,24 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
   
-  <style>
-    .nav-link.active { border-bottom: 4px solid #3b82f6; color: #1e293b; font-weight: bold; }
-    .card-zoom:hover { transform: translateY(-5px); transition: all 0.3s; }
-    .tab-content { display: none; }
-    .tab-content.active { display: block; }
-    .animate-fadeIn { animation: fadeIn 0.5s ease-in; }
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-    #carousel-slides { transition: transform 0.5s ease-in-out; }
-
-    .banner-container { height: 250px; }
-    @media (min-width: 1024px) { .banner-container { height: 450px; } }
-    
-    .pdf-thumb-canvas { width: 100%; height: 100%; object-fit: cover; }
-    
-    /* Container do Iframe para ocupar a altura da tela menos o header */
-    .iframe-container { height: calc(100vh - 160px); min-height: 600px; }
-  </style>
+<style>
+  .nav-link.active { border-bottom: 3px solid #3b82f6; color: #1e293b; font-weight: bold; }
+  .card-zoom:hover { transform: translateY(-3px); transition: all 0.3s; }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+  .animate-fadeIn { animation: fadeIn 0.5s ease-in; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  #carousel-slides { transition: transform 0.5s ease-in-out; }
+  .banner-container { height: clamp(150px, 40vh, 400px); width: 100%; }
+  body { overflow-x: hidden; }
+  .pdf-thumb-canvas { width: 100%; height: auto; }
+  .iframe-container { height: calc(100vh - 120px); min-height: 500px; }
+  @media (max-width: 480px) {
+    .container { padding-left: 0.5rem; padding-right: 0.5rem; }
+    h2 { font-size: 1.25rem !important; }
+    .nav-link { font-size: 8px !important; padding: 0.5rem 0.15rem !important; }
+  }
+</style>
 
   <script>
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
@@ -35,14 +36,14 @@
   <header class="bg-white shadow-sm sticky top-0 z-50">
     <div class="container mx-auto px-4 py-3 flex flex-col md:flex-row justify-between items-center text-center md:text-left">
       <img src="https://sonoshowmoveis.vtexassets.com/assets/vtex.file-manager-graphql/images/9c25daff-344c-4bbf-9adf-054dba3b5137___c25ce75d1124b3ba71eebaaf2a2527e2.png" alt="Logo" class="h-10 mb-3 md:mb-0" />
-      <nav class="flex flex-wrap justify-center gap-3 md:gap-6 text-gray-500 text-[10px] md:text-sm uppercase tracking-wider">
-        <button onclick="switchTab('home')" class="nav-link active py-2 transition-all">Home</button>
-        <button onclick="switchTab('treinamento')" class="nav-link py-2 transition-all">Treinamento</button>
-        <button onclick="switchTab('rh')" class="nav-link py-2 transition-all">RH</button>
-        <button onclick="switchTab('encartes')" class="nav-link py-2 transition-all">Encartes</button>
-        <button onclick="switchTab('catalogo')" class="nav-link py-2 transition-all text-blue-600 font-bold">Catálogo</button>
-        <button onclick="switchTab('sobre')" class="nav-link py-2 transition-all">Sobre Nós</button>
-        <button onclick="switchTab('faq')" class="nav-link py-2 transition-all">FAQ</button>
+      <nav class="flex flex-wrap justify-center gap-2 md:gap-4 text-gray-500 text-[9px] sm:text-xs uppercase tracking-tighter sm:tracking-wider">
+        <button onclick="switchTab('home')" class="nav-link active py-2 transition-all" id="btn-home">Home</button>
+        <button onclick="switchTab('treinamento')" class="nav-link py-2 transition-all" id="btn-treinamento">Treinamento</button>
+        <button onclick="switchTab('rh')" class="nav-link py-2 transition-all" id="btn-rh">RH</button>
+        <button onclick="switchTab('encartes')" class="nav-link py-2 transition-all" id="btn-encartes">Encartes</button>
+        <button onclick="switchTab('catalogo')" class="nav-link py-2 transition-all text-blue-600 font-bold" id="btn-catalogo">Catálogo</button>
+        <button onclick="switchTab('sobre')" class="nav-link py-2 transition-all" id="btn-sobre">Sobre Nós</button>
+        <button onclick="switchTab('faq')" class="nav-link py-2 transition-all" id="btn-faq">FAQ</button>
       </nav>
     </div>
   </header>
@@ -60,7 +61,7 @@
     <h3 class="text-xl font-bold text-slate-700 mb-6 flex items-center gap-2 italic">
       <i class="fas fa-bullhorn text-blue-500"></i> QUADRO DE AVISOS
     </h3>
-    <div id="grid-comunicados" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+    <div id="grid-comunicados" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
   </main>
 
   <main id="tab-treinamento" class="tab-content container mx-auto p-4 animate-fadeIn">
@@ -89,7 +90,7 @@
       <span class="bg-blue-600 text-white p-2 rounded-lg shadow-md"><i class="fas fa-tags"></i></span>
       Encartes e Promoções Atuais
     </h2>
-    <div id="grid-encartes" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8"></div>
+    <div id="grid-encartes" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8"></div>
   </main>
 
   <main id="tab-catalogo" class="tab-content container mx-auto p-4 animate-fadeIn">
@@ -150,13 +151,6 @@
           </p>
           <p class="text-sm text-gray-500 mt-3 pt-3 border-t">Fale com seu gerente regional ou envie uma sugestão para o setor de Treinamento através do e-mail corporativo.</p>
         </div>
-        <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
-          <p class="font-bold text-slate-700 flex justify-between items-center">
-            Qual o prazo de atualização dos encartes?
-            <i class="fas fa-chevron-down text-blue-500 text-xs"></i>
-          </p>
-          <p class="text-sm text-gray-500 mt-3 pt-3 border-t">Os encartes são atualizados automaticamente neste portal sempre que uma nova campanha é lançada pela equipe de Marketing.</p>
-        </div>
       </div>
     </div>
   </main>
@@ -171,7 +165,7 @@
         const loadingTask = pdfjsLib.getDocument(url);
         const pdf = await loadingTask.promise;
         const page = await pdf.getPage(1);
-        const viewport = page.getViewport({ scale: 0.5 });
+        const viewport = page.getViewport({ scale: 0.4 });
         const canvas = document.getElementById(canvasId);
         if (!canvas) return;
         const context = canvas.getContext('2d');
@@ -183,13 +177,15 @@
 
     async function loadHomeData() {
       try {
+        // Reduzi o tempo de processamento carregando o JSON primeiro
         const response = await fetch(`https://raw.githubusercontent.com/${USER}/${REPO}/main/comunicados.json?t=${Date.now()}`);
         const data = await response.json();
         
         const carousel = document.getElementById("carousel-slides");
         if (data.banners) {
           totalSlides = data.banners.length;
-          carousel.innerHTML = data.banners.map(img => `<div class="min-w-full h-full flex items-center justify-center bg-slate-900"><img src="${img}" class="max-w-full max-h-full object-contain"></div>`).join("");
+          // Imagens com loading lazy para não travar a renderização inicial
+          carousel.innerHTML = data.banners.map(img => `<div class="min-w-full h-full flex items-center justify-center bg-slate-900"><img src="${img}" loading="lazy" class="max-w-full max-h-full object-contain"></div>`).join("");
         }
 
         document.getElementById("grid-comunicados").innerHTML = data.avisos.map(c => `
@@ -211,11 +207,21 @@
         const data = await res.json();
         let pdfs = data.filter(i => i.name.toLowerCase().endsWith(".pdf"));
 
+        // CORREÇÃO DA ORDEM: Maior Ano, depois Maior Mês
         pdfs.sort((a, b) => {
-          const partsA = a.name.substring(0, 7).split('-');
-          const partsB = b.name.substring(0, 7).split('-');
-          if (partsB[1] !== partsA[1]) return partsB[1] - partsA[1];
-          return partsB[0] - partsA[0];
+            const getParts = (name) => {
+                const cleanName = name.replace('.pdf', '');
+                const parts = cleanName.split('-'); // Esperado [MM, YYYY]
+                return {
+                    mes: parseInt(parts[0]) || 0,
+                    ano: parseInt(parts[1]) || 0
+                };
+            };
+            const dateA = getParts(a.name);
+            const dateB = getParts(b.name);
+
+            if (dateB.ano !== dateA.ano) return dateB.ano - dateA.ano;
+            return dateB.mes - dateA.mes;
         });
 
         container.innerHTML = pdfs.map((pdf, index) => {
@@ -230,7 +236,7 @@
                 <canvas id="${canvasId}" class="pdf-thumb-canvas"></canvas>
               </div>
               <div class="p-3 bg-white border-t">
-                <p class="text-[10px] font-bold ${isNew ? 'text-amber-600' : 'text-blue-600'} uppercase">${isNew ? 'Destaque do Mês' : 'Encarte Anterior'}</p>
+                <p class="text-[10px] font-bold ${isNew ? 'text-amber-600' : 'text-blue-600'} uppercase">${isNew ? 'Destaque' : 'Anterior'}</p>
                 <p class="text-xs font-bold text-slate-700 truncate">${pdf.name.replace('.pdf','')}</p>
               </div>
             </div>`;
@@ -249,7 +255,7 @@
 
     function renderFileList(files, currentPath) {
       const container = document.getElementById("explorer-content");
-      let html = currentPath !== "Manuais" ? `<div class="p-4 text-blue-600 font-bold cursor-pointer border-b hover:bg-blue-50 transition" onclick="loadFiles('Manuais')"><i class="fas fa-arrow-left mr-2"></i> Voltar para pastas principais</div>` : "";
+      let html = currentPath !== "Manuais" ? `<div class="p-4 text-blue-600 font-bold cursor-pointer border-b hover:bg-blue-50 transition" onclick="loadFiles('Manuais')"><i class="fas fa-arrow-left mr-2"></i> Voltar</div>` : "";
       
       container.innerHTML = html + files.map(item => `
         <div class="flex items-center justify-between py-4 px-6 hover:bg-slate-50 cursor-pointer group transition" onclick="${item.type==='dir'?`loadFiles('${item.path}')`:`window.open('https://${USER}.github.io/${REPO}/${item.path}','_blank')`}">
@@ -270,14 +276,10 @@
     function switchTab(tabId) {
       document.querySelectorAll(".tab-content").forEach(el => el.classList.remove("active"));
       document.querySelectorAll(".nav-link").forEach(el => el.classList.remove("active"));
-      
       const targetTab = document.getElementById("tab-" + tabId);
       if (targetTab) targetTab.classList.add("active");
-      
-      const links = document.querySelectorAll(".nav-link");
-      links.forEach(link => {
-        if(link.innerText.toLowerCase().includes(tabId.toLowerCase())) link.classList.add("active");
-      });
+      const targetBtn = document.getElementById("btn-" + tabId);
+      if (targetBtn) targetBtn.classList.add("active");
 
       if (tabId === "home") loadHomeData();
       if (tabId === "treinamento") loadFiles("Manuais");
