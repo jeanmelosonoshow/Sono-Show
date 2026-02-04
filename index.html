@@ -9,6 +9,11 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
   
 <style>
+  /* --- LÓGICA DE IFRAME --- */
+  .is-iframe body { zoom: 0.9; }
+  .is-iframe .container { max-width: 100% !important; padding-left: 10px !important; padding-right: 10px !important; }
+
+  /* --- SEUS ESTILOS ORIGINAIS --- */
   .nav-link.active { border-bottom: 3px solid #3b82f6; color: #1e293b; font-weight: bold; }
   .card-zoom:hover { transform: translateY(-3px); transition: all 0.3s; }
   .tab-content { display: none; }
@@ -20,6 +25,7 @@
   body { overflow-x: hidden; }
   .pdf-thumb-canvas { width: 100%; height: auto; }
   .iframe-container { height: calc(100vh - 120px); min-height: 500px; }
+  
   @media (max-width: 480px) {
     .container { padding-left: 0.5rem; padding-right: 0.5rem; }
     h2 { font-size: 1.25rem !important; }
@@ -29,6 +35,7 @@
 
   <script>
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+    if (window.self !== window.top) { document.documentElement.classList.add('is-iframe'); }
   </script>
 </head>
 <body class="bg-gray-100 font-sans">
@@ -51,16 +58,10 @@
   <main id="tab-home" class="tab-content active container mx-auto p-4 animate-fadeIn">
     <div class="relative w-full bg-slate-900 rounded-2xl overflow-hidden shadow-xl border-4 border-white banner-container mb-8">
       <div id="carousel-slides" class="flex h-full w-full"></div>
-      <button onclick="moveSlide(-1)" class="absolute left-2 top-1/2 -translate-y-1/2 bg-black/20 hover:bg-black/50 text-white w-10 h-10 rounded-full z-20 flex items-center justify-center">
-        <i class="fas fa-chevron-left"></i>
-      </button>
-      <button onclick="moveSlide(1)" class="absolute right-2 top-1/2 -translate-y-1/2 bg-black/20 hover:bg-black/50 text-white w-10 h-10 rounded-full z-20 flex items-center justify-center">
-        <i class="fas fa-chevron-right"></i>
-      </button>
+      <button onclick="moveSlide(-1)" class="absolute left-2 top-1/2 -translate-y-1/2 bg-black/20 hover:bg-black/50 text-white w-10 h-10 rounded-full z-20 flex items-center justify-center"><i class="fas fa-chevron-left"></i></button>
+      <button onclick="moveSlide(1)" class="absolute right-2 top-1/2 -translate-y-1/2 bg-black/20 hover:bg-black/50 text-white w-10 h-10 rounded-full z-20 flex items-center justify-center"><i class="fas fa-chevron-right"></i></button>
     </div>
-    <h3 class="text-xl font-bold text-slate-700 mb-6 flex items-center gap-2 italic">
-      <i class="fas fa-bullhorn text-blue-500"></i> QUADRO DE AVISOS
-    </h3>
+    <h3 class="text-xl font-bold text-slate-700 mb-6 flex items-center gap-2 italic"><i class="fas fa-bullhorn text-blue-500"></i> QUADRO DE AVISOS</h3>
     <div id="grid-comunicados" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
   </main>
 
@@ -69,7 +70,7 @@
       <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
         <h2 class="text-2xl font-bold text-slate-800 italic">📂 Manuais e Arquivos</h2>
         <div class="relative w-full md:w-64">
-           <input type="text" id="fileSearch" oninput="filterFiles()" placeholder="Buscar manual..." class="w-full bg-gray-100 rounded-lg py-2 pl-10 pr-4 outline-none focus:ring-2 focus:ring-blue-500" />
+           <input type="text" id="fileSearch" placeholder="Buscar manual..." class="w-full bg-gray-100 rounded-lg py-2 pl-10 pr-4 outline-none focus:ring-2 focus:ring-blue-500" />
            <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
         </div>
       </div>
@@ -77,62 +78,35 @@
     </div>
   </main>
 
-  <main id="tab-rh" class="tab-content container mx-auto p-4 text-center py-20 animate-fadeIn">
-    <div class="bg-white p-12 rounded-2xl shadow-lg max-w-2xl mx-auto border-b-8 border-blue-500">
-      <i class="fas fa-user-tie text-6xl text-blue-100 mb-6"></i>
-      <h2 class="text-3xl font-bold text-gray-700">Espaço do Colaborador</h2>
-      <p class="text-gray-500 mt-4 italic">Conteúdos de RH, contracheques e benefícios em fase de implementação.</p>
-    </div>
-  </main>
-
   <main id="tab-encartes" class="tab-content container mx-auto p-4 animate-fadeIn">
     <h2 class="text-2xl font-bold mb-8 italic flex items-center gap-3 text-slate-800">
-      <span class="bg-blue-600 text-white p-2 rounded-lg shadow-md"><i class="fas fa-tags"></i></span>
-      Encartes e Promoções Atuais
+      <span class="bg-blue-600 text-white p-2 rounded-lg shadow-md"><i class="fas fa-tags"></i></span> Encartes e Promoções Atuais
     </h2>
     <div id="grid-encartes" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8"></div>
   </main>
 
   <main id="tab-catalogo" class="tab-content container mx-auto p-4 animate-fadeIn">
-    <div class="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col iframe-container">
-      <div class="p-4 bg-slate-800 text-white flex justify-between items-center">
-        <span class="font-bold italic flex items-center gap-2">
-            <i class="fas fa-shopping-bag text-blue-400"></i> Catálogo de Produtos Online
-        </span>
-        <button onclick="window.open('https://catalogo.sonoshowmoveis.com.br/', '_blank')" class="text-[10px] bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded transition">
-            ABRIR EM TELA CHEIA <i class="fas fa-external-link-alt ml-1"></i>
-        </button>
-      </div>
-      <iframe src="https://catalogo.sonoshowmoveis.com.br/" class="w-full h-full border-none"></iframe>
-    </div>
+    <div id="catalogo-wrapper" class="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col iframe-container"></div>
   </main>
 
   <main id="tab-sobre" class="tab-content container mx-auto p-4 animate-fadeIn">
-    <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
-      <div class="bg-blue-600 p-10 text-white text-center">
-        <h2 class="text-3xl font-bold italic">Nossa História</h2>
-        <p class="mt-2 text-blue-100 italic">Orgulho em servir bem para servir sempre.</p>
+    <div class="bg-white rounded-2xl shadow-lg p-8 max-w-4xl mx-auto">
+      <div class="text-center mb-10">
+        <h2 class="text-3xl font-bold text-slate-800 italic mb-2">Nossa História</h2>
+        <div class="h-1 w-20 bg-blue-600 mx-auto"></div>
       </div>
-      <div class="p-8 max-w-4xl mx-auto">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-            <div class="text-center p-6 bg-slate-50 rounded-xl">
-                <i class="fas fa-history text-3xl text-blue-500 mb-3"></i>
-                <h4 class="font-bold text-slate-800">Fundação</h4>
-                <p class="text-sm text-gray-500">Mais de XX anos de história no mercado carioca.</p>
-            </div>
-            <div class="text-center p-6 bg-slate-50 rounded-xl border-x border-gray-100">
-                <i class="fas fa-store text-3xl text-blue-500 mb-3"></i>
-                <h4 class="font-bold text-slate-800">Lojas</h4>
-                <p class="text-sm text-gray-500">Presença estratégica em todo o Rio de Janeiro.</p>
-            </div>
-            <div class="text-center p-6 bg-slate-50 rounded-xl">
-                <i class="fas fa-users text-3xl text-blue-500 mb-3"></i>
-                <h4 class="font-bold text-slate-800">Equipe</h4>
-                <p class="text-sm text-gray-500">Colaboradores focados em realizar sonhos.</p>
-            </div>
+      <div class="grid md:grid-cols-2 gap-8 items-center">
+        <div class="text-gray-600 space-y-4">
+          <p>A <strong>Sono Show Móveis</strong> nasceu com o objetivo de realizar sonhos, oferecendo conforto e qualidade para o lar das famílias brasileiras.</p>
+          <p>Com anos de tradição no mercado, nossa missão é proporcionar uma experiência de compra única, pautada na confiança e na excelência do atendimento.</p>
         </div>
-        <div class="prose max-w-none text-gray-600 leading-relaxed text-center">
-            <p>[Espaço reservado para a redação institucional da Sono Show: Missão, Visão e Valores.]</p>
+        <div class="bg-blue-50 p-6 rounded-xl border-l-4 border-blue-600">
+          <h4 class="font-bold text-blue-800 mb-2 uppercase text-sm">Nossos Valores</h4>
+          <ul class="text-sm space-y-2 text-blue-900">
+            <li><i class="fas fa-check-circle mr-2"></i> Ética e Transparência</li>
+            <li><i class="fas fa-check-circle mr-2"></i> Valorização das Pessoas</li>
+            <li><i class="fas fa-check-circle mr-2"></i> Qualidade nos Produtos</li>
+          </ul>
         </div>
       </div>
     </div>
@@ -140,18 +114,27 @@
 
   <main id="tab-faq" class="tab-content container mx-auto p-4 animate-fadeIn">
     <div class="max-w-3xl mx-auto">
-      <h2 class="text-2xl font-bold text-slate-800 mb-8 italic flex items-center gap-3">
+      <h2 class="text-2xl font-bold text-slate-800 italic mb-8 flex items-center gap-3">
         <i class="fas fa-question-circle text-blue-600"></i> Perguntas Frequentes
       </h2>
       <div class="space-y-4">
         <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
-          <p class="font-bold text-slate-700 flex justify-between items-center">
-            Como solicitar novos treinamentos?
-            <i class="fas fa-chevron-down text-blue-500 text-xs"></i>
-          </p>
-          <p class="text-sm text-gray-500 mt-3 pt-3 border-t">Fale com seu gerente regional ou envie uma sugestão para o setor de Treinamento através do e-mail corporativo.</p>
+          <h4 class="font-bold text-slate-700">Como acesso os manuais de montagem?</h4>
+          <p class="text-gray-500 text-sm mt-2">Basta navegar até a aba "Treinamento", onde todos os arquivos estão organizados por pastas.</p>
+        </div>
+        <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
+          <h4 class="font-bold text-slate-700">O catálogo é atualizado em tempo real?</h4>
+          <p class="text-gray-500 text-sm mt-2">Sim, a aba "Catálogo" exibe diretamente a nossa plataforma oficial de produtos.</p>
         </div>
       </div>
+    </div>
+  </main>
+
+  <main id="tab-rh" class="tab-content container mx-auto p-4 text-center py-20 animate-fadeIn">
+    <div class="bg-white p-12 rounded-2xl shadow-lg max-w-2xl mx-auto border-b-8 border-blue-500">
+      <i class="fas fa-user-tie text-6xl text-blue-100 mb-6"></i>
+      <h2 class="text-3xl font-bold text-gray-700">Espaço do Colaborador</h2>
+      <p class="text-gray-500 mt-4 italic">Conteúdos de RH em fase de implementação.</p>
     </div>
   </main>
 
@@ -159,6 +142,7 @@
     const USER = "jeanmelosonoshow";
     const REPO = "Sono-Show";
     let currentSlide = 0, totalSlides = 0, allFiles = [];
+    const loadedTabs = { home: false, treinamento: false, encartes: false, catalogo: false };
 
     async function generatePdfThumb(url, canvasId) {
       try {
@@ -176,114 +160,97 @@
     }
 
     async function loadHomeData() {
+      if(loadedTabs.home) return;
       try {
-        // Reduzi o tempo de processamento carregando o JSON primeiro
         const response = await fetch(`https://raw.githubusercontent.com/${USER}/${REPO}/main/comunicados.json?t=${Date.now()}`);
         const data = await response.json();
-        
         const carousel = document.getElementById("carousel-slides");
         if (data.banners) {
           totalSlides = data.banners.length;
-          // Imagens com loading lazy para não travar a renderização inicial
-          carousel.innerHTML = data.banners.map(img => `<div class="min-w-full h-full flex items-center justify-center bg-slate-900"><img src="${img}" loading="lazy" class="max-w-full max-h-full object-contain"></div>`).join("");
+          carousel.innerHTML = data.banners.map(img => `<div class="min-w-full h-full flex items-center justify-center bg-slate-900"><img src="${img}" class="max-w-full max-h-full object-contain"></div>`).join("");
         }
-
         document.getElementById("grid-comunicados").innerHTML = data.avisos.map(c => `
           <div class="bg-white p-6 rounded-xl shadow-sm border-t-4 border-${c.cor}-500 card-zoom">
             <span class="text-[10px] font-bold text-${c.cor}-600 bg-${c.cor}-50 px-2 py-1 rounded uppercase">${c.categoria}</span>
             <h4 class="font-bold text-lg mt-3 text-slate-800 leading-tight">${c.titulo}</h4>
             <p class="text-gray-500 text-sm mt-2">${c.descricao}</p>
             <div class="mt-4 pt-4 border-t border-gray-50 text-[10px] text-gray-400 font-bold uppercase">${c.data}</div>
-          </div>
-        `).join("");
-      } catch (e) { console.error("Erro home:", e); }
+          </div>`).join("");
+        loadedTabs.home = true;
+      } catch (e) { console.error(e); }
     }
 
     async function loadEncartes(path) {
+      if(loadedTabs.encartes) return;
       const container = document.getElementById("grid-encartes");
       container.innerHTML = '<p class="col-span-full text-center p-10 text-slate-400 animate-pulse">Carregando encartes...</p>';
       try {
         const res = await fetch(`https://api.github.com/repos/${USER}/${REPO}/contents/${path}`);
         const data = await res.json();
         let pdfs = data.filter(i => i.name.toLowerCase().endsWith(".pdf"));
-
-        // CORREÇÃO DA ORDEM: Maior Ano, depois Maior Mês
         pdfs.sort((a, b) => {
             const getParts = (name) => {
-                const cleanName = name.replace('.pdf', '');
-                const parts = cleanName.split('-'); // Esperado [MM, YYYY]
-                return {
-                    mes: parseInt(parts[0]) || 0,
-                    ano: parseInt(parts[1]) || 0
-                };
+                const parts = name.replace('.pdf', '').split('-');
+                return { mes: parseInt(parts[0]) || 0, ano: parseInt(parts[1]) || 0 };
             };
-            const dateA = getParts(a.name);
-            const dateB = getParts(b.name);
-
-            if (dateB.ano !== dateA.ano) return dateB.ano - dateA.ano;
-            return dateB.mes - dateA.mes;
+            const dA = getParts(a.name), dB = getParts(b.name);
+            return (dB.ano !== dA.ano) ? dB.ano - dA.ano : dB.mes - dA.mes;
         });
-
         container.innerHTML = pdfs.map((pdf, index) => {
           const canvasId = `pdf-canvas-${index}`;
           const isNew = index === 0;
-          setTimeout(() => generatePdfThumb(`https://${USER}.github.io/${REPO}/${pdf.path}`, canvasId), 300);
-          
-          return `
-            <div onclick="window.open('https://${USER}.github.io/${REPO}/${pdf.path}', '_blank')" class="relative cursor-pointer group bg-white rounded-xl shadow-md hover:shadow-2xl transition-all overflow-hidden border ${isNew ? 'border-amber-400 ring-2 ring-amber-50' : 'border-gray-100'} flex flex-col">
-              ${isNew ? '<div class="absolute top-2 right-2 z-10 bg-amber-500 text-white text-[10px] font-bold px-2 py-1 rounded-full shadow-lg animate-bounce"><i class="fas fa-star"></i> NOVO</div>' : ''}
-              <div class="aspect-[3/4] bg-gray-100 flex items-center justify-center overflow-hidden">
-                <canvas id="${canvasId}" class="pdf-thumb-canvas"></canvas>
-              </div>
-              <div class="p-3 bg-white border-t">
-                <p class="text-[10px] font-bold ${isNew ? 'text-amber-600' : 'text-blue-600'} uppercase">${isNew ? 'Destaque' : 'Anterior'}</p>
-                <p class="text-xs font-bold text-slate-700 truncate">${pdf.name.replace('.pdf','')}</p>
-              </div>
-            </div>`;
+          setTimeout(() => generatePdfThumb(`https://${USER}.github.io/${REPO}/${pdf.path}`, canvasId), 400);
+          return `<div onclick="window.open('https://${USER}.github.io/${REPO}/${pdf.path}', '_blank')" class="relative cursor-pointer group bg-white rounded-xl shadow-md transition-all overflow-hidden border ${isNew ? 'border-amber-400 ring-2 ring-amber-50' : 'border-gray-100'} flex flex-col">
+            ${isNew ? '<div class="absolute top-2 right-2 z-10 bg-amber-500 text-white text-[10px] font-bold px-2 py-1 rounded-full shadow-lg animate-bounce">NOVO</div>' : ''}
+            <div class="aspect-[3/4] bg-gray-100 flex items-center justify-center"><canvas id="${canvasId}" class="pdf-thumb-canvas"></canvas></div>
+            <div class="p-3 bg-white border-t">
+              <p class="text-[10px] font-bold ${isNew ? 'text-amber-600' : 'text-gray-400'} uppercase">${isNew ? 'Destaque' : 'Encarte Anterior'}</p>
+              <p class="text-xs font-bold text-slate-700 truncate">${pdf.name.replace('.pdf','')}</p>
+            </div>
+          </div>`;
         }).join("");
+        loadedTabs.encartes = true;
       } catch (e) { container.innerHTML = "Erro ao carregar encartes."; }
     }
 
+    // AJUSTE: Lógica de navegação corrigida
     async function loadFiles(path) {
-      const container = document.getElementById("explorer-content");
       try {
         const res = await fetch(`https://api.github.com/repos/${USER}/${REPO}/contents/${path}`);
         allFiles = await res.json();
         renderFileList(allFiles, path);
+        if(path === "Manuais") loadedTabs.treinamento = true;
       } catch (e) { console.error(e); }
     }
 
     function renderFileList(files, currentPath) {
       const container = document.getElementById("explorer-content");
-      let html = currentPath !== "Manuais" ? `<div class="p-4 text-blue-600 font-bold cursor-pointer border-b hover:bg-blue-50 transition" onclick="loadFiles('Manuais')"><i class="fas fa-arrow-left mr-2"></i> Voltar</div>` : "";
+      // O segredo do botão voltar: se o path não for "Manuais", ele volta para a raiz dos manuais
+      let backBtn = currentPath !== "Manuais" ? `
+        <div class="p-4 bg-blue-50 text-blue-600 font-bold cursor-pointer border-b flex items-center gap-2 hover:bg-blue-100 transition-colors" onclick="loadFiles('Manuais')">
+          <i class="fas fa-arrow-left"></i> Voltar para Manuais
+        </div>` : "";
       
-      container.innerHTML = html + files.map(item => `
-        <div class="flex items-center justify-between py-4 px-6 hover:bg-slate-50 cursor-pointer group transition" onclick="${item.type==='dir'?`loadFiles('${item.path}')`:`window.open('https://${USER}.github.io/${REPO}/${item.path}','_blank')`}">
-          <div class="flex items-center gap-4">
-            <i class="fas ${item.type==='dir'?'fa-folder text-yellow-500':'fa-file-pdf text-red-500'} text-2xl group-hover:scale-110 transition"></i>
-            <span class="font-medium text-slate-700">${item.name}</span>
-          </div>
-          <i class="fas fa-chevron-right text-slate-200 group-hover:text-blue-500 transition"></i>
+      container.innerHTML = backBtn + files.map(item => `
+        <div class="flex items-center justify-between py-4 px-6 hover:bg-slate-50 cursor-pointer border-b border-gray-50" onclick="${item.type==='dir' ? `loadFiles('${item.path}')` : `window.open('https://${USER}.github.io/${REPO}/${item.path}','_blank')`}">
+          <div class="flex items-center gap-4"><i class="fas ${item.type==='dir'?'fa-folder text-yellow-500':'fa-file-pdf text-red-500'} text-xl"></i><span class="font-medium text-slate-700">${item.name}</span></div>
+          <i class="fas fa-chevron-right text-slate-200 text-xs"></i>
         </div>`).join("");
-    }
-
-    function filterFiles() {
-        const term = document.getElementById("fileSearch").value.toLowerCase();
-        const filtered = allFiles.filter(f => f.name.toLowerCase().includes(term));
-        renderFileList(filtered, "Manuais");
     }
 
     function switchTab(tabId) {
       document.querySelectorAll(".tab-content").forEach(el => el.classList.remove("active"));
       document.querySelectorAll(".nav-link").forEach(el => el.classList.remove("active"));
-      const targetTab = document.getElementById("tab-" + tabId);
-      if (targetTab) targetTab.classList.add("active");
-      const targetBtn = document.getElementById("btn-" + tabId);
-      if (targetBtn) targetBtn.classList.add("active");
+      document.getElementById("tab-" + tabId).classList.add("active");
+      document.getElementById("btn-" + tabId).classList.add("active");
 
       if (tabId === "home") loadHomeData();
       if (tabId === "treinamento") loadFiles("Manuais");
       if (tabId === "encartes") loadEncartes("Encartes");
+      if (tabId === "catalogo" && !loadedTabs.catalogo) {
+          document.getElementById('catalogo-wrapper').innerHTML = `<iframe src="https://catalogo.sonoshowmoveis.com.br/" class="w-full h-full border-none"></iframe>`;
+          loadedTabs.catalogo = true;
+      }
     }
 
     function moveSlide(direction) {
@@ -295,7 +262,7 @@
 
     window.onload = () => {
       loadHomeData();
-      setInterval(() => moveSlide(1), 6000);
+      setInterval(() => { if(document.getElementById('tab-home').classList.contains('active')) moveSlide(1); }, 6000);
     };
   </script>
 </body>
