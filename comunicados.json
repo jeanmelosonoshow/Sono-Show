@@ -19,5 +19,12 @@
     "descricao": "Live oficial amanhã às 09h pelo link enviado no e-mail.",
     "data": "Hoje às 10:00",
     "cor": "amber"
+  },
+   {
+    "categoria": "TESTE DESENVOLVIMENTO",
+    "titulo": "Reunião de Metas",
+    "descricao": "CRIAÇÃO DE INTRANET.",
+    "data": "Hoje às 10:00",
+    "cor": "amber"
   }
 ]
