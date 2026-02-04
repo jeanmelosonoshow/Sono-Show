@@ -1,0 +1,23 @@
+[
+  {
+    "categoria": "NOTÍCIAS",
+    "titulo": "Novo Horário de Funcionamento",
+    "descricao": "A partir de segunda-feira, a unidade Centro fechará às 19h.",
+    "data": "Publicado há 2 horas",
+    "cor": "green"
+  },
+  {
+    "categoria": "SISTEMA",
+    "titulo": "Atualização do PDV",
+    "descricao": "A versão 4.2 já está disponível em todas as lojas.",
+    "data": "Ontem às 15:00",
+    "cor": "blue"
+  },
+  {
+    "categoria": "AVISO",
+    "titulo": "Reunião de Metas",
+    "descricao": "Live oficial amanhã às 09h pelo link enviado no e-mail.",
+    "data": "Hoje às 10:00",
+    "cor": "amber"
+  }
+]
