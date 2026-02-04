@@ -134,34 +134,45 @@
     }
 
     async function loadEncartes(path) {
-      const container = document.getElementById("grid-encartes");
-      container.innerHTML = '<p class="col-span-full text-center p-10 text-slate-400">Gerando visualizações...</p>';
-      try {
-        const res = await fetch(`https://api.github.com/repos/${USER}/${REPO}/contents/${path}`);
-        const data = await res.json();
-        const pdfs = data.filter(i => i.name.toLowerCase().endsWith(".pdf"));
-        
-        container.innerHTML = pdfs.map((pdf, index) => {
-          const canvasId = `pdf-canvas-${index}`;
-          const pdfUrl = `https://${USER}.github.io/${REPO}/${pdf.path}`;
-          setTimeout(() => generatePdfThumb(pdfUrl, canvasId), 100);
-          
-          return `
-            <div onclick="window.open('${pdfUrl}', '_blank')" class="cursor-pointer group bg-white rounded-xl shadow-md hover:shadow-2xl transition-all overflow-hidden border border-gray-100">
-              <div class="aspect-[3/4] bg-gray-200 relative overflow-hidden flex items-center justify-center">
-                <canvas id="${canvasId}" class="pdf-thumb-canvas"></canvas>
-                <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all flex items-center justify-center">
-                   <i class="fas fa-eye text-white opacity-0 group-hover:opacity-100 text-3xl"></i>
-                </div>
-              </div>
-              <div class="p-3 bg-white">
-                <p class="text-xs font-bold text-slate-700 truncate">${pdf.name.replace('.pdf','')}</p>
-                <p class="text-[10px] text-blue-500 font-bold mt-1 uppercase">Clique para abrir</p>
-              </div>
-            </div>`;
-        }).join("");
-      } catch (e) { container.innerHTML = "Erro ao carregar encartes."; }
-    }
+  const container = document.getElementById("grid-encartes");
+  container.innerHTML = '<p class="col-span-full text-center p-10 text-slate-400">Gerando visualizações...</p>';
+  
+  try {
+    const res = await fetch(`https://api.github.com/repos/${USER}/${REPO}/contents/${path}`);
+    const data = await res.json();
+    
+    // FILTRAGEM E ORDENAÇÃO:
+    // 1. Filtra apenas PDFs
+    // 2. Ordena alfabeticamente e inverte (Z-A) para que 2026 venha antes de 2025
+    const pdfs = data
+      .filter(i => i.name.toLowerCase().endsWith(".pdf"))
+      .sort((a, b) => b.name.localeCompare(a.name));
+
+    container.innerHTML = pdfs.map((pdf, index) => {
+      const canvasId = `pdf-canvas-${index}`;
+      const pdfUrl = `https://${USER}.github.io/${REPO}/${pdf.path}`;
+      
+      // Pequeno delay para garantir que o canvas exista no DOM antes de renderizar
+      setTimeout(() => generatePdfThumb(pdfUrl, canvasId), 200);
+      
+      return `
+        <div onclick="window.open('${pdfUrl}', '_blank')" class="cursor-pointer group bg-white rounded-xl shadow-md hover:shadow-2xl transition-all overflow-hidden border border-gray-100 flex flex-col">
+          <div class="aspect-[3/4] bg-gray-200 relative overflow-hidden flex items-center justify-center">
+            <canvas id="${canvasId}" class="pdf-thumb-canvas"></canvas>
+            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all flex items-center justify-center">
+               <i class="fas fa-eye text-white opacity-0 group-hover:opacity-100 text-3xl"></i>
+            </div>
+          </div>
+          <div class="p-3 bg-white border-t border-gray-50">
+            <p class="text-[10px] font-bold text-blue-600 mb-1">ENCARTE ATUAL</p>
+            <p class="text-xs font-bold text-slate-700 leading-tight h-8 overflow-hidden line-clamp-2">${pdf.name.replace('.pdf','')}</p>
+          </div>
+        </div>`;
+    }).join("");
+  } catch (e) { 
+    container.innerHTML = "<p class='col-span-full text-center text-red-500'>Erro ao carregar encartes.</p>"; 
+  }
+}
 
     function moveSlide(direction) {
       const slides = document.getElementById("carousel-slides");
