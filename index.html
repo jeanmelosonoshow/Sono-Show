@@ -44,7 +44,8 @@
         <button onclick="switchTab('treinamento')" class="nav-link py-2 px-1 transition-all">Treinamento</button>
         <button onclick="switchTab('rh')" class="nav-link py-2 px-1 transition-all">RH</button>
         <button onclick="switchTab('encartes')" class="nav-link py-2 px-1 transition-all">Encartes</button>
-        <button onclick="switchTab('sobre')" class="nav-link py-2 px-1 transition-all">Sobre Sono Show</button>
+        <button onclick="switchTab('catalogo')" class="nav-link py-2 px-1 transition-all">Catálogo de Produtos</button>
+        <button onclick="switchTab('sobre')" class="nav-link py-2 px-1 transition-all">Sobre Nós</button>
         <button onclick="switchTab('faq')" class="nav-link py-2 px-1 transition-all">FAQ</button>
       </nav>
     </div>
@@ -92,6 +93,18 @@
     </h2>
     <div id="grid-encartes" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8"></div>
   </main>
+  
+    <main id="tab-catalogo" class="tab-content container mx-auto p-4">
+    <div class="bg-white rounded-2xl shadow-lg p-6 min-h-[500px]">
+      <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
+        <h2 class="text-2xl font-bold text-slate-800 italic">Catálogo De Produtos</h2>
+        <input type="text" id="search" oninput="filterFiles()" placeholder="Buscar..." class="w-full md:w-64 bg-gray-100 rounded-lg py-2 px-4 outline-none focus:ring-2 focus:ring-blue-500" />
+        <iframe src= "https://catalogo.sonoshowmoveis.com.br/" ></iframe>
+      </div>
+      <div id="explorer-content" class="divide-y divide-gray-100"></div>
+    </div>
+  </main>
+
 
   <script>
     const USER = "jeanmelosonoshow";
