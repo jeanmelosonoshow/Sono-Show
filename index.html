@@ -185,6 +185,21 @@
             const filtered = allFiles.filter(f => f.name.toLowerCase().includes(term));
             renderFileList(filtered, 'Manuais');
         }
+
+        function enviarAltura() {
+        const altura = document.body.scrollHeight;
+        window.parent.postMessage({
+            tipo: 'ajustarAltura',
+            altura: altura
+        }, '*');
+    }
+
+    // Envia a altura quando carregar e quando redimensionar a tela
+    window.onload = enviarAltura;
+    window.onresize = enviarAltura;
+    
+    // Opcional: envia a cada 1 segundo para garantir se o conteúdo mudar dinamicamente
+    setInterval(enviarAltura, 1000);
     </script>
 </body>
 </html>
