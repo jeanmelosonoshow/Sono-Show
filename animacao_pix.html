@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Animação PIX com Personagens</title>
+    <style>
+        :root {
+            --primary: #32bcad; /* Cor oficial do PIX */
+            --bg: #f8faff;
+            --text: #333;
+            --skin: #f0c5a2;
+            --client-shirt: #4a90e2;
+            --seller-shirt: #3f6eb0;
+            --pants: #333;
+            --hair: #6a4a37;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f0f2f5;
+        }
+
+        .canvas {
+            width: 100%;
+            max-width: 800px;
+            height: 300px;
+            background-color: var(--bg);
+            border: 2px dashed #cbd5e0;
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+
+        /* Elementos principais */
+        .smartphone, .counter, .package, .qr-code, .receipt {
+            position: absolute;
+            z-index: 2; /* Para garantir que estejam acima do balcão */
+        }
+
+        /* Balcão do Vendedor */
+        .counter {
+            bottom: 0;
+            width: 100%;
+            height: 80px; /* Mais alto para acomodar os personagens melhor */
+            background: #d1d5db;
+            border-top: 4px solid #9ca3af;
+            z-index: 1; /* Abaixo dos personagens */
+            box-shadow: inset 0 3px 5px rgba(0,0,0,0.1);
+        }
+
+        /* QR Code na mesa */
+        .qr-code {
+            bottom: 90px;
+            right: 250px;
+            width: 70px;
+            height: 70px;
+            background: white url('https://upload.wikimedia.org/wikipedia/commons/d/d0/QR_code_for_mobile_English_Wikipedia.svg') no-repeat center/contain;
+            border: 2px solid #333;
+            padding: 5px;
+        }
+
+        /* Smartphone do Cliente */
+        .smartphone {
+            bottom: 150px;
+            left: -150px; /* Começa fora da tela */
+            width: 50px;
+            height: 90px;
+            background: #1f2937;
+            border-radius: 8px;
+            border: 3px solid #4b5563;
+            animation: movePhone 12s infinite;
+            transform-origin: bottom center; /* Para rotação mais natural */
+        }
+
+        .screen {
+            width: 90%;
+            height: 80%;
+            background: #fff;
+            margin: 5% auto;
+            position: relative;
+            overflow: hidden;
+            border-radius: 3px;
+        }
+
+        /* Laser de leitura */
+        .laser {
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: red;
+            top: 0;
+            box-shadow: 0 0 5px red;
+            display: none;
+            animation: scan 1.5s linear infinite;
+        }
+
+        /* Mercadoria */
+        .package {
+            bottom: 90px;
+            right: -100px; /* Começa fora da tela para a entrega */
+            width: 70px;
+            height: 50px;
+            background: #d97706;
+            border-radius: 4px;
+            box-shadow: inset -5px -5px 0 rgba(0,0,0,0.1);
+            animation: deliverPackage 12s infinite;
+        }
+
+        /* Comprovante Virtual */
+        .receipt {
+            width: 80%;
+            height: 60%;
+            background: var(--primary);
+            color: white;
+            top: 20%;
+            left: 10%;
+            border: 1px solid var(--primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 10px;
+            font-weight: bold;
+            border-radius: 3px;
+            opacity: 0;
+            transform: scale(0.5);
+            animation: showReceipt 12s infinite;
+        }
+
+        /* Legendas de status */
+        .status-msg {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-weight: bold;
+            color: var(--text);
+            font-size: 14px;
+            opacity: 0;
+            text-align: center;
+            animation: statusUpdate 12s infinite;
+            width: 80%;
+            white-space: nowrap; /* Evita quebra de linha inicial */
+        }
+
+        /* PERSONAGENS */
+        .character {
+            position: absolute;
+            bottom: 80px; /* Acima do balcão */
+            width: 60px;
+            height: 120px;
+            /* background-color: rgba(0,255,0,0.3); /* Debug */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            z-index: 3; /* Sempre acima de tudo */
+        }
+
+        .head {
+            width: 40px;
+            height: 40px;
+            background-color: var(--skin);
+            border-radius: 50%;
+            position: relative;
+            margin-bottom: -5px; /* Sobrepõe um pouco o corpo */
+            border: 2px solid rgba(0,0,0,0.1);
+        }
+
+        .hair {
+            width: 30px;
+            height: 15px;
+            background-color: var(--hair);
+            border-radius: 50% 50% 0 0;
+            position: absolute;
+            top: 0;
+            left: 5px;
+        }
+
+        .body {
+            width: 50px;
+            height: 70px;
+            border-radius: 10px 10px 0 0;
+            position: relative;
+            z-index: 0; /* Para braços ficarem por cima */
+        }
+
+        .arm {
+            width: 15px;
+            height: 40px;
+            background-color: var(--skin);
+            position: absolute;
+            top: 20px;
+            border-radius: 5px;
+            transform-origin: top center;
+            z-index: 1; /* Acima do corpo, abaixo da cabeça */
+        }
+
+        .left-arm { left: -10px; }
+        .right-arm { right: -10px; }
+
+        .client {
+            left: -150px; /* Começa fora */
+            animation: moveClient 12s infinite;
+        }
+        .client .body { background-color: var(--client-shirt); }
+        .client .pants {
+            width: 40px;
+            height: 30px;
+            background-color: var(--pants);
+            border-radius: 0 0 10px 10px;
+            position: absolute;
+            bottom: 0;
+        }
+
+        .seller {
+            right: 150px;
+            animation: moveSeller 12s infinite;
+        }
+        .seller .body { background-color: var(--seller-shirt); }
+        .seller .pants {
+            width: 40px;
+            height: 30px;
+            background-color: var(--pants);
+            border-radius: 0 0 10px 10px;
+            position: absolute;
+            bottom: 0;
+        }
+
+        /* ANIMAÇÕES */
+
+        @keyframes movePhone {
+            0% { left: -150px; transform: rotate(0deg); opacity: 1; }
+            10% { left: 180px; transform: rotate(0deg); } /* Cliente chega e posiciona o celular */
+            20% { left: 270px; transform: rotate(-15deg); } /* Posiciona sobre o QR */
+            35% { left: 270px; transform: rotate(-15deg); } /* Lendo... */
+            50% { left: 180px; transform: rotate(0deg); } /* Mostrando comprovante */
+            80% { left: 180px; opacity: 1; }
+            90% { left: -150px; opacity: 0; } /* Sai de cena */
+            100% { opacity: 0; }
+        }
+
+        @keyframes scan {
+            0%, 20% { display: none; }
+            25% { display: block; top: 0%; }
+            35% { top: 100%; }
+            40% { display: none; }
+        }
+
+        @keyframes showReceipt {
+            0%, 50% { opacity: 0; transform: scale(0.5); }
+            55% { opacity: 1; transform: scale(1); } /* Aparece o comprovante */
+            75% { opacity: 1; transform: scale(1); }
+            80% { opacity: 0; transform: scale(0.5); }
+        }
+
+        @keyframes statusUpdate {
+            0% { opacity: 0; content: " "; }
+            5% { opacity: 1; content: "Cliente se aproximando..."; }
+            15% { opacity: 1; content: "Cliente pronto para pagar."; }
+            22% { content: "Escaneando QR Code PIX..."; }
+            38% { content: "Processando pagamento..."; }
+            52% { content: "Comprovante verificado! ✅"; }
+            70% { content: "Entrega autorizada!"; }
+            85% { opacity: 1; content: "Transação concluída!"; }
+            95% { opacity: 0; }
+            100% { opacity: 0; }
+        }
+
+        @keyframes deliverPackage {
+            0%, 70% { right: -100px; opacity: 0; } /* Fora de cena */
+            75% { right: 180px; opacity: 1; transform: rotate(0deg); } /* Vendedor pegando */
+            85% { right: 350px; opacity: 1; transform: rotate(5deg); } /* Move em direção ao cliente */
+            95% { right: 500px; opacity: 0; } /* Cliente pegou e saiu */
+            100% { opacity: 0; }
+        }
+
+        @keyframes moveClient {
+            0% { left: -150px; }
+            10% { left: 100px; } /* Cliente chega na posição de pagar */
+            88% { left: 100px; }
+            95% { left: 600px; } /* Cliente sai com o pacote */
+            100% { left: 600px; }
+        }
+
+        @keyframes moveSeller {
+            0%, 70% { transform: translateX(0); }
+            75% { transform: translateX(-50px); } /* Vendedor se estica para entregar */
+            85% { transform: translateX(0); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="canvas">
+    <div class="status-msg"></div>
+    
+    <div class="counter"></div>
+    <div class="qr-code"></div>
+    
+    <div class="character client">
+        <div class="head">
+            <div class="hair"></div>
+        </div>
+        <div class="body">
+            <div class="arm left-arm"></div>
+            <div class="arm right-arm"></div>
+            <div class="pants"></div>
+        </div>
+    </div>
+
+    <div class="character seller">
+        <div class="head">
+            <div class="hair"></div>
+        </div>
+        <div class="body">
+            <div class="arm left-arm"></div>
+            <div class="arm right-arm"></div>
+            <div class="pants"></div>
+        </div>
+    </div>
+
+    <div class="smartphone">
+        <div class="screen">
+            <div class="laser"></div>
+            <div class="receipt">✅ OK</div>
+        </div>
+    </div>
+
+    <div class="package"></div>
+</div>
+
+<script>
+    // A lógica JavaScript para atualizar o texto do status-msg
+    const statusMsg = document.querySelector('.status-msg');
+    const laser = document.querySelector('.laser');
+
+    const messages = [
+        { time: 0, text: "Iniciando transação..." },
+        { time: 1000, text: "Cliente se aproximando..." },
+        { time: 2000, text: "Aguardando pagamento via PIX." },
+        { time: 3000, text: "Escaneando QR Code PIX..." },
+        { time: 5000, text: "Processando pagamento..." },
+        { time: 7000, text: "Comprovante verificado! ✅" },
+        { time: 8500, text: "Entrega autorizada!" },
+        { time: 10000, text: "Transação concluída!" }
+    ];
+
+    function updateStatus() {
+        messages.forEach(msg => {
+            setTimeout(() => {
+                statusMsg.style.opacity = 1;
+                statusMsg.textContent = msg.text;
+                if (msg.text.includes("Escaneando")) {
+                    laser.style.display = 'block';
+                } else {
+                    laser.style.display = 'none';
+                }
+            }, msg.time);
+        });
+        setTimeout(() => { statusMsg.style.opacity = 0; }, 11000); // Fade out no final
+    }
+
+    updateStatus();
+    setInterval(updateStatus, 12000); // Reinicia a cada 12 segundos
+</script>
+
+</body>
+</html>
