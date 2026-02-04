@@ -79,17 +79,17 @@
     </main>
 
     <script>
-        // CONFIGURAÇÕES GLOBAIS
+   // CONFIGURAÇÕES GLOBAIS
         const USER = 'jeanmelosonoshow';
         const REPO = 'Sono-Show';
-        let allFiles = []; // Para busca local
+        let allFiles = []; 
 
         // 1. CARREGAR COMUNICADOS (JSON)
         async function loadComunicados() {
             const container = document.getElementById('grid-comunicados');
+            if(!container) return;
             container.innerHTML = '<p class="text-slate-400">Carregando avisos...</p>';
             try {
-                // Adicionado timestamp para evitar cache do navegador ao editar o JSON
                 const response = await fetch(`https://raw.githubusercontent.com/${USER}/${REPO}/main/comunicados.json?t=${Date.now()}`);
                 const comunicados = await response.json();
 
@@ -104,91 +104,103 @@
                     </div>
                 `).join('');
             } catch (e) {
-                container.innerHTML = '<p class="text-gray-400">Crie o arquivo "comunicados.json" no seu GitHub para exibir avisos aqui.</p>';
+                container.innerHTML = '<p class="text-gray-400">Nenhum comunicado encontrado.</p>';
             }
         }
 
         // 2. NAVEGAÇÃO ENTRE ABAS
         function switchTab(tabId) {
-            // Esconde todas as abas
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            // Remove destaque de todos os botões
             document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
             
-            // Ativa a aba e o botão clicado
             document.getElementById('tab-' + tabId).classList.add('active');
             event.currentTarget.classList.add('active');
 
-            // Carrega os dados específicos
             if(tabId === 'home') loadComunicados();
             if(tabId === 'treinamento') loadFiles('Manuais');
             if(tabId === 'encartes') loadEncartes('Encartes');
         }
 
-        // 3. CARREGAR ARQUIVOS (TREINAMENTO)
+        // 3. LÓGICA DE ARQUIVOS E PASTAS (TREINAMENTO)
         async function loadFiles(path) {
             const container = document.getElementById('explorer-content');
-            container.innerHTML = '<p class="p-10 text-center text-slate-400 animate-pulse">Acessando servidores...</p>';
+            container.innerHTML = '<p class="p-10 text-center text-slate-400 animate-pulse">Acessando arquivos...</p>';
+            
             try {
                 const res = await fetch(`https://api.github.com/repos/${USER}/${REPO}/contents/${path}`);
                 allFiles = await res.json();
-                renderFileList(allFiles);
+                renderFileList(allFiles, path);
             } catch(e) { 
-                container.innerHTML = '<p class="p-10 text-center text-red-400">Pasta "Manuais" não encontrada no repositório.</p>'; 
+                container.innerHTML = '<p class="p-10 text-center text-red-400">Erro ao carregar pasta. Verifique se o caminho existe.</p>'; 
             }
         }
 
-        function renderFileList(files) {
+        function renderFileList(files, currentPath) {
             const container = document.getElementById('explorer-content');
-            container.innerHTML = files.map(item => `
-                <div class="flex items-center justify-between py-4 px-4 hover:bg-blue-50 transition-colors cursor-pointer group" 
-                     onclick="window.open('https://${USER}.github.io/${REPO}/${item.path}', '_blank')">
-                    <div class="flex items-center gap-4">
-                        <i class="fas ${item.name.endsWith('.pdf') ? 'fa-file-pdf text-rose-500' : 'fa-globe text-sky-500'} text-2xl group-hover:scale-110 transition"></i>
-                        <span class="font-semibold text-slate-700">${item.name}</span>
+            let html = '';
+
+            // Botão para voltar se estiver dentro de uma subpasta
+            if (currentPath !== 'Manuais') {
+                html += `
+                    <div class="flex items-center py-4 px-4 hover:bg-gray-100 cursor-pointer text-blue-600 font-bold border-b" onclick="loadFiles('Manuais')">
+                        <i class="fas fa-arrow-left mr-2"></i> Voltar para Manuais
                     </div>
-                    <i class="fas fa-external-link-alt text-gray-300 group-hover:text-blue-500 transition"></i>
-                </div>
-            `).join('');
+                `;
+            }
+
+            html += files.map(item => {
+                const isFolder = item.type === 'dir';
+                const icon = isFolder ? 'fa-folder text-yellow-500' : (item.name.endsWith('.pdf') ? 'fa-file-pdf text-rose-500' : 'fa-globe text-sky-500');
+                const action = isFolder ? `loadFiles('${item.path}')` : `window.open('https://${USER}.github.io/${REPO}/${item.path}', '_blank')`;
+
+                return `
+                    <div class="flex items-center justify-between py-4 px-4 hover:bg-blue-50 transition-colors cursor-pointer group border-b border-gray-50" onclick="${action}">
+                        <div class="flex items-center gap-4">
+                            <i class="fas ${icon} text-2xl group-hover:scale-110 transition"></i>
+                            <div>
+                                <span class="font-semibold text-slate-700">${item.name}</span>
+                                ${isFolder ? '<span class="block text-[10px] text-gray-400 uppercase">Pasta</span>' : ''}
+                            </div>
+                        </div>
+                        <i class="fas ${isFolder ? 'fa-chevron-right' : 'fa-external-link-alt'} text-gray-300 group-hover:text-blue-500 transition"></i>
+                    </div>
+                `;
+            }).join('');
+            
+            container.innerHTML = html;
         }
 
         function filterFiles() {
             const term = document.getElementById('search').value.toLowerCase();
             const filtered = allFiles.filter(f => f.name.toLowerCase().includes(term));
-            renderFileList(filtered);
+            renderFileList(filtered, 'Manuais');
         }
 
         // 4. CARREGAR ENCARTES
         async function loadEncartes(path) {
             const container = document.getElementById('grid-encartes');
-            container.innerHTML = '<p class="col-span-full text-center py-20 text-slate-400 animate-pulse">Buscando PDFs de ofertas...</p>';
+            container.innerHTML = '<p class="col-span-full text-center py-20 text-slate-400 animate-pulse">Buscando encartes...</p>';
             try {
                 const res = await fetch(`https://api.github.com/repos/${USER}/${REPO}/contents/${path}`);
                 const data = await res.json();
                 const pdfs = data.filter(i => i.name.toLowerCase().endsWith('.pdf')).slice(0, 20);
-
-                if(pdfs.length === 0) {
-                    container.innerHTML = '<p class="col-span-full text-center py-20 text-slate-400">Nenhum PDF encontrado na pasta Encartes.</p>';
-                    return;
-                }
 
                 container.innerHTML = pdfs.map(pdf => `
                     <div onclick="window.open('https://${USER}.github.io/${REPO}/${pdf.path}', '_blank')" class="cursor-pointer group">
                         <div class="bg-white aspect-[3/4] rounded-xl mb-3 shadow-md overflow-hidden border-2 border-transparent group-hover:border-blue-500 transition-all flex items-center justify-center relative bg-slate-50">
                             <i class="fas fa-file-pdf text-6xl text-rose-400 group-hover:scale-110 transition"></i>
                             <div class="absolute inset-0 bg-blue-600/10 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                                <span class="bg-white text-blue-600 text-[10px] font-bold px-3 py-1 rounded-full shadow-lg uppercase">Abrir Encarte</span>
+                                <span class="bg-white text-blue-600 text-[10px] font-bold px-3 py-1 rounded-full shadow-lg">ABRIR PDF</span>
                             </div>
                         </div>
                         <h5 class="text-xs font-bold text-slate-600 truncate px-1">${pdf.name}</h5>
                     </div>
                 `).join('');
             } catch(e) { 
-                container.innerHTML = '<p class="col-span-full text-center py-20 text-slate-400 text-sm">Crie a pasta "Encartes" no seu GitHub e coloque os PDFs lá.</p>'; 
+                container.innerHTML = '<p class="col-span-full text-center py-20 text-slate-400 text-sm">Pasta Encartes não encontrada.</p>'; 
             }
         }
 
-        // INICIALIZAÇÃO
         window.onload = loadComunicados;
     </script>
 </body>
