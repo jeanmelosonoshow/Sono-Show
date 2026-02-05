@@ -2,6 +2,7 @@
   "name": "portal-sonoshow",
   "version": "1.0.0",
   "dependencies": {
-    "node-firebird": "^1.1.6"
+    "node-firebird": "^1.1.6",
+    "crypto": "^1.0.1"
   }
 }
