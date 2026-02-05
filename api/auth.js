@@ -33,7 +33,7 @@ export default async function handler(req, res) {
             return res.status(500).json({ autorizado: false, erro: "Falha ao conectar no servidor remoto." });
         }
 
-        const sql = 'SELECT LOGIN FROM FUNCIONARIO WHERE LOGIN = ? AND SENHAWEB = ? AND STATUS = "A"';
+        const sql = "SELECT LOGIN FROM FUNCIONARIO WHERE LOGIN = '?' AND SENHAWEB = '?' AND STATUS = 'A'";
         
         db.query(sql, [usuario, senhaHash], function(err, result) {
             db.detach(); // Fecha a conexão imediatamente
