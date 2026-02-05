@@ -29,7 +29,7 @@
   @media (max-width: 480px) {
     .container { padding-left: 0.5rem; padding-right: 0.5rem; }
     h2 { font-size: 1.25rem !important; }
-    .nav-link { font-size: 8px !important; padding: 0.5rem 0.15rem !important; }
+    .-link { font-size: 8px !important; padding: 0.5rem 0.15rem !important; }
   }
 </style>
 
@@ -65,6 +65,7 @@
         <button onclick="switchTab('catalogo')" class="nav-link py-2 transition-all text-blue-600 font-bold" id="btn-catalogo">Catálogo</button>
         <button onclick="switchTab('sobre')" class="nav-link py-2 transition-all" id="btn-sobre">Sobre Nós</button>
         <button onclick="switchTab('faq')" class="nav-link py-2 transition-all" id="btn-faq">FAQ</button>
+        <button onclick="logout()" class="nav-link py-2 transition-all text-red-500 hover:text-red-700 font-bold" id="btn-sair"><i class="fas fa-sign-out-alt"></i> Sair</button>
       </nav>
     </div>
   </header>
@@ -158,44 +159,72 @@
     let currentSlide = 0, totalSlides = 0, allFiles = [];
     const loadedTabs = { home: false, treinamento: false, encartes: false, catalogo: false };
 
-    // --- LÓGICA DE LOGIN ---
-    async function checkLogin() {
-        const usuario = document.getElementById('user-input').value;
-        const senha = document.getElementById('pass-input').value;
-        const errorMsg = document.getElementById('login-error');
-        const btn = document.getElementById('btn-entrar');
+       // --- LÓGICA DE LOGIN E SESSÃO ---
+const SESSION_TIMEOUT = 2 * 60 * 60 * 1000; // 2 horas em milissegundos
 
-        if (!usuario || !senha) return alert("Preencha todos os campos");
+async function checkLogin() {
+    const usuario = document.getElementById('user-input').value;
+    const senha = document.getElementById('pass-input').value;
+    const errorMsg = document.getElementById('login-error');
+    const btn = document.getElementById('btn-entrar');
 
-        btn.disabled = true;
-        btn.innerText = "Conectando...";
-        errorMsg.classList.add('hidden');
+    if (!usuario || !senha) return alert("Preencha todos os campos");
 
-        try {
-            const API_URL = 'https://sono-show.vercel.app/api/auth'; 
-            const response = await fetch(API_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ usuario, senha })
-            });
-            const res = await response.json();
+    btn.disabled = true;
+    btn.innerText = "Conectando...";
+    errorMsg.classList.add('hidden');
 
-            if (response.ok && res.autorizado) {
-                document.getElementById('login-overlay').style.display = 'none';
-                sessionStorage.setItem('sono_logged', 'true');
-                loadHomeData(); 
-            } else {
-                errorMsg.innerText = res.mensagem || "Falha na autenticação";
-                errorMsg.classList.remove('hidden');
-            }
-        } catch (e) {
-            errorMsg.innerText = "Erro de rede. Tente novamente.";
+    try {
+        const API_URL = 'https://sono-show.vercel.app/api/auth'; 
+        const response = await fetch(API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ usuario, senha })
+        });
+        const res = await response.json();
+
+        if (response.ok && res.autorizado) {
+            const now = new Date().getTime();
+            localStorage.setItem('sono_logged', 'true');
+            localStorage.setItem('sono_login_time', now.toString()); // Salva o momento do login
+            
+            document.getElementById('login-overlay').style.display = 'none';
+            loadHomeData(); 
+        } else {
+            errorMsg.innerText = res.mensagem || "Falha na autenticação";
             errorMsg.classList.remove('hidden');
-        } finally {
-            btn.disabled = false;
-            btn.innerText = "Entrar";
         }
+    } catch (e) {
+        errorMsg.innerText = "Erro de rede. Tente novamente.";
+        errorMsg.classList.remove('hidden');
+    } finally {
+        btn.disabled = false;
+        btn.innerText = "Entrar";
     }
+}
+
+function logout() {
+    localStorage.removeItem('sono_logged');
+    localStorage.removeItem('sono_login_time');
+    location.reload(); // Recarrega para voltar à tela de login
+}
+
+function checkSession() {
+    const logged = localStorage.getItem('sono_logged');
+    const loginTime = localStorage.getItem('sono_login_time');
+    const now = new Date().getTime();
+
+    if (logged === 'true' && loginTime) {
+        // Verifica se passou de 2 horas
+        if (now - parseInt(loginTime) > SESSION_TIMEOUT) {
+            alert("Sua sessão expirou. Por favor, faça login novamente.");
+            logout();
+            return false;
+        }
+        return true;
+    }
+    return false;
+}
 
     document.addEventListener('keypress', (e) => {
         if(e.key === 'Enter' && document.getElementById('login-overlay').style.display !== 'none') checkLogin();
@@ -311,13 +340,19 @@
     }
 
     window.onload = () => {
-      // Verifica se já estava logado nesta sessão
-      if (sessionStorage.getItem('sono_logged') === 'true') {
+    // Verifica se a sessão é válida ao carregar/F5
+    if (checkSession()) {
         document.getElementById('login-overlay').style.display = 'none';
         loadHomeData();
-      }
-      setInterval(() => { if(document.getElementById('tab-home').classList.contains('active')) moveSlide(1); }, 6000);
-    };
+    } else {
+        document.getElementById('login-overlay').style.display = 'flex';
+    }
+    
+    // Auto-slide do banner
+    setInterval(() => { 
+        if(document.getElementById('tab-home').classList.contains('active')) moveSlide(1); 
+    }, 6000);
+};
   </script>
 </body>
 </html>
