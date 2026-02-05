@@ -1,44 +1,35 @@
 // api/auth.js
 export default async function handler(req, res) {
-  // 1. Configurar Headers para evitar erros de acesso (CORS)
-  res.setHeader('Access-Control-Allow-Credentials', true);
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
-  res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
+    // Configuração de CORS para permitir que o site acesse a API
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  if (req.method === 'OPTIONS') {
-    res.status(200).end();
-    return;
-  }
+    if (req.method === 'OPTIONS') return res.status(200).end();
 
-  // 2. Pegar os dados enviados pelo seu formulário
-  const { usuario, senha } = req.body;
+    const { usuario, senha } = req.body;
 
-  try {
-    // 3. Chamar o seu ERP (Ajuste a URL e o formato conforme seu ERP)
-    const response = await fetch('URL_DO_SEU_ERP_AQUI', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ 
-        codigo: usuario, 
-        password: senha 
-      })
-    });
+    try {
+        // --- AQUI ENTRA A CONEXÃO COM SEU ERP ---
+        const response = await fetch('URL_DO_SEU_ERP_AQUI', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                login: usuario, 
+                password: senha 
+            })
+        });
 
-    const data = await response.json();
+        const data = await response.json();
 
-    // 4. Lógica de validação baseada no seu ERP
-    // Exemplo: se o ERP retornar { ativo: true }
-    if (data.status === "Ativo" || data.ativo === true) {
-      return res.status(200).json({ 
-        autorizado: true, 
-        nome: data.nome_funcionario || "Colaborador" 
-      });
-    } else {
-      return res.status(401).json({ autorizado: false, mensagem: "Usuário ou senha inválidos" });
+        // Ajuste a condição abaixo conforme o que o seu ERP responde
+        if (data.status === "Ativo") {
+            return res.status(200).json({ autorizado: true, nome: data.nome });
+        } else {
+            return res.status(401).json({ autorizado: false, mensagem: "Acesso negado" });
+        }
+
+    } catch (error) {
+        return res.status(500).json({ autorizado: false, erro: "Falha ao conectar no ERP" });
     }
-
-  } catch (error) {
-    return res.status(500).json({ autorizado: false, erro: "Erro ao conectar no ERP" });
-  }
 }
