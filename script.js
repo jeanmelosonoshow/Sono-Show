@@ -6,66 +6,76 @@ const SESSION_TIMEOUT = 2 * 60 * 60 * 1000;
 let currentSlide = 0, totalSlides = 0, allFiles = [];
 const loadedTabs = { home: false, treinamento: false, encartes: false, catalogo: false };
 
-// --- LOGIN & SESSION ---
+// --- LÓGICA DE LOGIN E SESSÃO ---
+const SESSION_TIMEOUT = 2 * 60 * 60 * 1000; // 2 horas em milissegundos
+
 async function checkLogin() {
-    const usuario = document.getElementById('user-input').value;
-    const senha = document.getElementById('pass-input').value;
-    const errorMsg = document.getElementById('login-error');
-    const btn = document.getElementById('btn-entrar');
+  const usuario = document.getElementById('user-input').value;
+  const senha = document.getElementById('pass-input').value;
+  const errorMsg = document.getElementById('login-error');
+  const btn = document.getElementById('btn-entrar');
 
-    if (!usuario || !senha) return alert("Preencha todos os campos");
+  if (!usuario || !senha) return alert("Preencha todos os campos");
 
-    btn.disabled = true;
-    btn.innerText = "Conectando...";
-    errorMsg.classList.add('hidden');
+  btn.disabled = true;
+  btn.innerText = "Conectando...";
+  errorMsg.classList.add('hidden');
 
-    try {
-        const API_URL = 'https://sono-show.vercel.app/api/auth'; 
-        const response = await fetch(API_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ usuario, senha })
-        });
-        const res = await response.json();
+  try {
+    const API_URL = 'https://sono-show.vercel.app/api/auth';
+    const response = await fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ usuario, senha })
+    });
+    const res = await response.json();
 
-        if (response.ok && res.autorizado) {
-            const now = new Date().getTime();
-            localStorage.setItem('sono_logged', 'true');
-            localStorage.setItem('sono_login_time', now.toString());
-            document.getElementById('login-overlay').style.display = 'none';
-            loadHomeData(); 
-        } else {
-            errorMsg.innerText = res.mensagem || "Falha na autenticação";
-            errorMsg.classList.remove('hidden');
-        }
-    } catch (e) {
-        errorMsg.innerText = "Erro de rede. Tente novamente.";
-        errorMsg.classList.remove('hidden');
-    } finally {
-        btn.disabled = false;
-        btn.innerText = "Entrar";
+    if (response.ok && res.autorizado) {
+      const now = new Date().getTime();
+      localStorage.setItem('sono_logged', 'true');
+      localStorage.setItem('sono_login_time', now.toString()); // Salva o momento do login
+     
+      document.getElementById('login-overlay').style.display = 'none';
+      loadHomeData();
+    } else {
+      errorMsg.innerText = res.mensagem || "Falha na autenticação";
+      errorMsg.classList.remove('hidden');
     }
+  } catch (e) {
+    errorMsg.innerText = "Erro de rede. Tente novamente.";
+    errorMsg.classList.remove('hidden');
+  } finally {
+    btn.disabled = false;
+    btn.innerText = "Entrar";
+  }
 }
 
 function logout() {
-    localStorage.removeItem('sono_logged');
-    localStorage.removeItem('sono_login_time');
-    location.reload();
+  localStorage.removeItem('sono_logged');
+  localStorage.removeItem('sono_login_time');
+  location.reload(); // Recarrega para voltar à tela de login
 }
 
 function checkSession() {
-    const logged = localStorage.getItem('sono_logged');
-    const loginTime = localStorage.getItem('sono_login_time');
-    const now = new Date().getTime();
-    if (logged === 'true' && loginTime) {
-        if (now - parseInt(loginTime) > SESSION_TIMEOUT) {
-            logout();
-            return false;
-        }
-        return true;
+  const logged = localStorage.getItem('sono_logged');
+  const loginTime = localStorage.getItem('sono_login_time');
+  const now = new Date().getTime();
+
+  if (logged === 'true' && loginTime) {
+    // Verifica se passou de 2 horas
+    if (now - parseInt(loginTime) > SESSION_TIMEOUT) {
+      alert("Sua sessão expirou. Por favor, faça login novamente.");
+      logout();
+      return false;
     }
-    return false;
+    return true;
+  }
+  return false;
 }
+
+  document.addEventListener('keypress', (e) => {
+    if(e.key === 'Enter' && document.getElementById('login-overlay').style.display !== 'none') checkLogin();
+  });
 
 // --- EXPLORER DE ARQUIVOS (TREINAMENTO) ---
 
