@@ -158,6 +158,7 @@
     let currentSlide = 0, totalSlides = 0, allFiles = [];
     const loadedTabs = { home: false, treinamento: false, encartes: false, catalogo: false };
    //FUNCAO PARA O LOGIN
+
     async function checkLogin() {
     const usuario = document.getElementById('user-input').value;
     const senha = document.getElementById('pass-input').value;
@@ -167,10 +168,15 @@
     if (!usuario || !senha) return alert("Preencha todos os campos");
 
     btn.disabled = true;
-    btn.innerText = "Verificando...";
+    btn.innerText = "Conectando ao Banco..."; // Feedback mais específico
+    errorMsg.classList.add('hidden');
 
     try {
-        const response = await fetch('/api/auth', {
+        // MUITO IMPORTANTE: Se o seu site está no GitHub e a API na Vercel, 
+        // coloque a URL completa abaixo, ex: https://seu-projeto.vercel.app/api/auth
+        const API_URL = 'https://sono-show.vercel.app/api/auth'; 
+
+        const response = await fetch(API_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ usuario, senha })
@@ -178,15 +184,17 @@
 
         const res = await response.json();
 
-        if (res.autorizado) {
+        if (response.ok && res.autorizado) {
             document.getElementById('login-overlay').style.display = 'none';
             sessionStorage.setItem('sono_logged', 'true');
         } else {
-            errorMsg.innerText = res.mensagem || "Usuário ou senha inválidos";
+            // Exibe o erro exato que vem da API
+            errorMsg.innerText = res.mensagem || res.erro || "Falha na autenticação";
             errorMsg.classList.remove('hidden');
         }
     } catch (e) {
-        errorMsg.innerText = "Erro ao conectar com o servidor de autenticação.";
+        console.error("Erro no fetch:", e);
+        errorMsg.innerText = "Erro de rede: O servidor de autenticação não respondeu.";
         errorMsg.classList.remove('hidden');
     } finally {
         btn.disabled = false;
@@ -194,10 +202,7 @@
     }
 }
 
-// Bloqueia o site se não estiver logado ao carregar a página
-if (sessionStorage.getItem('sono_logged') === 'true') {
-    document.getElementById('login-overlay').style.display = 'none';
-}
+    
 // FUNCAO PARA O LOGIN
     async function generatePdfThumb(url, canvasId) {
       try {
