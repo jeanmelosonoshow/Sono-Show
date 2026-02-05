@@ -79,7 +79,67 @@ function checkSession() {
         if(e.key === 'Enter' && document.getElementById('login-overlay').style.display !== 'none') checkLogin();
     });
 
-    // --- FUNÇÕES DE DADOS E ARQUIVOS (RESTAURADAS DO ORIGINAL) ---
+    // --- FUNÇÕES DE DADOS E ARQUIVOS  ---
+    // Exemplo de como processar seus dados de arquivos
+        function renderFiles(arquivos) {
+            const videoContainer = document.getElementById('container-videos');
+            const leituraContainer = document.getElementById('container-leitura');
+            
+            videoContainer.innerHTML = '';
+            leituraContainer.innerHTML = '';
+        
+            arquivos.forEach(file => {
+                // 1. REMOVER A EXTENSÃO PARA EXIBIÇÃO
+                // Pega "manual_vendas.pdf" e transforma em "manual_vendas"
+                const nomeSemExtensao = file.nome.replace(/\.[^/.]+$/, "");
+                
+                const fileExt = file.nome.split('.').pop().toLowerCase();
+                
+                // Template do Card
+                const cardHtml = `
+                    <div class="file-card p-4 border border-gray-100 rounded-xl hover:shadow-md transition bg-gray-50 flex items-center gap-4 group" data-name="${file.nome.toLowerCase()}">
+                        <div class="text-2xl ${fileExt === 'mp4' ? 'text-blue-500' : 'text-red-500'}">
+                            <i class="fas ${fileExt === 'mp4' ? 'fa-play-circle' : 'fa-file-pdf'}"></i>
+                        </div>
+                        <div class="flex-1 truncate">
+                            <p class="font-bold text-slate-700 truncate">${nomeSemExtensao}</p>
+                            <span class="text-[10px] text-gray-400 uppercase">${fileExt}</span>
+                        </div>
+                        <button class="opacity-0 group-hover:opacity-100 bg-white p-2 rounded-full shadow-sm text-blue-600 transition">
+                            <i class="fas fa-external-link-alt"></i>
+                        </button>
+                    </div>
+                `;
+        
+                // 2. DIVIDIR POR TIPO
+                if (['mp4', 'webm', 'mov'].includes(fileExt)) {
+                    videoContainer.innerHTML += cardHtml;
+                } else if (['pdf', 'html', 'htm'].includes(fileExt)) {
+                    leituraContainer.innerHTML += cardHtml;
+                }
+            });
+        }
+        
+        // 3. BUSCA QUE FILTRA AMBAS AS SEÇÕES
+        function filterFiles() {
+            const searchTerm = document.getElementById('fileSearch').value.toLowerCase();
+            const cards = document.querySelectorAll('.file-card');
+            let hasResults = false;
+        
+            cards.forEach(card => {
+                const name = card.getAttribute('data-name');
+                if (name.includes(searchTerm)) {
+                    card.style.display = 'flex';
+                    hasResults = true;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        
+            // Exibe mensagem se nada for encontrado
+            document.getElementById('no-results').classList.toggle('hidden', hasResults);
+        }
+  
     async function generatePdfThumb(url, canvasId) {
       try {
         const loadingTask = pdfjsLib.getDocument(url);
