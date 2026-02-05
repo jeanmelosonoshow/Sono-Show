@@ -149,14 +149,41 @@ function checkSession() {
  } catch (e) { container.innerHTML = "Erro ao carregar encartes."; }
  }
 
-  async function loadFiles(path) {
-   try {
-    const res = await fetch(`https://api.github.com/repos/${USER}/${REPO}/contents/${path}`);
-    allFiles = await res.json();
-    renderFileList(allFiles, path);
-    if(path === "Manuais") loadedTabs.treinamento = true;
-   } catch (e) { console.error(e); }
-  }
+  //async function loadFiles(path) {
+   //try {
+    //const res = await fetch(`https://api.github.com/repos/${USER}/${REPO}/contents/${path}`);
+    //allFiles = await res.json();
+    //renderFileList(allFiles, path);
+   /// if(path === "Manuais") loadedTabs.treinamento = true;
+   ///} catch (e) { console.error(e); }
+  ///}
+      async function loadFiles(path) {
+          const pastasContainer = document.getElementById("section-pastas");
+          const videosContainer = document.getElementById("section-videos");
+          const arquivosContainer = document.getElementById("section-arquivos");
+          const breadcrumb = document.getElementById("breadcrumb");
+      
+          // Feedback visual de carregamento
+          pastasContainer.innerHTML = '<p class="col-span-full text-gray-400 animate-pulse">Carregando...</p>';
+          
+          try {
+              const res = await fetch(`https://api.github.com/repos/${USER}/${REPO}/contents/${path}`);
+              allFiles = await res.json();
+              
+              // Atualiza Breadcrumb
+              breadcrumb.innerHTML = path.split('/').map((p, i, arr) => {
+                  const fullPath = arr.slice(0, i + 1).join('/');
+                  return `<span class="cursor-pointer hover:underline" onclick="loadFiles('${fullPath}')">${p}</span>`;
+              }).join(' <i class="fas fa-chevron-right text-[8px] mx-1 text-gray-300"></i> ');
+      
+              renderExplorer(allFiles, path);
+          } catch (e) {
+              console.error(e);
+              pastasContainer.innerHTML = "Erro ao carregar arquivos.";
+          }
+      }
+
+
 
   function renderFileList(files, currentPath) {
    const container = document.getElementById("explorer-content");
@@ -171,6 +198,74 @@ function checkSession() {
      <i class="fas fa-chevron-right text-slate-200 text-xs"></i>
     </div>`).join("");
   }
+
+ ////ajuste de exibicao do arquivo
+function renderExplorer(files, currentPath) {
+    const secPastas = document.getElementById("section-pastas");
+    const secVideos = document.getElementById("section-videos");
+    const secArquivos = document.getElementById("section-arquivos");
+    
+    secPastas.innerHTML = "";
+    secVideos.innerHTML = "";
+    secArquivos.innerHTML = "";
+
+    // Botão Voltar
+    if (currentPath !== "Manuais") {
+        const pai = currentPath.substring(0, currentPath.lastIndexOf('/')) || "Manuais";
+        secPastas.innerHTML = `
+            <div onclick="loadFiles('${pai}')" class="flex flex-col items-center gap-2 group cursor-pointer">
+                <div class="w-full aspect-square bg-blue-50 rounded-xl flex items-center justify-center border-2 border-dashed border-blue-200 group-hover:bg-blue-100 transition">
+                    <i class="fas fa-level-up-alt text-blue-400 text-2xl"></i>
+                </div>
+                <p class="text-xs font-bold text-blue-600 uppercase">Voltar</p>
+            </div>`;
+    }
+
+    files.forEach(item => {
+        const nomeLimpo = item.name.replace(/\.[^/.]+$/, "");
+        const urlRaw = `https://${USER}.github.io/${REPO}/${item.path}`;
+
+        if (item.type === 'dir') {
+            secPastas.innerHTML += `
+                <div onclick="loadFiles('${item.path}')" class="flex flex-col items-center gap-2 group cursor-pointer text-center">
+                    <div class="w-full aspect-square bg-amber-50 rounded-xl flex items-center justify-center border-2 border-transparent group-hover:border-amber-400 transition shadow-sm">
+                        <i class="fas fa-folder text-amber-400 text-4xl"></i>
+                    </div>
+                    <p class="text-[11px] font-bold text-slate-700 leading-tight">${item.name}</p>
+                </div>`;
+        } 
+        else if (item.name.toLowerCase().match(/\.(mp4|webm|mov)$/)) {
+            const id = `thumb-video-${Math.random().toString(36).substr(2, 9)}`;
+            secVideos.innerHTML += `
+                <div onclick="window.open('${urlRaw}', '_blank')" class="flex flex-col gap-2 group cursor-pointer">
+                    <div class="aspect-video bg-black rounded-xl overflow-hidden relative border-2 border-transparent group-hover:border-blue-500 transition shadow-md">
+                        <video id="${id}" src="${urlRaw}#t=1" class="w-full h-full object-cover opacity-80" muted preload="metadata"></video>
+                        <div class="absolute inset-0 flex items-center justify-center text-white text-3xl opacity-30 group-hover:opacity-100 transition">
+                            <i class="fas fa-play-circle"></i>
+                        </div>
+                    </div>
+                    <p class="text-xs font-medium text-gray-700 text-center truncate px-2">${nomeLimpo}</p>
+                </div>`;
+        } 
+        else {
+            const canvasId = `thumb-pdf-${Math.random().toString(36).substr(2, 9)}`;
+            secArquivos.innerHTML += `
+                <div onclick="window.open('${urlRaw}', '_blank')" class="flex flex-col gap-2 group cursor-pointer">
+                    <div class="aspect-[3/4] bg-white rounded-xl overflow-hidden border border-gray-200 group-hover:border-red-400 transition shadow-sm flex items-center justify-center">
+                        <canvas id="${canvasId}" class="w-full h-full object-cover"></canvas>
+                    </div>
+                    <p class="text-xs font-medium text-gray-700 text-center truncate px-2">${nomeLimpo}</p>
+                </div>`;
+            if (item.name.toLowerCase().endsWith('.pdf')) {
+                setTimeout(() => generatePdfThumb(urlRaw, canvasId), 200);
+            }
+        }
+    });
+
+    // Mostrar ou esconder seções se estiverem vazias
+    document.getElementById("wrapper-videos").classList.toggle("hidden", secVideos.innerHTML === "");
+    document.getElementById("wrapper-arquivos").classList.toggle("hidden", secArquivos.innerHTML === "");
+}
 
   function switchTab(tabId) {
    document.querySelectorAll(".tab-content").forEach(el => el.classList.remove("active"));
