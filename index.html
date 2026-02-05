@@ -260,15 +260,15 @@
         const container = document.getElementById("grid-encartes");
         container.innerHTML = '<p class="col-span-full text-center p-10 text-slate-400 animate-pulse">Carregando encartes...</p>';
         try {
-            const res = await fetch(`https://api.github.com/repos/${USER}/${REPO}/contents/${path}`);
+            const res = await fetch(`https://raw.githubusercontent.com/${USER}/${REPO}/contents/${path}`);
             const data = await res.json();
             let pdfs = data.filter(i => i.name.toLowerCase().endsWith(".pdf"));
             
             container.innerHTML = pdfs.map((pdf, index) => {
                 const canvasId = `pdf-canvas-${index}`;
                 const isNew = index === 0;
-                setTimeout(() => generatePdfThumb(`https://${USER}.github.io/${REPO}/${pdf.path}`, canvasId), 400);
-                return `<div onclick="window.open('https://${USER}.github.io/${REPO}/${pdf.path}', '_blank')" class="relative cursor-pointer group bg-white rounded-xl shadow-md transition-all overflow-hidden border ${isNew ? 'border-amber-400 ring-2 ring-amber-50' : 'border-gray-100'} flex flex-col">
+                setTimeout(() => generatePdfThumb(`https://raw.githubusercontent.com/${USER}.github.io/${REPO}/${pdf.path}`, canvasId), 400);
+                return `<div onclick="window.open('https://raw.githubusercontent.com/${USER}.github.io/${REPO}/${pdf.path}', '_blank')" class="relative cursor-pointer group bg-white rounded-xl shadow-md transition-all overflow-hidden border ${isNew ? 'border-amber-400 ring-2 ring-amber-50' : 'border-gray-100'} flex flex-col">
                     ${isNew ? '<div class="absolute top-2 right-2 z-10 bg-amber-500 text-white text-[10px] font-bold px-2 py-1 rounded-full shadow-lg animate-bounce">NOVO</div>' : ''}
                     <div class="aspect-[3/4] bg-gray-100 flex items-center justify-center"><canvas id="${canvasId}" class="pdf-thumb-canvas"></canvas></div>
                     <div class="p-3 bg-white border-t">
