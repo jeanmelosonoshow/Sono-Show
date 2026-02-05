@@ -207,5 +207,15 @@ function checkSession() {
     setInterval(() => { 
         if(document.getElementById('tab-home').classList.contains('active')) moveSlide(1); 
     }, 6000);
-};
+}
+
+// Lógica de Busca de Manuais
+document.getElementById('fileSearch')?.addEventListener('input', (e) => {
+    const term = e.target.value.toLowerCase();
+    const filtered = allFiles.filter(file => 
+        file.name.toLowerCase().includes(term)
+    );
+    // Re-renderiza a lista apenas com os arquivos filtrados
+    renderFileList(filtered, "Manuais"); 
+});
 
