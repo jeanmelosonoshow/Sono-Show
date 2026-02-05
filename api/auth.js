@@ -1,35 +1,43 @@
-// api/auth.js
-export default async function handler(req, res) {
-    // Configuração de CORS para permitir que o site acesse a API
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+const Firebird = require('node-firebird');
 
-    if (req.method === 'OPTIONS') return res.status(200).end();
+export default async function handler(req, res) {
+    if (req.method !== 'POST') return res.status(405).end();
 
     const { usuario, senha } = req.body;
 
-    try {
-        // --- AQUI ENTRA A CONEXÃO COM SEU ERP ---
-        const response = await fetch('URL_DO_SEU_ERP_AQUI', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                login: usuario, 
-                password: senha 
-            })
-        });
+    // Configurações do Banco vindas das Variáveis de Ambiente da Vercel
+    const options = {
+        host: process.env.DB_HOST_FB,
+        port: process.env.DB_PORT_FB,
+        database: process.env.DB_PATH_FB, // Caminho exato no servidor (ex: C:\Dados\ERP.FDB)
+        user: process.env.DB_USER_FB,
+        password: process.env.DB_PASSWORD_DB,
+        lowercase_keys: false
+    };
 
-        const data = await response.json();
-
-        // Ajuste a condição abaixo conforme o que o seu ERP responde
-        if (data.status === "Ativo") {
-            return res.status(200).json({ autorizado: true, nome: data.nome });
-        } else {
-            return res.status(401).json({ autorizado: false, mensagem: "Dados de Login Incorretos ou Usuário Desativado" });
+    Firebird.attach(options, function(err, db) {
+        if (err) {
+            return res.status(500).json({ autorizado: false, erro: "Erro de conexão: " + err.message });
         }
 
-    } catch (error) {
-        return res.status(500).json({ autorizado: false, erro: "Falha ao conectar no ERP" });
-    }
+        // Query para Firebird 3.0 (Ajuste os nomes das colunas)
+        const sql = 'SELECT NOME_FUNC FROM FUNCIONARIOS WHERE CODIGO = ? AND SENHA = ? AND ATIVO = "S"';
+        
+        db.query(sql, [usuario, senha], function(err, result) {
+            db.detach(); // Fecha a conexão sempre!
+
+            if (err) {
+                return res.status(500).json({ autorizado: false, erro: "Erro na consulta" });
+            }
+
+            if (result.length > 0) {
+                return res.status(200).json({ 
+                    autorizado: true, 
+                    nome: result[0].NOME_FUNC 
+                });
+            } else {
+                return res.status(401).json({ autorizado: false, mensagem: "Login ou senha incorretos" });
+            }
+        });
+    });
 }
