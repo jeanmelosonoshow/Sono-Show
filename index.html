@@ -267,32 +267,38 @@ function checkSession() {
       } catch (e) { console.error(e); }
     }
 
-    async function loadEncartes(path) {
-      if(loadedTabs.encartes) return;
-      const container = document.getElementById("grid-encartes");
-      container.innerHTML = '<p class="col-span-full text-center p-10 text-slate-400 animate-pulse">Carregando encartes...</p>';
-      try {
-        const res = await fetch(`https://api.github.com/repos/${USER}/${REPO}/contents/${path}`);
-        const data = await res.json();
-        let pdfs = data.filter(i => i.name.toLowerCase().endsWith(".pdf"));
-        
-        container.innerHTML = pdfs.map((pdf, index) => {
-          const canvasId = `pdf-canvas-${index}`;
-          const isNew = index === 0;
-          // RESTAURADA URL CORRETA: github.io
-          setTimeout(() => generatePdfThumb(`https://${USER}.github.io/${REPO}/${pdf.path}`, canvasId), 400);
-          return `<div onclick="window.open('https://${USER}.github.io/${REPO}/${pdf.path}', '_blank')" class="relative cursor-pointer group bg-white rounded-xl shadow-md transition-all overflow-hidden border ${isNew ? 'border-amber-400 ring-2 ring-amber-50' : 'border-gray-100'} flex flex-col">
-            ${isNew ? '<div class="absolute top-2 right-2 z-10 bg-amber-500 text-white text-[10px] font-bold px-2 py-1 rounded-full shadow-lg animate-bounce">NOVO</div>' : ''}
-            <div class="aspect-[3/4] bg-gray-100 flex items-center justify-center"><canvas id="${canvasId}" class="pdf-thumb-canvas"></canvas></div>
-            <div class="p-3 bg-white border-t">
-              <p class="text-[10px] font-bold ${isNew ? 'text-amber-600' : 'text-gray-400'} uppercase">${isNew ? 'Destaque' : 'Encarte Anterior'}</p>
-              <p class="text-xs font-bold text-slate-700 truncate">${pdf.name.replace('.pdf','')}</p>
-            </div>
-          </div>`;
-        }).join("");
-        loadedTabs.encartes = true;
-      } catch (e) { container.innerHTML = "Erro ao carregar encartes."; }
-    }
+      async function loadEncartes(path) {
+   if(loadedTabs.encartes) return;
+   const container = document.getElementById("grid-encartes");
+   container.innerHTML = '<p class="col-span-full text-center p-10 text-slate-400 animate-pulse">Carregando encartes...</p>';
+   try {
+    const res = await fetch(`https://api.github.com/repos/${USER}/${REPO}/contents/${path}`);
+    const data = await res.json();
+    let pdfs = data.filter(i => i.name.toLowerCase().endsWith(".pdf"));
+    pdfs.sort((a, b) => {
+      const getParts = (name) => {
+        const parts = name.replace('.pdf', '').split('-');
+        return { mes: parseInt(parts[0]) || 0, ano: parseInt(parts[1]) || 0 };
+      };
+      const dA = getParts(a.name), dB = getParts(b.name);
+      return (dB.ano !== dA.ano) ? dB.ano - dA.ano : dB.mes - dA.mes;
+    });
+    container.innerHTML = pdfs.map((pdf, index) => {
+     const canvasId = `pdf-canvas-${index}`;
+     const isNew = index === 0;
+     setTimeout(() => generatePdfThumb(`https://${USER}.github.io/${REPO}/${pdf.path}`, canvasId), 400);
+     return `<div onclick="window.open('https://${USER}.github.io/${REPO}/${pdf.path}', '_blank')" class="relative cursor-pointer group bg-white rounded-xl shadow-md transition-all overflow-hidden border ${isNew ? 'border-amber-400 ring-2 ring-amber-50' : 'border-gray-100'} flex flex-col">
+      ${isNew ? '<div class="absolute top-2 right-2 z-10 bg-amber-500 text-white text-[10px] font-bold px-2 py-1 rounded-full shadow-lg animate-bounce">NOVO</div>' : ''}
+      <div class="aspect-[3/4] bg-gray-100 flex items-center justify-center"><canvas id="${canvasId}" class="pdf-thumb-canvas"></canvas></div>
+      <div class="p-3 bg-white border-t">
+       <p class="text-[10px] font-bold ${isNew ? 'text-amber-600' : 'text-gray-400'} uppercase">${isNew ? 'Destaque' : 'Encarte Anterior'}</p>
+       <p class="text-xs font-bold text-slate-700 truncate">${pdf.name.replace('.pdf','')}</p>
+      </div>
+     </div>`;
+    }).join("");
+    loadedTabs.encartes = true;
+   } catch (e) { container.innerHTML = "Erro ao carregar encartes."; }
+  }
 
     async function loadFiles(path) {
       try {
