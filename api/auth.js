@@ -26,7 +26,7 @@ export default async function handler(req, res) {
         if (data.status === "Ativo") {
             return res.status(200).json({ autorizado: true, nome: data.nome });
         } else {
-            return res.status(401).json({ autorizado: false, mensagem: "Acesso negado" });
+            return res.status(401).json({ autorizado: false, mensagem: "Dados de Login Incorretos ou Usuário Desativado" });
         }
 
     } catch (error) {
