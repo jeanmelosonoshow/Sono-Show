@@ -18,10 +18,10 @@ export default async function handler(req, res) {
     // 3. Configurações usando suas variáveis da Vercel
     const options = {
         host: process.env.DB_HOST_FB,
-        port: parseInt(process.env.DB_PORT_DB) || 35201,
-        database: process.env.DB_PATH_DB,
-        user: process.env.DB_USER_DB,
-        password: process.env.DB_PASSWORD_DB,
+        port: process.env.DB_PORT_FB,
+        database: process.env.DB_PATH_FB,
+        user: process.env.DB_USER_FB,
+        password: process.env.DB_PASSWORD_FB,
         lowercase_keys: false,
         pageSize: 4096 // Padrão Firebird
     };
