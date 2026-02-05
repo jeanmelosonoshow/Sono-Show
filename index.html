@@ -156,7 +156,48 @@
     const REPO = "Sono-Show";
     let currentSlide = 0, totalSlides = 0, allFiles = [];
     const loadedTabs = { home: false, treinamento: false, encartes: false, catalogo: false };
+   //FUNCAO PARA O LOGIN
+    async function checkLogin() {
+    const usuario = document.getElementById('user-input').value;
+    const senha = document.getElementById('pass-input').value;
+    const errorMsg = document.getElementById('login-error');
+    const btn = document.getElementById('btn-entrar');
 
+    if (!usuario || !senha) return alert("Preencha todos os campos");
+
+    btn.disabled = true;
+    btn.innerText = "Verificando...";
+
+    try {
+        const response = await fetch('/api/auth', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ usuario, senha })
+        });
+
+        const res = await response.json();
+
+        if (res.autorizado) {
+            document.getElementById('login-overlay').style.display = 'none';
+            sessionStorage.setItem('sono_logged', 'true');
+        } else {
+            errorMsg.innerText = res.mensagem || "Usuário ou senha inválidos";
+            errorMsg.classList.remove('hidden');
+        }
+    } catch (e) {
+        errorMsg.innerText = "Erro ao conectar com o servidor de autenticação.";
+        errorMsg.classList.remove('hidden');
+    } finally {
+        btn.disabled = false;
+        btn.innerText = "Entrar";
+    }
+}
+
+// Bloqueia o site se não estiver logado ao carregar a página
+if (sessionStorage.getItem('sono_logged') === 'true') {
+    document.getElementById('login-overlay').style.display = 'none';
+}
+// FUNCAO PARA O LOGIN
     async function generatePdfThumb(url, canvasId) {
       try {
         const loadingTask = pdfjsLib.getDocument(url);
