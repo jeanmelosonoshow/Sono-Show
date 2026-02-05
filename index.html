@@ -187,6 +187,9 @@
         if (response.ok && res.autorizado) {
             document.getElementById('login-overlay').style.display = 'none';
             sessionStorage.setItem('sono_logged', 'true');
+            
+            // NOVO: Carrega os dados assim que logar
+            loadHomeData(); 
         } else {
             // Exibe o erro exato que vem da API
             errorMsg.innerText = res.mensagem || res.erro || "Falha na autenticação";
@@ -320,9 +323,11 @@
       slides.style.transform = `translateX(-${currentSlide * 100}%)`;
     }
 
-    window.onload = () => {
-      loadHomeData();
-      setInterval(() => { if(document.getElementById('tab-home').classList.contains('active')) moveSlide(1); }, 6000);
+   window.onload = () => {
+    // Se já estiver logado (refresh da página), pula o login e carrega
+    if (sessionStorage.getItem('sono_logged') === 'true') {
+        document.getElementById('login-overlay').style.display = 'none';
+        loadHomeData();
     };
   </script>
 </body>
