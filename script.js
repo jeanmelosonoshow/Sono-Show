@@ -1,3 +1,7 @@
+    
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+    if (window.self !== window.top) { document.documentElement.classList.add('is-iframe'); }
+   
 
     const USER = "jeanmelosonoshow";
     const REPO = "Sono-Show";
