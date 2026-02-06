@@ -38,6 +38,7 @@ async function checkLogin() {
       localStorage.setItem('sono_login_time', now.toString()); // Salva o momento do login
      
       document.getElementById('login-overlay').classList.add('hidden');
+      document.getElementById('login-overlay').style.display = 'none';
       loadHomeData();
     } else {
       errorMsg.innerText = res.mensagem || "Falha na autenticação";
@@ -281,14 +282,15 @@ function checkSession() {
    slides.style.transform = `translateX(-${currentSlide * 100}%)`;
   }
 
-  window.onload = () => {
-  // Verifica se a sessão é válida ao carregar/F5
-  if (checkSession()) {
-    document.getElementById('login-overlay').style.display = 'none';
-    loadHomeData();
-  } else {
-    document.getElementById('login-overlay').style.display = 'flex';
-  }
+window.onload = () => {
+  // Apenas as funções de interface que não dependem do login
+  // O controle de acesso agora está no DOMContentLoaded abaixo
+  
+  // Auto-slide do banner
+  setInterval(() => {
+    if(document.getElementById('tab-home').classList.contains('active')) moveSlide(1);
+  }, 6000);
+}
  
   // Auto-slide do banner
   setInterval(() => {
@@ -308,17 +310,17 @@ document.getElementById('fileSearch')?.addEventListener('input', (e) => {
 
 // Executa assim que o navegador carrega o DOM
 document.addEventListener("DOMContentLoaded", () => {
-    const estaLogado = localStorage.getItem('sono_logged');
     const overlay = document.getElementById('login-overlay');
-
-    if (estaLogado === 'true') {
-        // Se estiver logado, garante que o overlay esteja escondido
-        overlay.classList.add('hidden');
+    
+    // Usa a sua função checkSession que já tem a lógica de tempo (2 horas)
+    if (checkSession()) {
+        overlay.classList.add("hidden");
+        overlay.style.display = "none"; // Garante compatibilidade
         loadHomeData(); 
     } else {
-        // Se não estiver, garante que ele apareça (caso você tenha posto 'hidden' no HTML)
-        overlay.classList.remove('hidden');
+        overlay.classList.remove("hidden");
+        overlay.style.display = "flex"; // Força a exibição se não estiver logado
     }
-});  
+});
   
   
