@@ -210,16 +210,16 @@ function renderExplorer(files, currentPath) {
     secArquivos.innerHTML = "";
 
     // Botão Voltar
-    if (currentPath !== "Manuais") {
-        const pai = currentPath.substring(0, currentPath.lastIndexOf('/')) || "Manuais";
-        secPastas.innerHTML = `
-            <div onclick="loadFiles('${pai}')" class="flex flex-col items-center gap-2 group cursor-pointer">
-                <div class="w-full aspect-square bg-blue-50 rounded-xl flex items-center justify-center border-2 border-dashed border-blue-200 group-hover:bg-blue-100 transition">
-                    <i class="fas fa-level-up-alt text-blue-400 text-2xl"></i>
-                </div>
-                <p class="text-xs font-bold text-blue-600 uppercase">Voltar</p>
-            </div>`;
-    }
+    //if (currentPath !== "Manuais") {
+      //  const pai = currentPath.substring(0, currentPath.lastIndexOf('/')) || "Manuais";
+        // secPastas.innerHTML = `
+           // <div onclick="loadFiles('${pai}')" class="flex flex-col items-center gap-2 group cursor-pointer">
+             //   <div class="w-full aspect-square bg-blue-50 rounded-xl flex items-center justify-center border-2 border-dashed border-blue-200 group-hover:bg-blue-100 transition">
+               //     <i class="fas fa-level-up-alt text-blue-400 text-2xl"></i>
+                //</div>
+                //<p class="text-xs font-bold text-blue-600 uppercase">Voltar</p>
+            //</div>`;
+    //}
 
     files.forEach(item => {
         const nomeLimpo = item.name.replace(/\.[^/.]+$/, "");
