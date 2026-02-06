@@ -282,21 +282,15 @@ function checkSession() {
    slides.style.transform = `translateX(-${currentSlide * 100}%)`;
   }
 
+// --- INICIALIZAÇÃO E EVENTOS ---
+
 window.onload = () => {
-  // Apenas as funções de interface que não dependem do login
-  // O controle de acesso agora está no DOMContentLoaded abaixo
-  
-  // Auto-slide do banner
+  // Auto-slide do banner (O código duplicado foi removido daqui)
   setInterval(() => {
-    if(document.getElementById('tab-home').classList.contains('active')) moveSlide(1);
+    const homeTab = document.getElementById('tab-home');
+    if(homeTab && homeTab.classList.contains('active')) moveSlide(1);
   }, 6000);
-}
- 
-  // Auto-slide do banner
-  setInterval(() => {
-    if(document.getElementById('tab-home').classList.contains('active')) moveSlide(1);
-  }, 6000);
-}
+};
 
 // Lógica de Busca de Manuais
 document.getElementById('fileSearch')?.addEventListener('input', (e) => {
@@ -304,23 +298,29 @@ document.getElementById('fileSearch')?.addEventListener('input', (e) => {
   const filtered = allFiles.filter(file =>
     file.name.toLowerCase().includes(term)
   );
-  // Re-renderiza a lista apenas com os arquivos filtrados
-  renderFileList(filtered, "Manuais");
-})
+  // Nota: Verifique se sua função é renderExplorer ou renderFileList
+  renderExplorer(filtered, "Manuais"); 
+});
 
 // Executa assim que o navegador carrega o DOM
 document.addEventListener("DOMContentLoaded", () => {
     const overlay = document.getElementById('login-overlay');
     
-    // Usa a sua função checkSession que já tem a lógica de tempo (2 horas)
+    // Se o checkSession retornar true, esconde o login, senão mostra
     if (checkSession()) {
         overlay.classList.add("hidden");
-        overlay.style.display = "none"; // Garante compatibilidade
+        overlay.style.display = "none"; 
         loadHomeData(); 
     } else {
         overlay.classList.remove("hidden");
-        overlay.style.display = "flex"; // Força a exibição se não estiver logado
+        overlay.style.display = "flex"; 
     }
 });
-  
-  
+
+// Listener de Enter para o Login
+document.addEventListener('keypress', (e) => {
+    const overlay = document.getElementById('login-overlay');
+    if(e.key === 'Enter' && overlay && !overlay.classList.contains('hidden')) {
+        checkLogin();
+    }
+});
