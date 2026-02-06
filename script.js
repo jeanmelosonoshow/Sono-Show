@@ -38,7 +38,7 @@ async function checkLogin() {
       localStorage.setItem('sono_login_time', now.toString()); // Salva o momento do login
      
       document.getElementById('login-overlay').classList.add('hidden');
-      document.getElementById('login-overlay').style.display = 'none';
+     
       loadHomeData();
     } else {
       errorMsg.innerText = res.mensagem || "Falha na autenticação";
