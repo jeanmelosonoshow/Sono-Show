@@ -472,15 +472,75 @@
                 O Rel. Total Financeiro Caixa pode ser dividido em 5 Partes para melhor entendermos a leitura dele
             </p>
             <p>
-                <span><strong class="section-header"><i>1)Movimentações Geradas</i></strong></span><wbr>
-                Nessa parte encontramos todos o registros (recebimentos) validos (faturados) na filial, de forma resumida, trazendo a soma total das vendas por portador dde pagamento (Bandeira do pagamento).
+                <span><strong class="section-header"><i>1)Movimentações Geradas</i></strong></span><br>
+                Nessa parte encontramos todos o registros de (recebimentos) validos (faturados) na filial de forma resumida, trazendo a soma total das vendas por portador de pagamento (Bandeira do pagamento). Com o relatório em Tela, ao clicar no símbolo <i class="bi bi-plus-square-fill"></i> é exibindo as vendas com seus totais de parcelas que compõem a soma de cada total. <span class="tooltip-img"> <strong> Observe o Video abaixo:</strong></span>
             </p>
             <div class="image-placeholder">
                 <video width="100%" height="auto" autoplay loop muted plasinline>
                     <source src="https://raw.githubusercontent.com/jeanmelosonoshow/Sono-Show/main/video/exibir-extrato.mp4" type="video/mp4">
                 </video>
             </div>
-            
+              
+              <p>
+                  <span><strong>2)Totalizadores</strong></span><br>
+                  Os Totais deste relatório, evidenciam que o Total financeiro que são os Valores recebidos no caixa em moeda vigente, seja este por espécie, cartão ou meios digitais, somado à outras operações, caracterizam o resultado de venda do dia (Resultado gerencial).
+                  O resultado gerencial é Tudo que foi recebido no caixa + Todos os recebimentos internos (Crédito cliente por exmeplo) - as devoluções. <br>
+                    <ul>
+                        <li>
+                            <strong>Total Movimentações: </strong> É a Soma de todas as movimentações geradas no caixa.                                                
+                        </li>
+                        <li>
+                            <strong>Totral Crédito Utilizado em Vendas: </strong> São os valores pagos com o Crédito do cliente que é gerado nas Devoluções do produto.
+                        </li>
+                        <li>
+                            <strong>Total Devolução: </strong> São todas as devoluções Faturadas no dia.
+                        </li>
+                        <li>
+                            <strong>Garantia Cancelada Sem Devolução: </strong>São os valores proveniente das devoluçoes de garantia.
+                        </li>
+                        <li>
+                            <strong>Resultado: </strong> Deve ser extamente igual ao resultado gerencial presente no Ranking de vendas ou Resultado de venda por filial.
+                        </li>
+                        <li>
+                            <strong>Total Garantia: </strong> É o valor vendido de Assistencia prolongada. Este valor já está na composição dos outros totais, porém ele está separado apenas para destaque e observação.
+                        </li>
+                    </ul>
+                    <div class="image-placeholder">   
+                        <img src="https://lh3.googleusercontent.com/pw/AP1GczP_Eg8zRbkUZYO5PWDPmA0nL63ujA0xjqJC2Jrkhk8uxtWMMYMiKNGqC3ml1hkkX2-1Fn8q9lNx6A6JQAs9BeIOpCX7K7B6kYrWt1j51vUxE9c38tmwM94Y0Rn3tl4hLLXNMLa0xggRxNIMdIQ-7OLB=w993-h230-s-no-gm?authuser=2">
+                    </div>
+
+                    <span><strong>3)Movimentações Caixa</strong></span><br>
+                        <p>
+                            Aqui você encontra toda movimentação recebida no caixa da filial. No momento o único recebimento que é efetuado de fato no dia para o caixa é o DINHEIRO. A movimentações geradas de cartão por exemplo, são valores que ainda serão recebidos, eles não estão já no caixa da loja ou do banco, por isso só o valor em dinheiro é considerado como "Movimentação do Caixa". Vamos abordar abaixo cada item:<br>
+                            
+                            <ul>
+                                <li>
+                                    <strong>4 CRÉDITOS - ABERTURA: </strong> Este Campo recebe a soma do saldo final de caixas anteriores a data consultada. <br>
+                                    <span class="tooltip-img"><strong>Exemplo: </strong></span> Digamos que estamos no dia 05. No dia 01 fechou o caixa com R$ 30,00, se não houver um débito no caixa até o dia 04. O saldo inicial do dia 04 será R$30. Então suponha que tenha entrado mais R$ 15 no dia 04. O seu saldo final será R$30 + $15 = R$45. Desta forma o saldo de abertura do dia 05 será de R$45.
+                                </li>
+                                <li>
+                                    <strong>2 CRÉDITOS - DINHEIRO: </strong> Toda venda em Dinheiro ao ser faturada tem o seu recebimento creditado no cadastro Fonte do caixa.
+                                </li>
+                                <li>
+                                    <strong>1 DÉBITO - LAN CAIXA | 1.99.99.99 - TRANSFERENCIA DEBITO FONTE: </strong> Ao realizar a saída do dinheiro na tela  de visualizar caixa de funcionário, ao usar a opção de transferencia entre fonte, seja essa fonte destino Sangria ou uma conta bancária, ficar registrado a saída nesse registro.
+                                </li>
+                            </ul>
+                            O soma desses saldos de abertura, créditos e débitos determinam o saldo final da filial.
+                        </p>
+                        <div class="image-placeholder">
+                            <img src="https://lh3.googleusercontent.com/pw/AP1GczM9e9EUW9wc5Blw4-4NJaAXE_4t39s5cQiUZWQU6WChJ9XRtBgMrXqCFQ5eSxiVMehYDhATZDxwestqkQ7UhK4ARM3J32v6MZJ7QTl91eo0Az8sdxgjNiR25CMudJhey83jORya7-WZwusjFvtT01fE=w1000-h269-s-no-gm?authuser=2">
+                        </div>
+                        <span><strong>4)Movimentações que não incidem no total (Alarme)</strong></span><br>
+                        <p>
+                            <ul>
+                                <li>
+                                    <strong>1   ALARME - CREDITO/DÉBITO/CANCELAMENTO: </strong> Qualquer movimentação existente na Filial, seja ela com origem no contas a Receber ou no Contas a Pagar, mas que estão canceladas ou não movimentou a Fonte do <em>"Caixa"</em> da filial, se caracteriza como valores que não influenciam no resultado do Caixa. Mas o sistema mostra essas movimentações para garantir a rastreabilidade de tudo o que ocoreu.
+                                </li>
+                            </ul>
+                        </p>
+
+             </p>
+
         </section>
 
         <section id="checklist" class="mt-5">
@@ -523,8 +583,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-
-
 
 
 
