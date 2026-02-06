@@ -37,7 +37,7 @@ async function checkLogin() {
       localStorage.setItem('sono_logged', 'true');
       localStorage.setItem('sono_login_time', now.toString()); // Salva o momento do login
      
-      document.getElementById('login-overlay').style.display = 'none';
+      document.getElementById('login-overlay').classList.add('hidden');
       loadHomeData();
     } else {
       errorMsg.innerText = res.mensagem || "Falha na autenticação";
@@ -304,4 +304,21 @@ document.getElementById('fileSearch')?.addEventListener('input', (e) => {
   );
   // Re-renderiza a lista apenas com os arquivos filtrados
   renderFileList(filtered, "Manuais");
-});
+})
+
+// Executa assim que o navegador carrega o DOM
+document.addEventListener("DOMContentLoaded", () => {
+    const estaLogado = localStorage.getItem('sono_logged');
+    const overlay = document.getElementById('login-overlay');
+
+    if (estaLogado === 'true') {
+        // Se estiver logado, garante que o overlay esteja escondido
+        overlay.classList.add('hidden');
+        loadHomeData(); 
+    } else {
+        // Se não estiver, garante que ele apareça (caso você tenha posto 'hidden' no HTML)
+        overlay.classList.remove('hidden');
+    }
+});  
+  
+  
