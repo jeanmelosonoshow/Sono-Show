@@ -183,24 +183,9 @@ function checkSession() {
           }
       }
 
+   ////organizacao dos arquivos
 
-
-  function renderFileList(files, currentPath) {
-   const container = document.getElementById("explorer-content");
-   let backBtn = currentPath !== "Manuais" ? `
-    <div class="p-4 bg-blue-50 text-blue-600 font-bold cursor-pointer border-b flex items-center gap-2 hover:bg-blue-100 transition-colors" onclick="loadFiles('Manuais')">
-     <i class="fas fa-arrow-left"></i> Voltar para Manuais
-    </div>` : "";
-  
-   container.innerHTML = backBtn + files.map(item => `
-    <div class="flex items-center justify-between py-4 px-6 hover:bg-slate-50 cursor-pointer border-b border-gray-50" onclick="${item.type==='dir' ? `loadFiles('${item.path}')` : `window.open('https://${USER}.github.io/${REPO}/${item.path}','_blank')`}">
-     <div class="flex items-center gap-4"><i class="fas ${item.type==='dir'?'fa-folder text-yellow-500':'fa-file-pdf text-red-500'} text-xl"></i><span class="font-medium text-slate-700">${item.name}</span></div>
-     <i class="fas fa-chevron-right text-slate-200 text-xs"></i>
-    </div>`).join("");
-  }
-
- ////ajuste de exibicao do arquivo
-function renderExplorer(files, currentPath) {
+   function renderExplorer(files, currentPath) {
     const secPastas = document.getElementById("section-pastas");
     const secVideos = document.getElementById("section-videos");
     const secArquivos = document.getElementById("section-arquivos");
@@ -209,22 +194,14 @@ function renderExplorer(files, currentPath) {
     secVideos.innerHTML = "";
     secArquivos.innerHTML = "";
 
-    // Botão Voltar
-    //if (currentPath !== "Manuais") {
-      //  const pai = currentPath.substring(0, currentPath.lastIndexOf('/')) || "Manuais";
-        // secPastas.innerHTML = `
-           // <div onclick="loadFiles('${pai}')" class="flex flex-col items-center gap-2 group cursor-pointer">
-             //   <div class="w-full aspect-square bg-blue-50 rounded-xl flex items-center justify-center border-2 border-dashed border-blue-200 group-hover:bg-blue-100 transition">
-               //     <i class="fas fa-level-up-alt text-blue-400 text-2xl"></i>
-                //</div>
-                //<p class="text-xs font-bold text-blue-600 uppercase">Voltar</p>
-            //</div>`;
-    //}
+    // O Botão Voltar foi removido conforme solicitado, 
+    // pois agora você utiliza o menu de navegação (breadcrumbs).
 
     files.forEach(item => {
         const nomeLimpo = item.name.replace(/\.[^/.]+$/, "");
         const urlRaw = `https://${USER}.github.io/${REPO}/${item.path}`;
 
+        // 1. TRATAMENTO DE PASTAS
         if (item.type === 'dir') {
             secPastas.innerHTML += `
                 <div onclick="loadFiles('${item.path}')" class="flex flex-col items-center gap-2 group cursor-pointer text-center">
@@ -234,6 +211,7 @@ function renderExplorer(files, currentPath) {
                     <p class="text-[11px] font-bold text-slate-700 leading-tight">${item.name}</p>
                 </div>`;
         } 
+        // 2. TRATAMENTO DE VÍDEOS
         else if (item.name.toLowerCase().match(/\.(mp4|webm|mov)$/)) {
             const id = `thumb-video-${Math.random().toString(36).substr(2, 9)}`;
             secVideos.innerHTML += `
@@ -247,6 +225,17 @@ function renderExplorer(files, currentPath) {
                     <p class="text-xs font-medium text-gray-700 text-center truncate px-2">${nomeLimpo}</p>
                 </div>`;
         } 
+        // 3. TRATAMENTO DE ARQUIVOS HTML (MINIATURA VIA IFRAME)
+        else if (item.name.toLowerCase().endsWith('.html')) {
+            secArquivos.innerHTML += `
+                <div onclick="window.open('${urlRaw}', '_blank')" class="flex flex-col gap-2 group cursor-pointer">
+                    <div class="aspect-[3/4] bg-white rounded-xl overflow-hidden border border-gray-200 group-hover:border-emerald-400 transition shadow-sm flex items-center justify-center relative">
+                        <iframe src="${urlRaw}" class="pointer-events-none absolute" style="width: 400%; height: 400%; transform: scale(0.25); transform-origin: top left; border: none; overflow: hidden;"></iframe>
+                    </div>
+                    <p class="text-xs font-medium text-gray-700 text-center truncate px-2">${nomeLimpo}</p>
+                </div>`;
+        }
+        // 4. TRATAMENTO DE OUTROS ARQUIVOS (PDF E GERAIS)
         else {
             const canvasId = `thumb-pdf-${Math.random().toString(36).substr(2, 9)}`;
             secArquivos.innerHTML += `
@@ -256,6 +245,7 @@ function renderExplorer(files, currentPath) {
                     </div>
                     <p class="text-xs font-medium text-gray-700 text-center truncate px-2">${nomeLimpo}</p>
                 </div>`;
+            
             if (item.name.toLowerCase().endsWith('.pdf')) {
                 setTimeout(() => generatePdfThumb(urlRaw, canvasId), 200);
             }
@@ -266,6 +256,8 @@ function renderExplorer(files, currentPath) {
     document.getElementById("wrapper-videos").classList.toggle("hidden", secVideos.innerHTML === "");
     document.getElementById("wrapper-arquivos").classList.toggle("hidden", secArquivos.innerHTML === "");
 }
+
+  
 
   function switchTab(tabId) {
    document.querySelectorAll(".tab-content").forEach(el => el.classList.remove("active"));
