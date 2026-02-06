@@ -230,12 +230,12 @@ function checkSession() {
             secArquivos.innerHTML += `
                 <div onclick="window.open('${urlRaw}', '_blank')" class="flex flex-col gap-2 group cursor-pointer">
                     <div class="aspect-[3/4] bg-white rounded-xl overflow-hidden border border-gray-200 group-hover:border-emerald-400 transition shadow-sm flex items-center justify-center relative">
-                        <iframe src="${urlRaw}" class="pointer-events-none absolute" style="width: 100%; height: vh; transform: scale(0.9);  transform-origin: top left; border: none; overflow: hidden;"></iframe> 
+                        <iframe src="${urlRaw}" class="pointer-events-none absolute" style="width: 100%; height: 100%;   transform-origin: top left; border: none; overflow: hidden;"></iframe> 
                     </div>
                     <p class="text-xs font-medium text-gray-700 text-center truncate px-2">${nomeLimpo}</p>
                 </div>`;
         }
-        // 4. TRATAMENTO DE OUTROS ARQUIVOS (PDF E GERAIS)   
+        // 4. TRATAMENTO DE OUTROS ARQUIVOS (PDF E GERAIS)   transform: scale(0.9);
         else {
             const canvasId = `thumb-pdf-${Math.random().toString(36).substr(2, 9)}`;
             secArquivos.innerHTML += `
