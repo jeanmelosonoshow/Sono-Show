@@ -16,6 +16,7 @@ async function checkLogin() {
   const senha = document.getElementById('pass-input').value;
   const errorMsg = document.getElementById('login-error');
   const btn = document.getElementById('btn-entrar');
+  const overlay = document.getElementById('login-overlay'); // Referência do overlay
 
   if (!usuario || !senha) return alert("Preencha todos os campos");
 
@@ -35,9 +36,11 @@ async function checkLogin() {
     if (response.ok && res.autorizado) {
       const now = new Date().getTime();
       localStorage.setItem('sono_logged', 'true');
-      localStorage.setItem('sono_login_time', now.toString()); // Salva o momento do login
+      localStorage.setItem('sono_login_time', now.toString());
      
-      document.getElementById('login-overlay').classList.add('hidden');
+      // CORREÇÃO AQUI: Remove a classe e força o display none
+      overlay.classList.add('hidden');
+      overlay.style.display = 'none'; 
      
       loadHomeData();
     } else {
@@ -76,9 +79,14 @@ function checkSession() {
   return false;
 }
 
-  document.addEventListener('keypress', (e) => {
-    if(e.key === 'Enter' && document.getElementById('login-overlay').style.display !== 'none') checkLogin();
-  });
+// Listener de Enter para o Login
+document.addEventListener('keypress', (e) => {
+    const overlay = document.getElementById('login-overlay');
+    // Verifica se o overlay existe e se NÃO está escondido antes de tentar logar
+    if(e.key === 'Enter' && overlay && overlay.style.display !== 'none' && !overlay.classList.contains('hidden')) {
+        checkLogin();
+    }
+});
 
   // --- FUNÇÕES DE DADOS E ARQUIVOS (RESTAURADAS DO ORIGINAL) ---
   async function generatePdfThumb(url, canvasId) {
