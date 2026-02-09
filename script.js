@@ -276,7 +276,7 @@ async function loadRHData() {
   
   // Lista dos seus arquivos PDF na pasta RH
   const arquivosRH = [
-    { nome: "código de Vestimenta", path: "RH/rh/CÓDIGO DE VESTIMENTA - RH_2-2025.pdf" },
+    { nome: "código de Vestimenta", path: "rh/CÓDIGO DE VESTIMENTA - RH_2-2025.pdf" },
     { nome: "Benefícios", path: "RH/beneficios.pdf" },
     { nome: "Cargos e Salários", path: "RH/cargos.pdf" },
     { nome: "Calendário 2024", path: "RH/calendario.pdf" },
