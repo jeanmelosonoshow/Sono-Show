@@ -281,7 +281,8 @@ async function loadRHData() {
     { nome: "Cargos e Salários", path: "RH/cargos.pdf" },
     { nome: "Calendário 2024", path: "RH/calendario.pdf" },
     { nome: "Segurança do Trabalho", path: "RH/seguranca.pdf" },
-    { nome: "Checklist Onboarding", path: "RH/checklist.pdf" }
+    { nome: "Checklist Onboarding", path: "RH/checklist.pdf" },
+    { nome: "Teste", path: "RH/teste.pdf" }
   ];
 
   container.innerHTML = arquivosRH.map((doc, index) => {
