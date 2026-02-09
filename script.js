@@ -6,10 +6,12 @@
   const USER = "jeanmelosonoshow";
   const REPO = "Sono-Show";
   let currentSlide = 0, totalSlides = 0, allFiles = [];
-  const loadedTabs = { home: false, treinamento: false, encartes: false, catalogo: false };
+   const loadedTabs = { home: false, treinamento: false, encartes: false, catalogo: false };
 
    // --- LÓGICA DE LOGIN E SESSÃO ---
 const SESSION_TIMEOUT = 2 * 60 * 60 * 1000; // 2 horas em milissegundos
+
+  loadedTabs.rh = false;
 
 async function checkLogin() {
   const usuario = document.getElementById('user-input').value;
@@ -266,8 +268,63 @@ document.addEventListener('keypress', (e) => {
     document.getElementById("wrapper-arquivos").classList.toggle("hidden", secArquivos.innerHTML === "");
 }
 
-  
+// funcao pdf para Tab RH - Down
 
+
+// 2. Adicione esta função em qualquer lugar do script
+async function loadRHData() {
+  if (loadedTabs.rh) return;
+  const container = document.getElementById("grid-rh-pdfs");
+  
+  // Lista dos seus arquivos PDF na pasta RH
+  const arquivosRH = [
+    { nome: "Manual de Conduta", path: "RH/manual.pdf" },
+    { nome: "Benefícios", path: "RH/beneficios.pdf" },
+    { nome: "Cargos e Salários", path: "RH/cargos.pdf" },
+    { nome: "Calendário 2024", path: "RH/calendario.pdf" },
+    { nome: "Segurança do Trabalho", path: "RH/seguranca.pdf" },
+    { nome: "Checklist Onboarding", path: "RH/checklist.pdf" }
+  ];
+
+  container.innerHTML = arquivosRH.map((doc, index) => {
+    const canvasId = `rh-pdf-canvas-${index}`;
+    const urlRaw = `https://${USER}.github.io/${REPO}/${doc.path}`;
+    
+    // Chama a SUA função existente generatePdfThumb
+    setTimeout(() => generatePdfThumb(urlRaw, canvasId), 500);
+
+    return `
+      <div onclick="window.open('${urlRaw}', '_blank')" class="group cursor-pointer bg-white p-4 rounded-xl shadow-md hover:shadow-2xl transition-all border border-transparent hover:border-blue-500">
+        <div class="aspect-[1/1.41] bg-gray-100 rounded-lg overflow-hidden mb-4 shadow-inner">
+          <canvas id="${canvasId}" class="w-full h-full object-cover"></canvas>
+        </div>
+        <h4 class="font-bold text-slate-700 truncate text-sm uppercase">${doc.nome}</h4>
+        <p class="text-[10px] text-blue-500 font-bold mt-1">CLIQUE PARA ABRIR</p>
+      </div>`;
+  }).join("");
+
+  loadedTabs.rh = true;
+}
+
+// 3. Atualize sua função switchTab para incluir o RH
+function switchTab(tabId) {
+  document.querySelectorAll(".tab-content").forEach(el => el.classList.remove("active"));
+  document.querySelectorAll(".nav-link").forEach(el => el.classList.remove("active"));
+  document.getElementById("tab-" + tabId).classList.add("active");
+  document.getElementById("btn-" + tabId).classList.add("active");
+
+  if (tabId === "home") loadHomeData();
+  if (tabId === "treinamento") loadFiles("Manuais");
+  if (tabId === "encartes") loadEncartes("Encartes");
+  if (tabId === "rh") loadRHData(); // <--- ADICIONE ESTA LINHA
+  if (tabId === "catalogo" && !loadedTabs.catalogo) {
+    document.getElementById('catalogo-wrapper').innerHTML = `<iframe src="https://catalogo.sonoshowmoveis.com.br/" class="w-full h-full border-none"></iframe>`;
+    loadedTabs.catalogo = true;
+  }
+}
+
+  
+// funcao pdf para Tab RH - UP
   function switchTab(tabId) {
    document.querySelectorAll(".tab-content").forEach(el => el.classList.remove("active"));
    document.querySelectorAll(".nav-link").forEach(el => el.classList.remove("active"));
