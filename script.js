@@ -270,8 +270,6 @@ document.addEventListener('keypress', (e) => {
 
 // funcao pdf para Tab RH - Down
 
-
-// 2. Adicione esta função em qualquer lugar do script
 async function loadRHData() {
   if (loadedTabs.rh) return;
   const container = document.getElementById("grid-rh-pdfs");
@@ -306,7 +304,10 @@ async function loadRHData() {
   loadedTabs.rh = true;
 }
 
-// 3. Atualize sua função switchTab para incluir o RH
+
+
+  
+// funcao pdf para Tab RH - UP
 function switchTab(tabId) {
   document.querySelectorAll(".tab-content").forEach(el => el.classList.remove("active"));
   document.querySelectorAll(".nav-link").forEach(el => el.classList.remove("active"));
@@ -323,22 +324,6 @@ function switchTab(tabId) {
   }
 }
 
-  
-// funcao pdf para Tab RH - UP
-  function switchTab(tabId) {
-   document.querySelectorAll(".tab-content").forEach(el => el.classList.remove("active"));
-   document.querySelectorAll(".nav-link").forEach(el => el.classList.remove("active"));
-   document.getElementById("tab-" + tabId).classList.add("active");
-   document.getElementById("btn-" + tabId).classList.add("active");
-
-   if (tabId === "home") loadHomeData();
-   if (tabId === "treinamento") loadFiles("Manuais");
-   if (tabId === "encartes") loadEncartes("Encartes");
-   if (tabId === "catalogo" && !loadedTabs.catalogo) {
-     document.getElementById('catalogo-wrapper').innerHTML = `<iframe src="https://catalogo.sonoshowmoveis.com.br/" class="w-full h-full border-none"></iframe>`;
-     loadedTabs.catalogo = true;
-   }
-  }
 
   function moveSlide(direction) {
    const slides = document.getElementById("carousel-slides");
