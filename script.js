@@ -109,43 +109,66 @@ document.addEventListener('keypress', (e) => {
 async function loadHomeData() {
     if (loadedTabs.home) return;
     try {
-        // 1. BUSCA BANNERS DINAMICAMENTE (DA PASTA)
-        const pastaBanners = "img/banners"; // Altere para o caminho da sua pasta
-        const resBanners = await fetch(`https://api.github.com/repos/${USER}/${REPO}/contents/${pastaBanners}`);
-        const arquivos = await resBanners.json();
-        
-        // Filtra apenas imagens
-        const listaBanners = arquivos
-            .filter(file => file.name.match(/\.(jpg|jpeg|png|gif|webp)$/i))
-            .map(file => file.download_url);
+        // --- 1. CARREGAMENTO DOS BANNERS ---
+        const pastaBanners = "img/banners"; 
+        const bannerFallback = "img/banner-padrao.jpg"; // Imagem de reserva caso a pasta esteja vazia
+        let listaBanners = [];
 
-        const carousel = document.getElementById("carousel-slides");
-        if (listaBanners.length > 0) {
-            totalSlides = listaBanners.length;
-            carousel.innerHTML = listaBanners.map(img => `
-                <div class="min-w-full h-full flex items-center justify-center bg-slate-900">
-                    <img src="${img}" class="max-w-full max-h-full object-contain">
-                </div>`).join("");
+        try {
+            const resBanners = await fetch(`https://api.github.com/repos/${USER}/${REPO}/contents/${pastaBanners}`);
+            if (resBanners.ok) {
+                const arquivos = await resBanners.json();
+                listaBanners = arquivos
+                    .filter(file => file.name.match(/\.(jpg|jpeg|png|gif|webp)$/i))
+                    .map(file => file.download_url);
+            }
+        } catch (e) { console.error("Erro na API de banners, usando fallback."); }
+
+        // Se a pasta estiver vazia ou der erro, usa o fallback
+        if (listaBanners.length === 0) {
+            listaBanners = [bannerFallback];
         }
 
-        // 2. BUSCA COMUNICADOS (DO JSON)
-        const resDados = await fetch(`https://raw.githubusercontent.com/${USER}/${REPO}/main/comunicados.json?t=${Date.now()}`);
-        const data = await resDados.json();
+        const carousel = document.getElementById("carousel-slides");
+        totalSlides = listaBanners.length;
+        carousel.innerHTML = listaBanners.map(img => `
+            <div class="min-w-full h-full flex items-center justify-center bg-slate-900">
+                <img src="${img}" class="max-w-full max-h-full object-contain" onerror="this.src='${bannerFallback}'">
+            </div>`).join("");
+
+
+        // --- 2. CARREGAMENTO DOS COMUNICADOS ---
+        const response = await fetch(`https://raw.githubusercontent.com/${USER}/${REPO}/main/comunicados.json?t=${Date.now()}`);
+        const data = await response.json();
+        const grid = document.getElementById("grid-comunicados");
 
         if (data.avisos) {
-            document.getElementById("grid-comunicados").innerHTML = data.avisos.map(c => `
-                <div class="bg-white p-6 rounded-xl shadow-sm border-t-4 border-${c.cor}-500 card-zoom">
-                    <span class="text-[10px] font-bold text-${c.cor}-600 bg-${c.cor}-50 px-2 py-1 rounded uppercase">${c.categoria}</span>
-                    <h4 class="font-bold text-lg mt-3 text-slate-800 leading-tight">${c.titulo}</h4>
-                    <p class="text-gray-500 text-sm mt-2">${c.descricao}</p>
-                    <div class="mt-4 pt-4 border-t border-gray-50 text-[10px] text-gray-400 font-bold uppercase">${c.data}</div>
-                </div>`).join("");
+            // Usamos Promise.all para permitir que descrições vindas de arquivos .txt sejam carregadas
+            const avisosHTML = await Promise.all(data.avisos.map(async (c) => {
+                let descricaoFinal = c.descricao;
+
+                // SEGREDO: Se a descrição terminar em .txt, ele busca o conteúdo do arquivo!
+                if (c.descricao.endsWith('.txt')) {
+                    try {
+                        const resTxt = await fetch(`https://raw.githubusercontent.com/${USER}/${REPO}/main/${c.descricao}`);
+                        descricaoFinal = await resTxt.text();
+                    } catch (err) { descricaoFinal = "Erro ao carregar conteúdo."; }
+                }
+
+                return `
+                    <div class="bg-white p-6 rounded-xl shadow-sm border-t-4 border-${c.cor}-500 card-zoom">
+                        <span class="text-[10px] font-bold text-${c.cor}-600 bg-${c.cor}-50 px-2 py-1 rounded uppercase">${c.categoria}</span>
+                        <h4 class="font-bold text-lg mt-3 text-slate-800 leading-tight">${c.titulo}</h4>
+                        <p class="text-gray-500 text-sm mt-2 whitespace-pre-line">${descricaoFinal}</p>
+                        <div class="mt-4 pt-4 border-t border-gray-50 text-[10px] text-gray-400 font-bold uppercase">${c.data}</div>
+                    </div>`;
+            }));
+
+            grid.innerHTML = avisosHTML.join("");
         }
 
         loadedTabs.home = true;
-    } catch (e) { 
-        console.error("Erro ao carregar dados:", e); 
-    }
+    } catch (e) { console.error("Erro geral:", e); }
 }
    async function loadEncartes(path) {
  if(loadedTabs.encartes) return;
