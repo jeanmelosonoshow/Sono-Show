@@ -94,73 +94,54 @@ document.addEventListener('keypress', (e) => {
 
 
 async function carregarAniversariantes() {
-    const url = "https://raw.githubusercontent.com/jeanmelosonoshow/Sono-Show/main/aniversariantes/aniversariantes.XLS?t=" + new Date().getTime();
-    const lista = document.getElementById('lista-aniversariantes');
+  try {
+    const response = await fetch('aniversariantes/aniversariantes.XLS');
+    if (!response.ok) throw new Error('Arquivo não encontrado');
+    
+    const data = await response.arrayBuffer();
+    const workbook = XLSX.read(data, { type: 'array' });
+    const firstSheet = workbook.SheetNames[0];
+    const jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[firstSheet]);
+
+    const mesAtual = new Date().getMonth() + 1;
+
+    const aniversariantesDoMes = jsonData.filter(row => {
+      if (row.Data) {
+        // Tenta converter a data do Excel (que às vezes vem como número ou string)
+        const dataNasc = new Date((row.Data - 25569) * 86400 * 1000); 
+        // Se a data acima falhar, tenta o básico:
+        const dataFinal = isNaN(dataNasc.getTime()) ? new Date(row.Data) : dataNasc;
+        return (dataFinal.getMonth() + 1) === mesAtual;
+      }
+      return false;
+    });
+
+    // AQUI ESTÁ A CORREÇÃO DO ERRO:
     const secao = document.getElementById('secao-aniversariantes');
+    const lista = document.getElementById('lista-aniversariantes'); // Use o ID correto do HTML
 
-    if (!grid || !secao) return;
+    if (aniversariantesDoMes.length > 0 && lista) {
+      secao.classList.remove('hidden');
+      lista.innerHTML = ''; // Limpamos a lista
 
-    try {
-        const response = await fetch(url);
-        const arrayBuffer = await response.arrayBuffer();
-        const data = new Uint8Array(arrayBuffer);
-        const workbook = XLSX.read(data, { type: 'array' });
-        
-        const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-        // Converte para JSON mantendo os nomes das colunas exatamente como no Excel
-        const jsonData = XLSX.utils.sheet_to_json(firstSheet);
-
-        const hojeObj = new Date();
-        const mesAtual = hojeObj.getMonth() + 1;
-        const diaHoje = hojeObj.getDate();
-
-        const aniversariantesDoMes = jsonData.filter(funci => {
-            // Usamos os nomes exatos das suas colunas aqui:
-            const campoData = funci["Nascimento"];
-            if (!campoData) return false;
-
-            let dia, mes;
-
-            if (typeof campoData === 'string') {
-                // Trata o formato DD/MM/AAAA
-                const partes = campoData.split('/');
-                dia = parseInt(partes[0]);
-                mes = parseInt(partes[1]);
-            } else {
-                // Trata caso o Excel envie como objeto de data
-                const d = new Date(campoData);
-                dia = d.getUTCDate();
-                mes = d.getUTCMonth() + 1;
-            }
-
-            funci.diaExtraido = dia; 
-            return mes === mesAtual;
-        }).sort((a, b) => a.diaExtraido - b.diaExtraido);
-
-       if (aniversariantesDoMes.length > 0) {
-    document.getElementById('secao-aniversariantes').classList.remove('hidden');
-            grid.innerHTML = aniversariantesDoMes.map(funci => {
-                const isHoje = funci.diaExtraido === diaHoje;
-                // Ajustado para a coluna "Sexo"
-                const isMasc = String(funci["Sexo"] || '').toLowerCase().startsWith('m');
-                // Ajustado para "Nome do Funcionário"
-                const nomeCompleto = funci["Nome do Funcionário"] || "Funcionário";
-                const primeiroNome = nomeCompleto.split(' ')[0];
-
-                return `
-                    <div class="relative bg-white shadow-md rounded-xl p-4 border-b-4 ${isMasc ? 'border-blue-500' : 'border-pink-500'} transition-transform hover:scale-105 w-full sm:w-48 text-center">
-                        ${isHoje ? '<span class="absolute -top-3 -right-2 bg-yellow-400 text-white text-[10px] font-bold px-2 py-1 rounded-full shadow-lg animate-bounce">HOJE! 🥳</span>' : ''}
-                        <div class="text-3xl mb-2">${isMasc ? '🔹' : '🌸'}</div>
-                        <p class="font-bold text-slate-800 text-sm uppercase truncate">${primeiroNome}</p>
-                        <p class="text-xs text-gray-500 font-medium">Dia ${funci.diaExtraido}</p>
-                    </div>`;
-            }).join('');
-        } else {
-            secao.classList.add('hidden');
-        }
-    } catch (error) {
-        console.error("Erro ao carregar aniversariantes:", error);
+      aniversariantesDoMes.forEach(p => {
+        // Criamos o card e adicionamos na 'lista' (e não no 'grid')
+        lista.innerHTML += `
+          <div class="bg-white p-4 rounded-xl shadow-sm border-l-4 border-pink-500 flex items-center gap-3">
+            <div class="bg-pink-100 text-pink-600 w-10 h-10 rounded-full flex items-center justify-center font-bold">
+              ${new Date(p.Data).getDate() || '!!'}
+            </div>
+            <div>
+              <p class="font-bold text-slate-800 text-sm uppercase">${p.Nome || 'Colaborador'}</p>
+              <p class="text-xs text-gray-500">${p.Setor || 'Sono Show'}</p>
+            </div>
+          </div>
+        `;
+      });
     }
+  } catch (error) {
+    console.error("Erro detalhado:", error);
+  }
 }
 
   // --- FUNÇÕES DE DADOS E ARQUIVOS (RESTAURADAS DO ORIGINAL) ---
