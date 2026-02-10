@@ -120,7 +120,7 @@ async function carregarAniversariantes() {
     lista.innerHTML = aniversariantesDoMes.map(p => {
       const dia = p.Nascimento.split('-')[2];
       const isFeminino = p.Sexo === 'Feminino' || p.Sexo === 'F';
-      const corTema = isFeminino ? 'dark yellow' : 'blue';
+      const corTema = isFeminino ? 'ffa500' : 'blue';
 
       return `
         <div class="relative group bg-white border border-slate-100 rounded-xl p-3 shadow-sm hover:shadow-md transition-all border-l-4 ${isFeminino ? 'border-l-pink-400' : 'border-l-blue-400'}">
