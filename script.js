@@ -90,6 +90,71 @@ document.addEventListener('keypress', (e) => {
     }
 });
 
+document.addEventListener('DOMContentLoaded', function() {
+    carregarAniversariantes();
+});
+
+async function carregarAniversariantes() {
+    const url = "https://raw.githubusercontent.com/jeanmelosonoshow/Sono-Show/main/aniversariantes/aniversariantes.XLS";
+    const grid = document.getElementById('lista-aniversariantes');
+    const secao = document.getElementById('secao-aniversariantes');
+
+    try {
+        const response = await fetch(url);
+        const arrayBuffer = await response.arrayBuffer();
+        const data = new Uint8Array(arrayBuffer);
+        const workbook = XLSX.read(data, { type: 'array' });
+        
+        // Pega a primeira aba do Excel
+        const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+        const jsonData = XLSX.utils.sheet_to_json(firstSheet);
+
+        const mesAtual = new Date().getMonth() + 1;
+        const hoje = new Date().getDate();
+
+        const aniversariantesDoMes = jsonData.filter(funci => {
+            if (!funci.DataNascimento) return false;
+            // Converte data do Excel ou String para objeto Date
+            const dataNasc = funci.DataNascimento instanceof Date ? 
+                             funci.DataNascimento : 
+                             new Date(funci.DataNascimento);
+            return (dataNasc.getMonth() + 1) === mesAtual;
+        }).sort((a, b) => new Date(a.DataNascimento).getDate() - new Date(b.DataNascimento).getDate());
+
+        if (aniversariantesDoMes.length > 0) {
+            secao.classList.remove('hidden');
+            grid.innerHTML = aniversariantesDoMes.map(funci => {
+                const dataNasc = new Date(funci.DataNascimento);
+                const dia = dataNasc.getDate() + 1; // Ajuste de fuso
+                const isHoje = dia === hoje;
+                const isMasc = funci.Sexo === 'Masculino';
+
+                return `
+                    <div class="relative group bg-white shadow-md rounded-xl p-4 border-b-4 ${isMasc ? 'border-blue-500' : 'border-pink-500'} transition-transform hover:scale-105 w-full sm:w-48 text-center">
+                        ${isHoje ? '<span class="absolute -top-3 -right-2 bg-yellow-400 text-xs font-bold px-2 py-1 rounded-full shadow-lg animate-bounce">HOJE! 🥳</span>' : ''}
+                        
+                        <div class="text-3xl mb-2">
+                            ${isMasc ? '🔹' : '🌸'} 
+                            <i class="fas ${isMasc ? 'fa-hat-wizard text-blue-400' : 'fa-magic text-pink-400'}"></i>
+                        </div>
+                        
+                        <p class="font-bold text-slate-800 text-sm uppercase truncate">${funci.Nome.split(' ')[0]}</p>
+                        <p class="text-xs text-gray-500 font-medium">Dia ${dia}</p>
+                        
+                        <div class="mt-2 flex justify-center gap-1 opacity-60">
+                            <i class="fas fa-balloon text-red-400 text-[10px]"></i>
+                            <i class="fas fa-candy-cane text-blue-300 text-[10px]"></i>
+                            <i class="fas fa-gift text-yellow-500 text-[10px]"></i>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+    } catch (error) {
+        console.error("Erro ao carregar aniversariantes:", error);
+    }
+}
+
   // --- FUNÇÕES DE DADOS E ARQUIVOS (RESTAURADAS DO ORIGINAL) ---
   async function generatePdfThumb(url, canvasId) {
    try {
