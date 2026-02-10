@@ -185,7 +185,7 @@ async function carregarAniversariantes() {
         
         <button onclick="toggleCortina()" class="group relative flex items-center gap-3 bg-gradient-to-r from-slate-800 to-slate-900 text-white px-6 py-3 rounded-full font-bold text-xs tracking-widest shadow-lg hover:shadow-pink-500/20 transition-all hover:-translate-y-1 active:scale-95">
           <i class="fas fa-circle text-pink-500 group-hover:animate-ping text-[10px]"></i>
-          VISUALIZAR TODOS DO MÊS
+          TODOS ANIVERSARIANTES DO MÊS
           <i class="fas fa-bullseye text-blue-400 group-hover:rotate-12 transition-transform"></i>
         </button>
       </div>
@@ -227,7 +227,7 @@ function renderizarCards(lista) {
           <i class="fas fa-hat-wizard text-slate-300"></i>
         </div>
         <h4 class="font-bold text-slate-700 text-[11px] uppercase truncate">${p["Nome do Funcionário"]}</h4>
-        <p class="text-[9px] text-slate-400 font-medium">${isFeminino ? 'COLABORADORA' : 'COLABORADOR'}</p>
+        <p class="text-[9px] text-slate-400 font-medium">Setor: ${p["Setor"]}</p>
       </div>
     `;
   }).join('');
