@@ -94,56 +94,77 @@ document.addEventListener('keypress', (e) => {
 
 async function carregarAniversariantes() {
   try {
+    // 1. Busca o arquivo (certifique-se que o caminho está correto no seu repositório)
     const response = await fetch('aniversariantes/aniversariantes.XLS');
+    if (!response.ok) throw new Error('Não foi possível carregar o arquivo Excel.');
+
     const data = await response.arrayBuffer();
     const workbook = XLSX.read(data, { type: 'array' });
-    const firstSheet = workbook.SheetNames[0];
-    
-    // Converte para JSON usando cabeçalhos simples
-    const jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[firstSheet]);
-    
-    const mesAtual = new Date().getMonth() + 1;
-    const lista = document.getElementById('lista-aniversariantes');
-    const secao = document.getElementById('secao-aniversariantes');
+    const firstSheetName = workbook.SheetNames[0];
+    const jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[firstSheetName]);
 
-    // Filtro inteligente
+    // Log para você ver no console exatamente o que o JS está lendo
+    console.log("Dados brutos da planilha:", jsonData);
+
+    const hoje = new Date();
+    const mesAtual = hoje.getMonth() + 1; // Janeiro é 0, então +1
+
+    const secao = document.getElementById('secao-aniversariantes');
+    const lista = document.getElementById('lista-aniversariantes');
+
+    // 2. Filtro com correção de fuso horário
     const aniversariantesDoMes = jsonData.filter(row => {
-      // Procura qualquer coluna que contenha "data" no nome
+      // Procura a coluna que contém "data" no nome
       const chaveData = Object.keys(row).find(key => key.toLowerCase().includes('data'));
-      const valorData = row[chaveData];
+      let valorData = row[chaveData];
 
       if (valorData) {
-        let dataFinal;
+        let dataObjeto;
         if (typeof valorData === 'number') {
-          // Converte número serial do Excel para data JS
-          dataFinal = new Date((valorData - 25569) * 86400 * 1000);
+          // Converte número do Excel para Data JS
+          dataObjeto = new Date(Math.round((valorData - 25569) * 86400 * 1000));
         } else {
-          dataFinal = new Date(valorData);
+          // Tenta ler como string (ex: "10/02/1990")
+          dataObjeto = new Date(valorData);
         }
-        return (dataFinal.getMonth() + 1) === mesAtual;
+
+        // CORREÇÃO CRÍTICA: Ajusta o fuso horário para não "voltar" o dia/mês
+        dataObjeto.setMinutes(dataObjeto.getMinutes() + dataObjeto.getTimezoneOffset());
+
+        return (dataObjeto.getMonth() + 1) === mesAtual;
       }
       return false;
     });
 
+    // 3. Renderização na tela
     if (aniversariantesDoMes.length > 0) {
       secao.classList.remove('hidden');
-      lista.innerHTML = ''; 
+      lista.innerHTML = ''; // Limpa o "Aguardando dados"
 
       aniversariantesDoMes.forEach(p => {
-        // Tenta achar o nome idependente de como foi escrito na planilha
-        const nome = p.Nome || p.NOME || p.nome || p.Colaborador || "Colaborador";
-        const setor = p.Setor || p.SETOR || p.Loja || p.LOJA || "Sono Show";
+        // Busca nomes das colunas de forma flexível
+        const nomeChave = Object.keys(p).find(k => k.toLowerCase().includes('nome')) || 'Nome';
+        const setorChave = Object.keys(p).find(k => k.toLowerCase().includes('setor') || k.toLowerCase().includes('loja')) || 'Setor';
+        const dataChave = Object.keys(p).find(k => k.toLowerCase().includes('data'));
+
+        const nome = p[nomeChave] || "Colaborador";
+        const setor = p[setorChave] || "Sono Show";
         
-        // Tenta extrair o dia
-        const chaveData = Object.keys(p).find(key => key.toLowerCase().includes('data'));
+        // Extrai o dia para o círculo rosa
         let dia = "!!";
-        if (typeof p[chaveData] === 'number') {
-            dia = new Date((p[chaveData] - 25569) * 86400 * 1000).getDate();
+        if (p[dataChave]) {
+            let d = typeof p[dataChave] === 'number' 
+                ? new Date(Math.round((p[dataChave] - 25569) * 86400 * 1000))
+                : new Date(p[dataChave]);
+            d.setMinutes(d.getMinutes() + d.getTimezoneOffset());
+            dia = d.getDate();
         }
 
         lista.innerHTML += `
-          <div class="bg-white p-4 rounded-xl shadow-sm border-l-4 border-pink-500 flex items-center gap-3 min-w-[200px]">
-            <div class="bg-pink-100 text-pink-600 w-10 h-10 rounded-full flex items-center justify-center font-bold">${dia}</div>
+          <div class="bg-white p-4 rounded-xl shadow-sm border-l-4 border-pink-500 flex items-center gap-3 min-w-[220px] animate-fadeIn">
+            <div class="bg-pink-100 text-pink-600 w-10 h-10 rounded-full flex items-center justify-center font-bold">
+              ${dia}
+            </div>
             <div>
               <p class="font-bold text-slate-800 text-sm uppercase">${nome}</p>
               <p class="text-xs text-gray-500">${setor}</p>
@@ -152,13 +173,13 @@ async function carregarAniversariantes() {
         `;
       });
     } else {
-      console.log("Nenhum aniversariante encontrado para o mês:", mesAtual);
+      console.log("Nenhum aniversariante encontrado para o mês", mesAtual);
+      secao.classList.add('hidden'); // Esconde se não houver ninguém
     }
-  } catch (err) {
-    console.error("Erro na leitura final:", err);
+  } catch (error) {
+    console.error("Erro ao processar aniversariantes:", error);
   }
 }
-
   // --- FUNÇÕES DE DADOS E ARQUIVOS (RESTAURADAS DO ORIGINAL) ---
   async function generatePdfThumb(url, canvasId) {
    try {
