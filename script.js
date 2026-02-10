@@ -92,55 +92,70 @@ document.addEventListener('keypress', (e) => {
     }
 });
 
-
 async function carregarAniversariantes() {
   try {
     const response = await fetch('aniversariantes/aniversariantes.XLS');
-    if (!response.ok) throw new Error('Arquivo não encontrado');
-    
     const data = await response.arrayBuffer();
     const workbook = XLSX.read(data, { type: 'array' });
     const firstSheet = workbook.SheetNames[0];
+    
+    // Converte para JSON usando cabeçalhos simples
     const jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[firstSheet]);
-
+    
     const mesAtual = new Date().getMonth() + 1;
+    const lista = document.getElementById('lista-aniversariantes');
+    const secao = document.getElementById('secao-aniversariantes');
 
+    // Filtro inteligente
     const aniversariantesDoMes = jsonData.filter(row => {
-      if (row.Data) {
-        // Tenta converter a data do Excel (que às vezes vem como número ou string)
-        const dataNasc = new Date((row.Data - 25569) * 86400 * 1000); 
-        // Se a data acima falhar, tenta o básico:
-        const dataFinal = isNaN(dataNasc.getTime()) ? new Date(row.Data) : dataNasc;
+      // Procura qualquer coluna que contenha "data" no nome
+      const chaveData = Object.keys(row).find(key => key.toLowerCase().includes('data'));
+      const valorData = row[chaveData];
+
+      if (valorData) {
+        let dataFinal;
+        if (typeof valorData === 'number') {
+          // Converte número serial do Excel para data JS
+          dataFinal = new Date((valorData - 25569) * 86400 * 1000);
+        } else {
+          dataFinal = new Date(valorData);
+        }
         return (dataFinal.getMonth() + 1) === mesAtual;
       }
       return false;
     });
 
-    // AQUI ESTÁ A CORREÇÃO DO ERRO:
-    const secao = document.getElementById('secao-aniversariantes');
-    const lista = document.getElementById('lista-aniversariantes'); // Use o ID correto do HTML
-
-    if (aniversariantesDoMes.length > 0 && lista) {
+    if (aniversariantesDoMes.length > 0) {
       secao.classList.remove('hidden');
-      lista.innerHTML = ''; // Limpamos a lista
+      lista.innerHTML = ''; 
 
       aniversariantesDoMes.forEach(p => {
-        // Criamos o card e adicionamos na 'lista' (e não no 'grid')
+        // Tenta achar o nome idependente de como foi escrito na planilha
+        const nome = p.Nome || p.NOME || p.nome || p.Colaborador || "Colaborador";
+        const setor = p.Setor || p.SETOR || p.Loja || p.LOJA || "Sono Show";
+        
+        // Tenta extrair o dia
+        const chaveData = Object.keys(p).find(key => key.toLowerCase().includes('data'));
+        let dia = "!!";
+        if (typeof p[chaveData] === 'number') {
+            dia = new Date((p[chaveData] - 25569) * 86400 * 1000).getDate();
+        }
+
         lista.innerHTML += `
-          <div class="bg-white p-4 rounded-xl shadow-sm border-l-4 border-pink-500 flex items-center gap-3">
-            <div class="bg-pink-100 text-pink-600 w-10 h-10 rounded-full flex items-center justify-center font-bold">
-              ${new Date(p.Data).getDate() || '!!'}
-            </div>
+          <div class="bg-white p-4 rounded-xl shadow-sm border-l-4 border-pink-500 flex items-center gap-3 min-w-[200px]">
+            <div class="bg-pink-100 text-pink-600 w-10 h-10 rounded-full flex items-center justify-center font-bold">${dia}</div>
             <div>
-              <p class="font-bold text-slate-800 text-sm uppercase">${p.Nome || 'Colaborador'}</p>
-              <p class="text-xs text-gray-500">${p.Setor || 'Sono Show'}</p>
+              <p class="font-bold text-slate-800 text-sm uppercase">${nome}</p>
+              <p class="text-xs text-gray-500">${setor}</p>
             </div>
           </div>
         `;
       });
+    } else {
+      console.log("Nenhum aniversariante encontrado para o mês:", mesAtual);
     }
-  } catch (error) {
-    console.error("Erro detalhado:", error);
+  } catch (err) {
+    console.error("Erro na leitura final:", err);
   }
 }
 
