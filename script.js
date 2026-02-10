@@ -196,7 +196,7 @@ async function carregarAniversariantes() {
 
       <div id="cortina-aniversariantes" class="max-h-0 overflow-hidden transition-all duration-700 ease-in-out opacity-0">
         <div class="pt-8 mt-8 border-t border-slate-200">
-           <h4 class="text-slate-400 font-bold text-[10px] tracking-[0.3em] mb-6 uppercase">Cronograma Completo do Mês</h4>
+           <h4 class="text-slate-400 font-bold text-[10px] tracking-[0.3em] mb-6 uppercase">Calendário Completo do Mês</h4>
            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 pb-10">
              ${renderizarCards(todosDoMes)}
            </div>
