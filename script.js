@@ -39,13 +39,13 @@ async function checkLogin() {
       const now = new Date().getTime();
       localStorage.setItem('sono_logged', 'true');
       localStorage.setItem('sono_login_time', now.toString());
-     
-      // CORREÇÃO AQUI: Remove a classe e força o display none
+      
       overlay.classList.add('hidden');
       overlay.style.display = 'none'; 
-     
+      
+      // Chame as funções aqui para garantir que carreguem após o login
       loadHomeData();
-      carregarAniversariantes();
+      carregarAniversariantes(); 
     } else {
       errorMsg.innerText = res.mensagem || "Falha na autenticação";
       errorMsg.classList.remove('hidden');
