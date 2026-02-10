@@ -87,12 +87,10 @@ document.addEventListener('keypress', (e) => {
     // Verifica se o overlay existe e se NÃO está escondido antes de tentar logar
     if(e.key === 'Enter' && overlay && overlay.style.display !== 'none' && !overlay.classList.contains('hidden')) {
         checkLogin();
+       carregarAniversariantes();
     }
 });
 
-document.addEventListener('DOMContentLoaded', function() {
-    carregarAniversariantes();
-});
 
 async function carregarAniversariantes() {
     const url = "https://raw.githubusercontent.com/jeanmelosonoshow/Sono-Show/main/aniversariantes/aniversariantes.XLS";
