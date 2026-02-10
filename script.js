@@ -95,7 +95,7 @@ document.addEventListener('keypress', (e) => {
 
 async function carregarAniversariantes() {
     const url = "https://raw.githubusercontent.com/jeanmelosonoshow/Sono-Show/main/aniversariantes/aniversariantes.XLS?t=" + new Date().getTime();
-    const grid = document.getElementById('lista-aniversariantes');
+    const lista = document.getElementById('lista-aniversariantes');
     const secao = document.getElementById('secao-aniversariantes');
 
     if (!grid || !secao) return;
@@ -137,8 +137,8 @@ async function carregarAniversariantes() {
             return mes === mesAtual;
         }).sort((a, b) => a.diaExtraido - b.diaExtraido);
 
-        if (aniversariantesDoMes.length > 0) {
-            secao.classList.remove('hidden');
+       if (aniversariantesDoMes.length > 0) {
+    document.getElementById('secao-aniversariantes').classList.remove('hidden');
             grid.innerHTML = aniversariantesDoMes.map(funci => {
                 const isHoje = funci.diaExtraido === diaHoje;
                 // Ajustado para a coluna "Sexo"
