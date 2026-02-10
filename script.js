@@ -107,6 +107,7 @@ async function carregarAniversariantes() {
         const workbook = XLSX.read(data, { type: 'array' });
         
         const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+        // Converte para JSON mantendo os nomes das colunas exatamente como no Excel
         const jsonData = XLSX.utils.sheet_to_json(firstSheet);
 
         const hojeObj = new Date();
@@ -114,23 +115,24 @@ async function carregarAniversariantes() {
         const diaHoje = hojeObj.getDate();
 
         const aniversariantesDoMes = jsonData.filter(funci => {
-            if (!funci.DataNascimento) return false;
+            // Usamos os nomes exatos das suas colunas aqui:
+            const campoData = funci["Nascimento"];
+            if (!campoData) return false;
 
             let dia, mes;
 
-            // TRATAMENTO DA DATA DD/MM/AAAA
-            if (typeof funci.DataNascimento === 'string') {
-                const partes = funci.DataNascimento.split('/');
+            if (typeof campoData === 'string') {
+                // Trata o formato DD/MM/AAAA
+                const partes = campoData.split('/');
                 dia = parseInt(partes[0]);
                 mes = parseInt(partes[1]);
             } else {
-                // Caso o Excel tenha convertido para objeto Date automaticamente
-                const d = new Date(funci.DataNascimento);
+                // Trata caso o Excel envie como objeto de data
+                const d = new Date(campoData);
                 dia = d.getUTCDate();
                 mes = d.getUTCMonth() + 1;
             }
 
-            // Guarda o dia processado para usar no sort depois
             funci.diaExtraido = dia; 
             return mes === mesAtual;
         }).sort((a, b) => a.diaExtraido - b.diaExtraido);
@@ -139,13 +141,17 @@ async function carregarAniversariantes() {
             secao.classList.remove('hidden');
             grid.innerHTML = aniversariantesDoMes.map(funci => {
                 const isHoje = funci.diaExtraido === diaHoje;
-                const isMasc = String(funci.Sexo).toLowerCase().startsWith('m');
+                // Ajustado para a coluna "Sexo"
+                const isMasc = String(funci["Sexo"] || '').toLowerCase().startsWith('m');
+                // Ajustado para "Nome do Funcionário"
+                const nomeCompleto = funci["Nome do Funcionário"] || "Funcionário";
+                const primeiroNome = nomeCompleto.split(' ')[0];
 
                 return `
                     <div class="relative bg-white shadow-md rounded-xl p-4 border-b-4 ${isMasc ? 'border-blue-500' : 'border-pink-500'} transition-transform hover:scale-105 w-full sm:w-48 text-center">
                         ${isHoje ? '<span class="absolute -top-3 -right-2 bg-yellow-400 text-white text-[10px] font-bold px-2 py-1 rounded-full shadow-lg animate-bounce">HOJE! 🥳</span>' : ''}
                         <div class="text-3xl mb-2">${isMasc ? '🔹' : '🌸'}</div>
-                        <p class="font-bold text-slate-800 text-sm uppercase truncate">${funci.Nome.split(' ')[0]}</p>
+                        <p class="font-bold text-slate-800 text-sm uppercase truncate">${primeiroNome}</p>
                         <p class="text-xs text-gray-500 font-medium">Dia ${funci.diaExtraido}</p>
                     </div>`;
             }).join('');
