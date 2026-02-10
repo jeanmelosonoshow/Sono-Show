@@ -184,9 +184,9 @@ async function carregarAniversariantes() {
         </h3>
         
         <button onclick="toggleCortina()" class="group relative flex items-center gap-3 bg-gradient-to-r from-slate-800 to-slate-900 text-white px-6 py-3 rounded-full font-bold text-xs tracking-widest shadow-lg hover:shadow-pink-500/20 transition-all hover:-translate-y-1 active:scale-95">
-          <i class="fa-solid fa-champagne-glasses group-hover:animate-ping text-[10px]"></i>
+          <i class="fa-solid fa-champagne-glasses text-pink-500 group-hover:animate-ping text-[10px]"></i>
          <span><strong>CLIQUE E VEJA </strong></span> TODOS ANIVERSARIANTES DO MÊS
-          <i class="fa-solid fa-champagne-glasses  group-hover:rotate-12 transition-transform"></i>
+          <i class="fa-solid fa-champagne-glasses text-blue-500  group-hover:rotate-12 transition-transform"></i>
         </button>
       </div>
 
@@ -223,8 +223,8 @@ function renderizarCards(lista) {
           Dia ${dia}
         </div>
         <div class="flex justify-between items-start mb-1 text-[12px]">
-          <i class="fas fa-circle ${textClass} opacity-60"></i>
-          <i class="fas fa-hat-wizard text-slate-300"></i>
+          <i class="fa-solid fa-party-horn ${textClass} opacity-60"></i>
+          <i class="fa-solid fa-party-horn text-slate-300"></i>
         </div>
         <h4 class="font-bold text-slate-700 text-[11px] uppercase truncate">${p["Nome do Funcionário"]}</h4>
         <p class="text-[9px] text-slate-400 font-medium">Setor: ${p["Setor"]}</p>
