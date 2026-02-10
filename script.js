@@ -138,8 +138,8 @@ async function carregarAniversariantes() {
             <h4 class="font-bold text-slate-700 text-[11px] leading-tight uppercase truncate" title="${p["Nome do Funcionário"]}">
               ${p["Nome do Funcionário"]}
             </h4>
-            <p class="text-[9px] text-slate-400 font-medium tracking-wide">
-              ${isFeminino ? 'COLABORADORA' : 'COLABORADOR'}
+            <p class="text-[9px] text-slate-400 font-medium tracking-wide"${p["Setor"]}">
+             Setor:  ${p["Setor"]}
             </p>
           </div>
         </div>
