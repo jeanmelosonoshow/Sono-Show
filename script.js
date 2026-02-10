@@ -91,8 +91,8 @@ document.addEventListener('keypress', (e) => {
        carregarAniversariantes();
     }
 });
-
-async function carregarAniversariantes() {
+/// backup aniversariantes, modelo lista
+/*async function carregarAniversariantes() {
   try {
     const response = await fetch('aniversariantes/aniversariantes.json');
     const dados = await response.json();
@@ -149,8 +149,101 @@ async function carregarAniversariantes() {
   } catch (error) {
     console.error("Erro ao carregar:", error);
   }
+}*/
+
+async function carregarAniversariantes() {
+  try {
+    const response = await fetch('aniversariantes/aniversariantes.json');
+    const dados = await response.json();
+    
+    const hoje = new Date();
+    const diaHoje = hoje.getDate();
+    const mesAtual = hoje.getMonth() + 1;
+
+    // 1. Filtra aniversariantes do mês e ordena por dia
+    const todosDoMes = dados.filter(p => {
+      if (!p.Nascimento) return false;
+      const partes = p.Nascimento.split('-');
+      return parseInt(partes[1]) === mesAtual;
+    }).sort((a, b) => parseInt(a.Nascimento.split('-')[2]) - parseInt(b.Nascimento.split('-')[2]));
+
+    // 2. Separa os "Próximos 10 dias" (Hoje até Hoje + 10)
+    const proximos = todosDoMes.filter(p => {
+      const dia = parseInt(p.Nascimento.split('-')[2]);
+      return dia >= diaHoje && dia <= (diaHoje + 10);
+    });
+
+    const secao = document.getElementById('secao-aniversariantes');
+    secao.classList.remove('hidden');
+
+    // Renderiza a estrutura interna
+    secao.innerHTML = `
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+        <h3 class="text-xl font-black text-slate-700 italic flex items-center gap-2">
+          <i class="fas fa-cake-candles text-pink-500"></i> PRÓXIMOS ANIVERSARIANTES
+        </h3>
+        
+        <button onclick="toggleCortina()" class="group relative flex items-center gap-3 bg-gradient-to-r from-slate-800 to-slate-900 text-white px-6 py-3 rounded-full font-bold text-xs tracking-widest shadow-lg hover:shadow-pink-500/20 transition-all hover:-translate-y-1 active:scale-95">
+          <i class="fas fa-circle text-pink-500 group-hover:animate-ping text-[10px]"></i>
+          VISUALIZAR TODOS DO MÊS
+          <i class="fas fa-bullseye text-blue-400 group-hover:rotate-12 transition-transform"></i>
+        </button>
+      </div>
+
+      <div id="lista-proximos" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+        ${renderizarCards(proximos)}
+      </div>
+
+      <div id="cortina-aniversariantes" class="max-h-0 overflow-hidden transition-all duration-700 ease-in-out opacity-0">
+        <div class="pt-8 mt-8 border-t border-slate-200">
+           <h4 class="text-slate-400 font-bold text-[10px] tracking-[0.3em] mb-6 uppercase">Cronograma Completo do Mês</h4>
+           <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 pb-10">
+             ${renderizarCards(todosDoMes)}
+           </div>
+        </div>
+      </div>
+    `;
+
+  } catch (error) {
+    console.error("Erro:", error);
+  }
 }
 
+// Função auxiliar para gerar os cards
+function renderizarCards(lista) {
+  return lista.map(p => {
+    const dia = p.Nascimento.split('-')[2];
+    const isFeminino = p.Sexo === 'Feminino' || p.Sexo === 'F';
+    const corClass = isFeminino ? 'border-l-pink-400' : 'border-l-blue-400';
+    const textClass = isFeminino ? 'text-pink-500' : 'text-blue-500';
+
+    return `
+      <div class="relative bg-white border border-slate-100 rounded-xl p-3 shadow-sm border-l-4 ${corClass} transition-all hover:shadow-md">
+        <div class="absolute -top-2 -right-1 bg-slate-800 text-white text-[10px] font-bold px-2 py-0.5 rounded-lg shadow-sm">
+          Dia ${dia}
+        </div>
+        <div class="flex justify-between items-start mb-1 text-[12px]">
+          <i class="fas fa-circle ${textClass} opacity-60"></i>
+          <i class="fas fa-hat-wizard text-slate-300"></i>
+        </div>
+        <h4 class="font-bold text-slate-700 text-[11px] uppercase truncate">${p["Nome do Funcionário"]}</h4>
+        <p class="text-[9px] text-slate-400 font-medium">${isFeminino ? 'COLABORADORA' : 'COLABORADOR'}</p>
+      </div>
+    `;
+  }).join('');
+}
+
+// Lógica de abrir/fechar cortina
+function toggleCortina() {
+  const cortina = document.getElementById('cortina-aniversariantes');
+  if (cortina.classList.contains('max-h-0')) {
+    cortina.classList.remove('max-h-0', 'opacity-0');
+    cortina.classList.add('max-h-[2000px]', 'opacity-100');
+  } else {
+    cortina.classList.add('max-h-0', 'opacity-0');
+    cortina.classList.remove('max-h-[2000px]', 'opacity-100');
+  }
+}
 
 
   // --- FUNÇÕES DE DADOS E ARQUIVOS (RESTAURADAS DO ORIGINAL) ---
