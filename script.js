@@ -94,7 +94,7 @@ document.addEventListener('keypress', (e) => {
 
 
 async function carregarAniversariantes() {
-    const url = "https://raw.githubusercontent.com/jeanmelosonoshow/Sono-Show/main/aniversariantes/aniversariantes.XLS";
+    const url = "https://raw.githubusercontent.com/jeanmelosonoshow/Sono-Show/main/aniversariantes/aniversariantes.XLS?t=" + new Date().getTime();
     const grid = document.getElementById('lista-aniversariantes');
     const secao = document.getElementById('secao-aniversariantes');
 
@@ -430,15 +430,27 @@ document.getElementById('fileSearch')?.addEventListener('input', (e) => {
 document.addEventListener("DOMContentLoaded", () => {
     const overlay = document.getElementById('login-overlay');
     
-    // Se o checkSession retornar true, esconde o login, senão mostra
     if (checkSession()) {
-        overlay.classList.add("hidden");
-        overlay.style.display = "none"; 
+        if (overlay) {
+            overlay.classList.add("hidden");
+            overlay.style.display = "none";
+        }
         loadHomeData(); 
-        carregarAniversariantes();
+        
+        // Pequeno atraso para garantir que a biblioteca XLSX carregou
+        setTimeout(() => {
+            if (typeof XLSX !== 'undefined') {
+                carregarAniversariantes();
+            } else {
+                console.error("Biblioteca XLSX não carregada!");
+            }
+        }, 500);
+        
     } else {
-        overlay.classList.remove("hidden");
-        overlay.style.display = "flex"; 
+        if (overlay) {
+            overlay.classList.remove("hidden");
+            overlay.style.display = "flex"; 
+        }
     }
 });
 
