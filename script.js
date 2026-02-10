@@ -223,8 +223,8 @@ function renderizarCards(lista) {
           Dia ${dia}
         </div>
         <div class="flex justify-between items-start mb-1 text-[12px]">
-          <i class="fa-solid fa-gift ${textClass} opacity-60"  style="background:#FFC107;color:#C62828; padding:10px;   border-radius:8px;  font-size:22px; display:inline-flex; align-items:center; justify-content:center; ">></i>
-          <i class="fa-solid fa-party-horn text-slate-300"></i>
+          <i class="fa-solid fa-gift ${textClass} opacity-60" text-slate-300  style="background:#FFC107;color:#C62828; padding:10px;   border-radius:8px;  font-size:1px; display:inline-flex; align-items:center; justify-content:center; "></i>
+         
         </div>
         <h4 class="font-bold text-slate-700 text-[11px] uppercase truncate">${p["Nome do Funcionário"]}</h4>
         <p class="text-[9px] text-slate-400 font-medium">Setor: ${p["Setor"]}</p>
