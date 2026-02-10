@@ -45,6 +45,7 @@ async function checkLogin() {
       overlay.style.display = 'none'; 
      
       loadHomeData();
+      carregarAniversariantes();
     } else {
       errorMsg.innerText = res.mensagem || "Falha na autenticação";
       errorMsg.classList.remove('hidden');
