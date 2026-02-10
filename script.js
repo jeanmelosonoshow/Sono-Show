@@ -425,6 +425,7 @@ document.addEventListener("DOMContentLoaded", () => {
         overlay.classList.add("hidden");
         overlay.style.display = "none"; 
         loadHomeData(); 
+        carregarAniversariantes();
     } else {
         overlay.classList.remove("hidden");
         overlay.style.display = "flex"; 
