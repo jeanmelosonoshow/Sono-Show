@@ -95,50 +95,73 @@ document.addEventListener('keypress', (e) => {
 async function carregarAniversariantes() {
   try {
     const response = await fetch('aniversariantes/aniversariantes.json');
-    if (!response.ok) throw new Error('Arquivo JSON não encontrado');
-    
     const dados = await response.json();
     const mesAtual = new Date().getMonth() + 1;
-    
+
+    // 1. Filtrar aniversariantes do mês
+    const aniversariantesDoMes = dados.filter(p => {
+      if (!p.Nascimento) return false;
+      const partes = p.Nascimento.split('-');
+      return parseInt(partes[1]) === mesAtual;
+    });
+
     const secao = document.getElementById('secao-aniversariantes');
     const lista = document.getElementById('lista-aniversariantes');
 
-    // Filtra pelo mês atual baseando-se na chave "Nascimento" (AAAA-MM-DD)
-    const aniversariantesDoMes = dados.filter(p => {
-      if (p.Nascimento) {
-        const partes = p.Nascimento.split('-'); 
-        return parseInt(partes[1]) === mesAtual;
-      }
-      return false;
-    });
-
-    // Ordena por dia
-    aniversariantesDoMes.sort((a, b) => {
-        return parseInt(a.Nascimento.split('-')[2]) - parseInt(b.Nascimento.split('-')[2]);
-    });
-
-    if (aniversariantesDoMes.length > 0) {
-      secao.classList.remove('hidden'); // Mostra a seção na Home
-      lista.innerHTML = aniversariantesDoMes.map(p => {
-        const dia = p.Nascimento.split('-')[2];
-        const nomeParaExibir = p["Nome do Funcionário"];
-        return `
-          <div class="bg-white p-4 rounded-xl shadow-sm border-l-4 border-pink-500 flex items-center gap-3 min-w-[220px]">
-            <div class="bg-pink-100 text-pink-600 w-10 h-10 rounded-full flex items-center justify-center font-bold">
-              ${dia}
-            </div>
-            <div>
-              <p class="font-bold text-slate-800 text-[11px] uppercase">${nomeParaExibir}</p>
-              <p class="text-[10px] text-gray-500">${p.Sexo === 'Feminino' ? 'Colaboradora' : 'Colaborador'}</p>
-            </div>
-          </div>
-        `;
-      }).join("");
-    } else {
+    if (aniversariantesDoMes.length === 0) {
       secao.classList.add('hidden');
+      return;
     }
+
+    secao.classList.remove('hidden');
+
+    // 2. Agrupar por dia
+    const gruposPorDia = {};
+    aniversariantesDoMes.forEach(p => {
+      const dia = p.Nascimento.split('-')[2];
+      if (!gruposPorDia[dia]) gruposPorDia[dia] = [];
+      gruposPorDia[dia].push(p);
+    });
+
+    // 3. Gerar HTML organizado por dia
+    const diasOrdenados = Object.keys(gruposPorDia).sort((a, b) => a - b);
+    
+    lista.innerHTML = diasOrdenados.map(dia => `
+      <div class="w-full mb-6">
+        <div class="flex items-center gap-4 mb-4">
+          <span class="bg-slate-800 text-white px-4 py-1 rounded-full text-sm font-bold shadow-md">Dia ${dia}</span>
+          <div class="h-[1px] bg-slate-200 flex-grow"></div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          ${gruposPorDia[dia].map(p => {
+            const isFeminino = p.Sexo === 'Feminino' || p.Sexo === 'F';
+            const corBase = isFeminino ? 'pink' : 'blue';
+            const iconCor = isFeminino ? 'text-pink-500' : 'text-blue-500';
+            const bgCard = isFeminino ? 'hover:border-pink-300' : 'hover:border-blue-300';
+
+            return `
+              <div class="relative bg-white p-5 rounded-2xl shadow-sm border border-slate-100 transition-all hover:shadow-md ${bgCard} group overflow-hidden">
+                <i class="fas fa-circle absolute -left-2 -top-2 text-[10px] opacity-20 ${iconCor}"></i>
+                <i class="fas fa-birthday-cake absolute left-3 top-3 ${iconCor} text-lg"></i>
+                <i class="fas fa-hat-wizard absolute right-3 top-3 text-slate-300 group-hover:rotate-12 transition-transform text-lg"></i>
+                
+                <div class="mt-4 text-center">
+                  <h4 class="font-black text-slate-800 text-sm uppercase tracking-tight">${p["Nome do Funcionário"]}</h4>
+                  <p class="text-[10px] font-semibold uppercase tracking-wider ${iconCor} mt-1">
+                    ${isFeminino ? 'Colaboradora' : 'Colaborador'}
+                  </p>
+                </div>
+
+                <div class="absolute bottom-0 left-0 w-full h-1 ${isFeminino ? 'bg-pink-400' : 'bg-blue-400'} opacity-30"></div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      </div>
+    `).join('');
+
   } catch (error) {
-    console.error("Erro ao carregar aniversariantes:", error);
+    console.error("Erro:", error);
   }
 }
 
