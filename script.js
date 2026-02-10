@@ -94,33 +94,42 @@ document.addEventListener('keypress', (e) => {
 
 async function carregarAniversariantes() {
   try {
-    // 1. Busca o arquivo JSON
+    // 1. Busca o arquivo JSON (ajuste o caminho se necessário)
     const response = await fetch('aniversariantes/aniversariantes.json');
     if (!response.ok) throw new Error('Arquivo JSON não encontrado');
     
     const dados = await response.json();
 
+    // 2. Define o mês atual (Janeiro é 0, então somamos 1 para Fevereiro ser 2)
     const mesAtual = new Date().getMonth() + 1;
+    
     const secao = document.getElementById('secao-aniversariantes');
     const lista = document.getElementById('lista-aniversariantes');
 
-    // 2. Filtro Simples (Lê a string "YYYY-MM-DD")
+    // 3. Filtro corrigido para as suas chaves: "Nascimento"
     const aniversariantesDoMes = dados.filter(p => {
-      if (p.Data) {
-        const partes = p.Data.split('-'); // Quebra 1990-02-15 em [1990, 02, 15]
-        const mesNasc = parseInt(partes[1]);
+      if (p.Nascimento) {
+        // p.Nascimento vem como "1984-02-10"
+        const partes = p.Nascimento.split('-'); 
+        const mesNasc = parseInt(partes[1]); // Pega o "02" e vira 2
         return mesNasc === mesAtual;
       }
       return false;
     });
 
-    // 3. Renderização
+    // 4. Ordenar por dia (opcional, mas fica mais bonito)
+    aniversariantesDoMes.sort((a, b) => {
+        return parseInt(a.Nascimento.split('-')[2]) - parseInt(b.Nascimento.split('-')[2]);
+    });
+
+    // 5. Renderização
     if (aniversariantesDoMes.length > 0) {
       secao.classList.remove('hidden');
       lista.innerHTML = '';
 
       aniversariantesDoMes.forEach(p => {
-        const dia = p.Data.split('-')[2]; // Pega o 15 de "1990-02-15"
+        const dia = p.Nascimento.split('-')[2]; // Pega o dia (ex: 10)
+        const nomeParaExibir = p["Nome do Funcionário"]; // Usa a chave exata do seu JSON
 
         lista.innerHTML += `
           <div class="bg-white p-4 rounded-xl shadow-sm border-l-4 border-pink-500 flex items-center gap-3 min-w-[220px]">
@@ -128,21 +137,19 @@ async function carregarAniversariantes() {
               ${dia}
             </div>
             <div>
-              <p class="font-bold text-slate-800 text-sm uppercase">${p.Nome}</p>
-              <p class="text-xs text-gray-500">${p.Setor}</p>
+              <p class="font-bold text-slate-800 text-sm uppercase">${nomeParaExibir}</p>
+              <p class="text-xs text-gray-500">${p.Sexo === 'Feminino' ? 'Colaboradora' : 'Colaborador'}</p>
             </div>
           </div>
         `;
       });
     } else {
       secao.classList.add('hidden');
-      console.log("Nenhum aniversariante no JSON para o mês", mesAtual);
     }
   } catch (error) {
-    console.error("Erro ao carregar JSON:", error);
+    console.error("Erro ao carregar aniversariantes:", error);
   }
 }
-
 
   // --- FUNÇÕES DE DADOS E ARQUIVOS (RESTAURADAS DO ORIGINAL) ---
   async function generatePdfThumb(url, canvasId) {
