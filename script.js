@@ -94,55 +94,46 @@ document.addEventListener('keypress', (e) => {
 
 async function carregarAniversariantes() {
   try {
-    // 1. Busca o arquivo JSON (ajuste o caminho se necessário)
     const response = await fetch('aniversariantes/aniversariantes.json');
     if (!response.ok) throw new Error('Arquivo JSON não encontrado');
     
     const dados = await response.json();
-
-    // 2. Define o mês atual (Janeiro é 0, então somamos 1 para Fevereiro ser 2)
     const mesAtual = new Date().getMonth() + 1;
     
     const secao = document.getElementById('secao-aniversariantes');
     const lista = document.getElementById('lista-aniversariantes');
 
-    // 3. Filtro corrigido para as suas chaves: "Nascimento"
+    // Filtra pelo mês atual baseando-se na chave "Nascimento" (AAAA-MM-DD)
     const aniversariantesDoMes = dados.filter(p => {
       if (p.Nascimento) {
-        // p.Nascimento vem como "1984-02-10"
         const partes = p.Nascimento.split('-'); 
-        const mesNasc = parseInt(partes[1]); // Pega o "02" e vira 2
-        return mesNasc === mesAtual;
+        return parseInt(partes[1]) === mesAtual;
       }
       return false;
     });
 
-    // 4. Ordenar por dia (opcional, mas fica mais bonito)
+    // Ordena por dia
     aniversariantesDoMes.sort((a, b) => {
         return parseInt(a.Nascimento.split('-')[2]) - parseInt(b.Nascimento.split('-')[2]);
     });
 
-    // 5. Renderização
     if (aniversariantesDoMes.length > 0) {
-      secao.classList.remove('hidden');
-      lista.innerHTML = '';
-
-      aniversariantesDoMes.forEach(p => {
-        const dia = p.Nascimento.split('-')[2]; // Pega o dia (ex: 10)
-        const nomeParaExibir = p["Nome do Funcionário"]; // Usa a chave exata do seu JSON
-
-        lista.innerHTML += `
+      secao.classList.remove('hidden'); // Mostra a seção na Home
+      lista.innerHTML = aniversariantesDoMes.map(p => {
+        const dia = p.Nascimento.split('-')[2];
+        const nomeParaExibir = p["Nome do Funcionário"];
+        return `
           <div class="bg-white p-4 rounded-xl shadow-sm border-l-4 border-pink-500 flex items-center gap-3 min-w-[220px]">
             <div class="bg-pink-100 text-pink-600 w-10 h-10 rounded-full flex items-center justify-center font-bold">
               ${dia}
             </div>
             <div>
-              <p class="font-bold text-slate-800 text-sm uppercase">${nomeParaExibir}</p>
-              <p class="text-xs text-gray-500">${p.Sexo === 'Feminino' ? 'Colaboradora' : 'Colaborador'}</p>
+              <p class="font-bold text-slate-800 text-[11px] uppercase">${nomeParaExibir}</p>
+              <p class="text-[10px] text-gray-500">${p.Sexo === 'Feminino' ? 'Colaboradora' : 'Colaborador'}</p>
             </div>
           </div>
         `;
-      });
+      }).join("");
     } else {
       secao.classList.add('hidden');
     }
