@@ -75,40 +75,50 @@
             titulo: "Mude A Sua Mentalidade",
             autor: "Motivacional",
             descricao: "Transforme Mente e Atitude, Sua Vida Vai Mudar",
-            link: "https://www.youtube.com/embed/nsww-xMpQ-g&end=412"
+            link: "https://www.youtube.com/embed/nsww-xMpQ-g"
+            tempoFinal: 412
         }
         
     ];
 
     // 2. Função para renderizar os vídeos na tela
-    function renderizarVideos(lista) {
-        const grid = document.getElementById('videoGrid');
-        grid.innerHTML = ""; // Limpa a grade antes de preencher
+function renderizarVideos(lista) {
+    const grid = document.getElementById('videoGrid');
+    grid.innerHTML = ""; 
 
-        lista.forEach(video => {
-            const card = `
-                <div class="video-card bg-white rounded-2xl overflow-hidden shadow-lg transition-transform hover:scale-[1.02]">
-                    <div class="relative aspect-video">
-                        <iframe class="absolute inset-0 w-full h-full" 
-                            src="${video.link}?rel=0&modestbranding=1" 
-                            frameborder="0" 
-                            allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"                    
-                            allowfullscreen>
-                            </iframe>
-                    </div>
-                    <div class="p-4">
-                        <h3 class="font-bold text-slate-800 text-lg video-title">
-                            ${video.titulo}                          
-                        </h3>
-                        <p class="text-gray-500 text-sm">${video.descricao} <br>
-                         <span class="text-sm font-normal text-blue-600">Autor: ${video.autor}</span>
-                        </p>
-                    </div>
+    lista.forEach(video => {
+        // Lógica para construir a URL
+        // Começamos com os parâmetros padrão
+        let urlFinal = `${video.link}?rel=0&modestbranding=1`;
+        
+        // Se o vídeo tiver a propriedade tempoFinal, adicionamos o parâmetro &end
+        if (video.tempoFinal) {
+            urlFinal += `&end=${video.tempoFinal}`;
+        }
+
+        const card = `
+            <div class="video-card bg-white rounded-2xl overflow-hidden shadow-lg transition-transform hover:scale-[1.02]">
+                <div class="relative aspect-video">
+                    <iframe class="absolute inset-0 w-full h-full" 
+                        src="${urlFinal}" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen>
+                    </iframe>
                 </div>
-            `;
-            grid.innerHTML += card;
-        });
-    }
+                <div class="p-4">
+                    <h3 class="font-bold text-slate-800 text-lg video-title">
+                        ${video.titulo}                          
+                    </h3>
+                    <p class="text-gray-500 text-sm">${video.descricao} <br>
+                     <span class="text-sm font-normal text-blue-600">Autor: ${video.autor}</span>
+                    </p>
+                </div>
+            </div>
+        `;
+        grid.innerHTML += card;
+    });
+}
 
     // 3. Lógica de Busca (Atualizada para a lista)
     function filterVideos() {
