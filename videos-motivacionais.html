@@ -1,25 +1,7 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vídeos de Desenvolvimento | Sono Show</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-</head>
-<body class="bg-gray-100 font-sans">
-
-<header class="bg-white shadow-sm sticky top-0 z-50">
-    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
-        <img src="https://sonoshowmoveis.vtexassets.com/assets/vtex.file-manager-graphql/images/9c25daff-344c-4bbf-9adf-054dba3b5137___c25ce75d1124b3ba71eebaaf2a2527e2.png" class="h-8">
-        <a href="index.html" class="text-blue-600 font-bold text-sm uppercase"><i class="fas fa-arrow-left mr-2"></i> Voltar ao Portal</a>
-    </div>
-</header>
-
 <main class="container mx-auto p-6">
     <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
         <h2 class="text-2xl font-bold text-slate-800 italic uppercase">
-            <i class="fas fa- lightbulb text-yellow-500 mr-2"></i> Desenvolvimento Profissional
+            <i class="fas fa-lightbulb text-yellow-500 mr-2"></i> Desenvolvimento Profissional
         </h2>
         
         <div class="relative w-full md:w-80">
@@ -28,62 +10,52 @@
             <i class="fas fa-search absolute right-4 top-3.5 text-gray-400"></i>
         </div>
     </div>
-    <!-- video 1 -->
-    <div id="videoGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">        
+
+    <div id="videoGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        
         <div class="video-card bg-white rounded-2xl overflow-hidden shadow-lg transition-transform hover:scale-[1.02]">
             <div class="relative aspect-video">
                 <iframe class="absolute inset-0 w-full h-full" 
-                    src="https://www.youtube-nocookie.com/embed/W4Axgkv0DvQ?rel=0" 
+                    src="https://www.youtube-nocookie.com/embed/W4Axgkv0DvQ?rel=0&modestbranding=1" 
                     title="Supere as Expectativas"
                     frameborder="0" 
-                    allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen
-                    ></iframe>
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen></iframe>
             </div>
             <div class="p-4">
-                <h3 class="font-bold text-slate-800 text-lg video-title">Supere as Expectativas<br> <strong>Autor:</strong> Daniel Godri</h3>
-                <p class="text-gray-500 text-sm">Busque a Excelecia no Atendimento </p>
+                <h3 class="font-bold text-slate-800 text-lg video-title">Supere as Expectativas<br> <span class="text-sm font-normal text-blue-600">Autor: Daniel Godri</span></h3>
+                <p class="text-gray-500 text-sm">Busque a Excelência no Atendimento</p>
             </div>
         </div>
-        </div>
-    <!-- video 2 -->
-    <div id="videoGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">        
+
         <div class="video-card bg-white rounded-2xl overflow-hidden shadow-lg transition-transform hover:scale-[1.02]">
             <div class="relative aspect-video">
                 <iframe class="absolute inset-0 w-full h-full" 
-                    src="https://www.youtube-nocookie.com/embed/W4Axgkv0DvQ?rel=0" 
+                    src="https://www.youtube-nocookie.com/embed/W4Axgkv0DvQ?rel=0&modestbranding=1" 
                     title="Supere as Expectativas"
                     frameborder="0" 
-                    allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen
-                    ></iframe>
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen></iframe>
             </div>
             <div class="p-4">
-                <h3 class="font-bold text-slate-800 text-lg video-title">Supere as Expectativas</h3>
-                <p class="text-gray-500 text-sm">Busque a Excelecia no Atendimento </p>
+                <h3 class="font-bold text-slate-800 text-lg video-title">Título do Segundo Vídeo</h3>
+                <p class="text-gray-500 text-sm">Descrição breve do conteúdo aqui.</p>
             </div>
         </div>
+
+        <div class="video-card bg-white rounded-2xl overflow-hidden shadow-lg transition-transform hover:scale-[1.02]">
+            <div class="relative aspect-video">
+                <iframe class="absolute inset-0 w-full h-full" 
+                    src="https://www.youtube-nocookie.com/embed/W4Axgkv0DvQ?rel=0&modestbranding=1" 
+                    title="Supere as Expectativas"
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen></iframe>
+            </div>
+            <div class="p-4">
+                <h3 class="font-bold text-slate-800 text-lg video-title">Título do Terceiro Vídeo</h3>
+                <p class="text-gray-500 text-sm">Descrição breve do conteúdo aqui.</p>
+            </div>
         </div>
-    
-</main>
 
-<script>
-    function filterVideos() {
-        const input = document.getElementById('videoSearch');
-        const filter = input.value.toLowerCase();
-        const grid = document.getElementById('videoGrid');
-        const cards = grid.getElementsByClassName('video-card');
-
-        for (let i = 0; i < cards.length; i++) {
-            let title = cards[i].querySelector('.video-title').innerText;
-            if (title.toLowerCase().indexOf(filter) > -1) {
-                cards[i].style.display = "";
-            } else {
-                cards[i].style.display = "none";
-            }
-        }
-    }
-</script>
-
-</body>
-</html>
+    </div> </main>
