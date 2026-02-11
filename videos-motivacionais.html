@@ -92,7 +92,7 @@ function renderizarVideos(lista) {
         let urlFinal = `${video.link}?rel=0&modestbranding=1`;
         
         // Se o vídeo tiver a propriedade tempoFinal, adicionamos o parâmetro &end
-        if (video.tempoFinal) {
+        if (video.tempoFinal > 0) {
             urlFinal += `&end=${video.tempoFinal}`;
         }
 
