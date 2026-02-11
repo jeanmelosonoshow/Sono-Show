@@ -36,21 +36,71 @@
 </main>
 
 <script>
-    function filterVideos() {
-        const input = document.getElementById('videoSearch');
-        const filter = input.value.toLowerCase();
-        const grid = document.getElementById('videoGrid');
-        const cards = grid.getElementsByClassName('video-card');
-
-        for (let i = 0; i < cards.length; i++) {
-            let title = cards[i].querySelector('.video-title').innerText;
-            if (title.toLowerCase().indexOf(filter) > -1) {
-                cards[i].style.display = "";
-            } else {
-                cards[i].style.display = "none";
-            }
+    // 1. Sua "Base de Dados" de vídeos
+    const meusVideos = [
+        {
+            titulo: "Supere as Expectativas",
+            autor: "Daniel Godri",
+            descricao: "Busque a Excelência no Atendimento",
+            link: "https://www.youtube-nocookie.com/embed/W4Axgkv0DvQ"
+        },
+        {
+            titulo: "A Arte de Encantar Clientes",
+            autor: "Erik Penna",
+            descricao: "Dicas práticas para fidelização.",
+            link: "https://www.youtube-nocookie.com/embed/SzddfXxN94M"
+        },
+        {
+            titulo: "Motivação em Tempos de Crise",
+            autor: "Leandro Karnal",
+            descricao: "Como manter o foco nos objetivos.",
+            link: "https://www.youtube-nocookie.com/embed/W4Axgkv0DvQ"
         }
+        
+    ];
+
+    // 2. Função para renderizar os vídeos na tela
+    function renderizarVideos(lista) {
+        const grid = document.getElementById('videoGrid');
+        grid.innerHTML = ""; // Limpa a grade antes de preencher
+
+        lista.forEach(video => {
+            const card = `
+                <div class="video-card bg-white rounded-2xl overflow-hidden shadow-lg transition-transform hover:scale-[1.02]">
+                    <div class="relative aspect-video">
+                        <iframe class="absolute inset-0 w-full h-full" 
+                            src="${video.link}?rel=0&modestbranding=1" 
+                            frameborder="0" 
+                            allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"                    
+                            allowfullscreen>
+                            </iframe>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-slate-800 text-lg video-title">
+                            ${video.titulo}                          
+                        </h3>
+                        <p class="text-gray-500 text-sm">${video.descricao} <br>
+                         <span class="text-sm font-normal text-blue-600">Autor: ${video.autor}</span>
+                        </p>
+                    </div>
+                </div>
+            `;
+            grid.innerHTML += card;
+        });
     }
+
+    // 3. Lógica de Busca (Atualizada para a lista)
+    function filterVideos() {
+        const termo = document.getElementById('videoSearch').value.toLowerCase();
+        const videosFiltrados = meusVideos.filter(video => 
+            video.titulo.toLowerCase().includes(termo) || 
+            video.autor.toLowerCase().includes(termo)
+        );
+        renderizarVideos(videosFiltrados);
+    }
+
+    // Inicializa a página com todos os vídeos
+    renderizarVideos(meusVideos);
 </script>
 
 </body>
