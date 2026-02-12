@@ -213,7 +213,7 @@ function toggleCortina() {
     const carousel = document.getElementById("carousel-slides");
     if (data.banners) {
      totalSlides = data.banners.length;
-     carousel.innerHTML = data.banners.map(img => `<div class="min-w-full h-full flex items-center justify-center bg-slate-900 " style="background: #181368"><img src="${img}" class="max-w-full max-h-full object-contain"></div>`).join("");
+     carousel.innerHTML = data.banners.map(img => `<div class="min-w-full h-full flex items-center justify-center bg-slate-900 " style="background: #160b30"><img src="${img}" class="max-w-full max-h-full object-contain"></div>`).join("");
     }
     document.getElementById("grid-comunicados").innerHTML = data.avisos.map(c => `
      <div class="bg-white p-6 rounded-xl shadow-sm border-t-4 border-${c.cor}-500 card-zoom">
