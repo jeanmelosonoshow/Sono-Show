@@ -91,65 +91,7 @@ document.addEventListener('keypress', (e) => {
        carregarAniversariantes();
     }
 });
-/// backup aniversariantes, modelo lista
-/*async function carregarAniversariantes() {
-  try {
-    const response = await fetch('aniversariantes/aniversariantes.json');
-    const dados = await response.json();
-    const mesAtual = new Date().getMonth() + 1;
 
-    const aniversariantesDoMes = dados.filter(p => {
-      if (!p.Nascimento) return false;
-      const partes = p.Nascimento.split('-');
-      return parseInt(partes[1]) === mesAtual;
-    }).sort((a, b) => parseInt(a.Nascimento.split('-')[2]) - parseInt(b.Nascimento.split('-')[2]));
-
-    const secao = document.getElementById('secao-aniversariantes');
-    const lista = document.getElementById('lista-aniversariantes');
-
-    if (aniversariantesDoMes.length === 0) {
-      secao.classList.add('hidden');
-      return;
-    }
-
-    secao.classList.remove('hidden');
-
-    // Layout de Grid Compacto: Ocupa menos espaço vertical
-    lista.className = "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3";
-    
-    lista.innerHTML = aniversariantesDoMes.map(p => {
-      const dia = p.Nascimento.split('-')[2];
-      const isFeminino = p.Sexo === 'Feminino' || p.Sexo === 'F';
-      const corTema = isFeminino ? 'ffa500' : 'blue';
-
-      return `
-        <div class="relative group bg-white border border-slate-100 rounded-xl p-3 shadow-sm hover:shadow-md transition-all border-l-4 ${isFeminino ? 'border-l-pink-400' : 'border-l-blue-400'}">
-          
-          <div class="absolute -top-2 -right-1 bg-slate-800 text-white text-[10px] font-bold px-2 py-0.5 rounded-lg shadow-sm z-10">
-            Dia ${dia}
-          </div>
-
-          <div class="flex justify-between items-start mb-1">
-            <i class="fas fa-cake-candles text-[12px] ${isFeminino ? 'text-pink-400' : 'text-blue-400'}"></i>
-            <i class="fas fa-hat-wizard text-[12px] text-slate-300 group-hover:text-yellow-500 transition-colors"></i>
-          </div>
-
-          <div class="pr-2">
-            <h4 class="font-bold text-slate-700 text-[11px] leading-tight uppercase truncate" title="${p["Nome do Funcionário"]}">
-              ${p["Nome do Funcionário"]}
-            </h4>
-            <p class="text-[9px] text-slate-400 font-medium tracking-wide"${p["Setor"]}">
-             Setor:  ${p["Setor"]}
-            </p>
-          </div>
-        </div>
-      `;
-    }).join('');
-
-  } catch (error) {
-    console.error("Erro ao carregar:", error);
-  }
-}*/
 
 async function carregarAniversariantes() {
   try {
@@ -271,7 +213,7 @@ function toggleCortina() {
     const carousel = document.getElementById("carousel-slides");
     if (data.banners) {
      totalSlides = data.banners.length;
-     carousel.innerHTML = data.banners.map(img => `<div class="min-w-full h-full flex items-center justify-center bg-slate-900"><img src="${img}" class="max-w-full max-h-full object-contain"></div>`).join("");
+     carousel.innerHTML = data.banners.map(img => `<div class="min-w-full h-full flex items-center justify-center bg-slate-900 " style="background: #181368"><img src="${img}" class="max-w-full max-h-full object-contain"></div>`).join("");
     }
     document.getElementById("grid-comunicados").innerHTML = data.avisos.map(c => `
      <div class="bg-white p-6 rounded-xl shadow-sm border-t-4 border-${c.cor}-500 card-zoom">
