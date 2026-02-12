@@ -439,7 +439,7 @@ window.onload = () => {
   setInterval(() => {
     const homeTab = document.getElementById('tab-home');
     if(homeTab && homeTab.classList.contains('active')) moveSlide(1);
-  }, 6000);
+  }, 10000);
 };
 
 // Lógica de Busca de Manuais
