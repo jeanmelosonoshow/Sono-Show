@@ -259,14 +259,7 @@ function toggleCortina() {
  } catch (e) { container.innerHTML = "Erro ao carregar encartes."; }
  }
 
-  //async function loadFiles(path) {
-   //try {
-    //const res = await fetch(`https://api.github.com/repos/${USER}/${REPO}/contents/${path}`);
-    //allFiles = await res.json();
-    //renderFileList(allFiles, path);
-   /// if(path === "Manuais") loadedTabs.treinamento = true;
-   ///} catch (e) { console.error(e); }
-  ///}
+ 
       async function loadFiles(path) {
           const pastasContainer = document.getElementById("section-pastas");
           const videosContainer = document.getElementById("section-videos");
@@ -442,15 +435,19 @@ window.onload = () => {
   }, 10000);
 };
 
-// Lógica de Busca de Manuais
-document.getElementById('fileSearch')?.addEventListener('input', (e) => {
-  const term = e.target.value.toLowerCase();
-  const filtered = allFiles.filter(file =>
-    file.name.toLowerCase().includes(term)
-  );
-  // Nota: Verifique se sua função é renderExplorer ou renderFileList
-  renderExplorer(filtered, "Manuais"); 
-});
+// Função Genérica de Busca (Melhor Prática)
+function setupSearch(inputId, dataArray, renderFunction, filterProp = 'name') {
+  document.getElementById(inputId)?.addEventListener('input', (e) => {
+    const term = e.target.value.toLowerCase();
+    const filtered = dataArray.filter(item => 
+      item[filterProp].toLowerCase().includes(term)
+    );
+    renderFunction(filtered);
+  });
+}
+
+setupSearch('fileSearch', allFiles, (data) => renderExplorer(data, "Manuais"), 'name');
+setupSearch('encarteSearch', allEncartes, renderEncartes, 'titulo');
 
 // Executa assim que o navegador carrega o DOM
 document.addEventListener("DOMContentLoaded", () => {
