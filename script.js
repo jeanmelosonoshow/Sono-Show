@@ -259,7 +259,14 @@ function toggleCortina() {
  } catch (e) { container.innerHTML = "Erro ao carregar encartes."; }
  }
 
- 
+  //async function loadFiles(path) {
+   //try {
+    //const res = await fetch(`https://api.github.com/repos/${USER}/${REPO}/contents/${path}`);
+    //allFiles = await res.json();
+    //renderFileList(allFiles, path);
+   /// if(path === "Manuais") loadedTabs.treinamento = true;
+   ///} catch (e) { console.error(e); }
+  ///}
       async function loadFiles(path) {
           const pastasContainer = document.getElementById("section-pastas");
           const videosContainer = document.getElementById("section-videos");
@@ -435,38 +442,15 @@ window.onload = () => {
   }, 10000);
 };
 
-function setupSearch(inputId, dataArray, renderFunction, filterProp = 'name', category = "") {
-  const input = document.getElementById(inputId);
-  if (!input) return;
-
-  input.addEventListener('input', (e) => {
-    const term = e.target.value.toLowerCase();
-    
-    // Se o campo estiver vazio, renderiza o array completo original
-    if (!term.trim()) {
-      category ? renderFunction(dataArray, category) : renderFunction(dataArray);
-      return;
-    }
-
-    const filtered = dataArray.filter(item => {
-      const valorParaFiltrar = item[filterProp] ? item[filterProp].toString().toLowerCase() : "";
-      return valorParaFiltrar.includes(term);
-    });
-
-    // Renderiza os resultados filtrados
-    if (category) {
-      renderFunction(filtered, category);
-    } else {
-      renderFunction(filtered);
-    }
-  });
-}
-// Para Manuais (O "Manuais" é passado como segundo parâmetro para a função)
-setupSearch('fileSearch', allFiles, renderExplorer, 'name', "Manuais");
-
-// Para Encartes
-// IMPORTANTE: Verifique se o nome do array é 'allEncartes' e se a propriedade é 'titulo'
-setupSearch('encarteSearch', allEncartes, renderEncartes, 'titulo');
+// Lógica de Busca de Manuais
+document.getElementById('fileSearch')?.addEventListener('input', (e) => {
+  const term = e.target.value.toLowerCase();
+  const filtered = allFiles.filter(file =>
+    file.name.toLowerCase().includes(term)
+  );
+  // Nota: Verifique se sua função é renderExplorer ou renderFileList
+  renderExplorer(filtered, "Manuais"); 
+});
 
 // Executa assim que o navegador carrega o DOM
 document.addEventListener("DOMContentLoaded", () => {
