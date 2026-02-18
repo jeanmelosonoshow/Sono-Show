@@ -95,16 +95,21 @@
 </main>
 
 <main id="tab-encartes" class="tab-content container mx-auto p-4 animate-fadeIn">
-  <div class="relative w-full md:w-64">
-         <input type="text" id="fileSearch" placeholder="Buscar arquivo..." class="w-full bg-gray-100 rounded-lg py-2 pl-10 pr-4 outline-none focus:ring-2 focus:ring-blue-500" />
-         <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
-         </div>
-  <h2 class="text-2xl font-bold mb-8 italic flex items-center gap-3 text-slate-800">
-    <span class="bg-blue-600 text-white p-2 rounded-lg shadow-md"><i class="fas fa-tags"></i></span> Encartes e Promoções Atuais
-  </h2>
-  <div id="grid-encartes" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8">  </div>
-    
-  
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+    <h2 class="text-2xl font-bold italic flex items-center gap-3 text-slate-800">
+      <span class="bg-blue-600 text-white p-2 rounded-lg shadow-md"><i class="fas fa-tags"></i></span> 
+      Encartes e Promoções Atuais
+    </h2>
+
+    <div class="relative w-full md:w-64">
+      <input type="text" id="fileSearch" placeholder="Buscar encarte..." 
+             class="w-full bg-white border border-slate-200 rounded-lg py-2 pl-10 pr-4 outline-none focus:ring-2 focus:ring-blue-500 shadow-sm" />
+      <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+    </div>
+  </div>
+
+  <div id="grid-encartes" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8">
+      </div>
 </main>
 
 <main id="tab-catalogo" class="tab-content container mx-auto p-4 animate-fadeIn">
