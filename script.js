@@ -468,7 +468,8 @@ function switchTab(tabId) {
   if (tabId === "home") loadHomeData();
   if (tabId === "treinamento") loadFiles("Manuais");
   if (tabId === "encartes") loadEncartes("Encartes");
-  if (tabId === "rh") loadRHData(); // <--- ADICIONE ESTA LINHA
+  if (tabId === "rh") loadRHData(); 
+  if (tabId === "contatos") loadContatosData();
   if (tabId === "catalogo" && !loadedTabs.catalogo) {
     document.getElementById('catalogo-wrapper').innerHTML = `<iframe src="https://catalogo.sonoshowmoveis.com.br/" class="w-full h-full border-none"></iframe>`;
     loadedTabs.catalogo = true;
@@ -482,6 +483,60 @@ function switchTab(tabId) {
    currentSlide = (currentSlide + direction + totalSlides) % totalSlides;
    slides.style.transform = `translateX(-${currentSlide * 100}%)`;
   }
+
+async function loadContatosData() {
+    if (loadedTabs.contatos) return;
+    const container = document.getElementById("container-equipe");
+
+    try {
+        const response = await fetch('equipe.json');
+        const data = await response.json();
+
+        container.innerHTML = data.supervisores.map(sup => `
+            <div class="space-y-8">
+                <div class="text-center">
+                    <div class="relative inline-block">
+                        <img src="${sup.foto}" onerror="this.src='https://ui-avatars.com/api/?name=${sup.nome}'" 
+                             class="w-32 h-32 rounded-full border-4 border-blue-600 object-cover shadow-xl mx-auto mb-4">
+                        <div class="absolute bottom-4 right-0 bg-blue-600 text-white w-8 h-8 rounded-full flex items-center justify-center border-2 border-white">
+                            <i class="fas fa-star text-[10px]"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800 uppercase">${sup.nome}</h3>
+                    <p class="text-blue-600 font-bold text-xs mb-2">SUPERVISOR REGIONAL</p>
+                    <p class="text-sm text-slate-500 font-mono italic underline">
+                        <i class="fab fa-whatsapp mr-1 text-green-500"></i> ${sup.contato}
+                    </p>
+                </div>
+
+                <div class="space-y-4">
+                    <h4 class="text-[10px] font-black text-slate-400 tracking-[0.3em] uppercase border-b pb-2">Filiais Sob Gestão</h4>
+                    ${sup.lojas.map(loja => `
+                        <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-all flex items-center gap-4">
+                            <img src="${loja.fotoGerente}" onerror="this.src='https://ui-avatars.com/api/?name=${loja.gerente}'" 
+                                 class="w-14 h-14 rounded-full border-2 border-slate-200 object-cover">
+                            <div class="flex-1 min-w-0">
+                                <h5 class="font-bold text-slate-800 text-sm truncate uppercase">${loja.nome}</h5>
+                                <p class="text-[10px] text-slate-500 truncate mb-1">${loja.endereco}</p>
+                                <div class="flex justify-between items-end">
+                                    <div>
+                                        <p class="text-[9px] text-blue-600 font-bold uppercase">Gerente: <span class="text-slate-700">${loja.gerente}</span></p>
+                                        <p class="text-[10px] font-mono text-slate-400 italic">${loja.telefone}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `).join('');
+
+        loadedTabs.contatos = true;
+    } catch (e) {
+        console.error("Erro ao carregar contatos:", e);
+        container.innerHTML = "<p class='col-span-full text-center text-red-500'>Erro ao carregar os dados das filiais.</p>";
+    }
+}
 
 // --- INICIALIZAÇÃO E EVENTOS ---
 
