@@ -435,18 +435,37 @@ window.onload = () => {
   }, 10000);
 };
 
-// Função Genérica de Busca (Melhor Prática)
-function setupSearch(inputId, dataArray, renderFunction, filterProp = 'name') {
-  document.getElementById(inputId)?.addEventListener('input', (e) => {
+function setupSearch(inputId, dataArray, renderFunction, filterProp = 'name', category = "") {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+
+  input.addEventListener('input', (e) => {
     const term = e.target.value.toLowerCase();
-    const filtered = dataArray.filter(item => 
-      item[filterProp].toLowerCase().includes(term)
-    );
-    renderFunction(filtered);
+    
+    // Se o campo estiver vazio, renderiza o array completo original
+    if (!term.trim()) {
+      category ? renderFunction(dataArray, category) : renderFunction(dataArray);
+      return;
+    }
+
+    const filtered = dataArray.filter(item => {
+      const valorParaFiltrar = item[filterProp] ? item[filterProp].toString().toLowerCase() : "";
+      return valorParaFiltrar.includes(term);
+    });
+
+    // Renderiza os resultados filtrados
+    if (category) {
+      renderFunction(filtered, category);
+    } else {
+      renderFunction(filtered);
+    }
   });
 }
+// Para Manuais (O "Manuais" é passado como segundo parâmetro para a função)
+setupSearch('fileSearch', allFiles, renderExplorer, 'name', "Manuais");
 
-setupSearch('fileSearch', allFiles, (data) => renderExplorer(data, "Manuais"), 'name');
+// Para Encartes
+// IMPORTANTE: Verifique se o nome do array é 'allEncartes' e se a propriedade é 'titulo'
 setupSearch('encarteSearch', allEncartes, renderEncartes, 'titulo');
 
 // Executa assim que o navegador carrega o DOM
