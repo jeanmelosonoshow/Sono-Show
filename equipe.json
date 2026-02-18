@@ -1,0 +1,56 @@
+{
+  "supervisores": [
+    {
+      "id": 1,
+      "nome": "NOME SUPERVISOR 1",
+      "foto": "fotos/supervisor1.jpg",
+      "contato": "(21) 99999-9999",
+      "lojas": [
+        {
+          "nome": "Campo Grande 1",
+          "endereco": "Rua Exemplo, 123 - Centro",
+          "telefone": "(21) 3333-4444",
+          "gerente": "Gerente Nome",
+          "fotoGerente": "fotos/gerente1.jpg"
+        },
+        {
+          "nome": "Santa Cruz",
+          "endereco": "Av. Principal, 456",
+          "telefone": "(21) 3333-5555",
+          "gerente": "Gerente Nome",
+          "fotoGerente": "fotos/gerente2.jpg"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "nome": "NOME SUPERVISOR 2",
+      "foto": "fotos/supervisor2.jpg",
+      "contato": "(21) 88888-8888",
+      "lojas": [
+        {
+          "nome": "Bangu",
+          "endereco": "Rua Bangu, 789",
+          "telefone": "(21) 3333-6666",
+          "gerente": "Gerente Nome",
+          "fotoGerente": "fotos/gerente3.jpg"
+        }
+      ]
+    },
+        {
+      "id": 3,
+      "nome": "NOME SUPERVISOR 2",
+      "foto": "fotos/supervisor2.jpg",
+      "contato": "(21) 88888-8888",
+      "lojas": [
+        {
+          "nome": "Bangu",
+          "endereco": "Rua Bangu, 789",
+          "telefone": "(21) 3333-6666",
+          "gerente": "Gerente Nome",
+          "fotoGerente": "fotos/gerente3.jpg"
+        }
+      ]
+    }
+  ]
+}
