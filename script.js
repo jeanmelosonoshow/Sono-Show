@@ -6,7 +6,8 @@
   const USER = "jeanmelosonoshow";
   const REPO = "Sono-Show";
   let currentSlide = 0, totalSlides = 0, allFiles = [];
-   const loadedTabs = { home: false, treinamento: false, encartes: false, catalogo: false };
+  let allEncartes = [];
+  const loadedTabs = { home: false, treinamento: false, encartes: false, catalogo: false };
 
    // --- LÓGICA DE LOGIN E SESSÃO ---
 const SESSION_TIMEOUT = 2 * 60 * 60 * 1000; // 2 horas em milissegundos
@@ -226,38 +227,88 @@ function toggleCortina() {
    } catch (e) { console.error(e); }
   }
 
-   async function loadEncartes(path) {
- if(loadedTabs.encartes) return;
- const container = document.getElementById("grid-encartes");
- container.innerHTML = '<p class="col-span-full text-center p-10 text-slate-400 animate-pulse">Carregando encartes...</p>';
- try {
-  const res = await fetch(`https://api.github.com/repos/${USER}/${REPO}/contents/${path}`);
-  const data = await res.json();
-  let pdfs = data.filter(i => i.name.toLowerCase().endsWith(".pdf"));
-  pdfs.sort((a, b) => {
-   const getParts = (name) => {
-    const parts = name.replace('.pdf', '').split('-');
-    return { mes: parseInt(parts[0]) || 0, ano: parseInt(parts[1]) || 0 };
-   };
-   const dA = getParts(a.name), dB = getParts(b.name);
-   return (dB.ano !== dA.ano) ? dB.ano - dA.ano : dB.mes - dA.mes;
-  });
-  container.innerHTML = pdfs.map((pdf, index) => {
-  const canvasId = `pdf-canvas-${index}`;
-  const isNew = index === 0;
-  setTimeout(() => generatePdfThumb(`https://${USER}.github.io/${REPO}/${pdf.path}`, canvasId), 400);
-  return `<div onclick="window.open('https://${USER}.github.io/${REPO}/${pdf.path}', '_blank')" class="relative cursor-pointer group bg-white rounded-xl shadow-md transition-all overflow-hidden border ${isNew ? 'border-amber-400 ring-2 ring-amber-50' : 'border-gray-100'} flex flex-col">
-   ${isNew ? '<div class="absolute top-2 right-2 z-10 bg-amber-500 text-white text-[10px] font-bold px-2 py-1 rounded-full shadow-lg animate-bounce">NOVO</div>' : ''}
-   <div class="aspect-[3/4] bg-gray-100 flex items-center justify-center"><canvas id="${canvasId}" class="pdf-thumb-canvas"></canvas></div>
-   <div class="p-3 bg-white border-t">
-   <p class="text-[10px] font-bold ${isNew ? 'text-amber-600' : 'text-gray-400'} uppercase">${isNew ? 'Destaque' : 'Encarte Anterior'}</p>
-   <p class="text-xs font-bold text-slate-700 truncate">${pdf.name.replace('.pdf','')}</p>
-   </div>
-  </div>`;
+async function loadEncartes(path) {
+  if (loadedTabs.encartes) return;
+  const container = document.getElementById("grid-encartes");
+  container.innerHTML = '<p class="col-span-full text-center p-10 text-slate-400 animate-pulse">Carregando encartes...</p>';
+  
+  try {
+    const res = await fetch(`https://api.github.com/repos/${USER}/${REPO}/contents/${path}`);
+    const data = await res.json();
+    
+    // Filtra apenas PDFs
+    let pdfs = data.filter(i => i.name.toLowerCase().endsWith(".pdf"));
+    
+    // MANTÉM SUA LÓGICA DE ORDENAÇÃO ORIGINAL (Mês e Ano)
+    pdfs.sort((a, b) => {
+      const getParts = (name) => {
+        const parts = name.replace('.pdf', '').split('-');
+        return { mes: parseInt(parts[0]) || 0, ano: parseInt(parts[1]) || 0 };
+      };
+      const dA = getParts(a.name), dB = getParts(b.name);
+      return (dB.ano !== dA.ano) ? dB.ano - dA.ano : dB.mes - dA.mes;
+    });
+
+    // Salva no array global para a busca usar depois
+    allEncartes = pdfs;
+
+    // Chama a renderização
+    renderEncartes(allEncartes);
+    loadedTabs.encartes = true;
+  } catch (e) { 
+    container.innerHTML = "Erro ao carregar encartes."; 
+    console.error(e);
+  }
+}
+
+// FUNÇÃO DE RENDERIZAÇÃO (Mantém seu layout, badges e miniaturas)
+function renderEncartes(listaParaExibir) {
+  const container = document.getElementById("grid-encartes");
+  
+  if (listaParaExibir.length === 0) {
+    container.innerHTML = '<p class="col-span-full text-center p-10 text-slate-400">Nenhum encarte encontrado para esta busca.</p>';
+    return;
+  }
+
+  container.innerHTML = listaParaExibir.map((pdf, index) => {
+    const canvasId = `pdf-canvas-${Math.random().toString(36).substr(2, 9)}`; // ID único para não conflitar na busca
+    const isNew = index === 0; // O primeiro da lista atual ganha o destaque
+    
+    // Gera a miniatura
+    setTimeout(() => generatePdfThumb(`https://${USER}.github.io/${REPO}/${pdf.path}`, canvasId), 400);
+    
+    return `
+      <div onclick="window.open('https://${USER}.github.io/${REPO}/${pdf.path}', '_blank')" 
+           class="relative cursor-pointer group bg-white rounded-xl shadow-md transition-all overflow-hidden border ${isNew ? 'border-amber-400 ring-2 ring-amber-50' : 'border-gray-100'} flex flex-col">
+        
+        ${isNew ? '<div class="absolute top-2 right-2 z-10 bg-amber-500 text-white text-[10px] font-bold px-2 py-1 rounded-full shadow-lg animate-bounce">NOVO</div>' : ''}
+        
+        <div class="aspect-[3/4] bg-gray-100 flex items-center justify-center">
+          <canvas id="${canvasId}" class="pdf-thumb-canvas"></canvas>
+        </div>
+        
+        <div class="p-3 bg-white border-t">
+          <p class="text-[10px] font-bold ${isNew ? 'text-amber-600' : 'text-gray-400'} uppercase">
+            ${isNew ? 'Destaque' : 'Encarte Anterior'}
+          </p>
+          <p class="text-xs font-bold text-slate-700 truncate">${pdf.name.replace('.pdf','')}</p>
+        </div>
+      </div>`;
   }).join("");
-  loadedTabs.encartes = true;
- } catch (e) { container.innerHTML = "Erro ao carregar encartes."; }
- }
+}
+
+// Ativando a busca para a aba de Encartes
+document.getElementById('encarteSearch')?.addEventListener('input', (e) => {
+  const term = e.target.value.toLowerCase();
+  
+  // Filtra sobre o array global que já está ordenado por data
+  const filtered = allEncartes.filter(pdf => 
+    pdf.name.toLowerCase().includes(term)
+  );
+
+  // Renderiza os resultados (o primeiro resultado do filtro será o novo "Destaque")
+  renderEncartes(filtered);
+});
 
   //async function loadFiles(path) {
    //try {
