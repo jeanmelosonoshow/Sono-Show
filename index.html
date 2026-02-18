@@ -105,33 +105,84 @@
   <div id="catalogo-wrapper" class="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col iframe-container"></div>
 </main>
 
-<main id="tab-sobre" class="tab-content container mx-auto p-4 animate-fadeIn">
-  <div class="bg-white rounded-2xl shadow-lg p-8 max-w-4xl mx-auto">
-    <div class="text-center mb-10">
-      <h2 class="text-3xl font-bold text-slate-800 italic mb-2">Nossa História</h2>
-      <div class="h-1 w-20 bg-blue-600 mx-auto"></div>
+<main id="tab-sobre" class="tab-content container mx-auto p-4 md:p-12 animate-fadeIn">
+    <div class="max-w-4xl mx-auto text-center mb-16">
+        <h2 class="text-4xl md:text-5xl font-extrabold text-slate-900 mb-4 tracking-tight">
+            Nossa <span class="text-blue-600">História</span>
+        </h2>
+        <div class="h-1.5 w-24 bg-blue-600 mx-auto rounded-full"></div>
     </div>
-    <div class="grid md:grid-cols-2 gap-8 items-center">
-      <div class="text-gray-600 space-y-4">
-        <p>A <strong>Sono Show Móveis</strong>  uma empresa carioca, com mais de 30 anos de mercado, tem orgulho de estar presente em milhares de lares através de seus produtos de qualidade e com design moderno, contribuindo para o bem estar de nossas famílias e gerando conforto, organização e beleza.</p>
-        <p>Com 23 lojas na capital do Rio de Janeiro e Baixada Fluminense, a Sono Show Móveis vem se tornando líder em vendas e se consolidando como marca de prestígio.</p>
-        <p>Como resultado de um bom trabalho nos últimos anos, rendeu à empresa o título de Marcas dos Cariocas do jornal O Globo (2020), na categoria Casa e Móveis e o Troféu Reclame Aqui de Atendimento ao Cliente (2020), na mesma categoria.</p>
-        <p>Sua forte presença online, em seu site e redes sociais, fazem da marca ainda mais próxima de seus clientes com rápido atendimento e serviços cada vez melhores.</p>
-        <p>Os produtos vendidos em suas lojas se originam de fornecedores conceituados no mercado, garantindo qualidade e confiabilidade aos clientes, sempre atentos em oferecer preços atrativos. Atender a toda a família, com móveis bonitos, práticos e confortáveis é o nosso objetivo.</p>
-        <p>A Sono Show Móveis quer estar presente na sua Casa e Família!</p>
-      </div>
-      <div class="bg-blue-50 p-6 rounded-xl border-l-4 border-blue-600">
-        <img src= "https://lh3.googleusercontent.com/pw/AP1GczNjsNeASTP0o6CZPjJmPQhan3ej4fWG-7LK49zSRFJfQ4jsfjl3sm1J4amFz0G5-vB8iucxpw_bzJ_vIu9kMpA22TLl47ftcrObRhU4ELtif6VFOZwWwL3nzMkp4AN-KGMUmErK--A_iCKHodxy5egc=w1360-h510-s-no-gm?authuser=2">
-        <h4 class="font-bold text-blue-800 mb-2 uppercase text-sm">Nossos Valores</h4>
-        <ul class="text-sm space-y-2 text-blue-900">
-          <li><i class="fas fa-check-circle mr-2"></i> Ética e Criatividade</li>
-          <li><i class="fas fa-check-circle mr-2"></i> Respeito aos clientes</li>
-          <li><i class="fas fa-check-circle mr-2"></i> Comprometimento</li>
-          <li><i class="fas fa-check-circle mr-2"></i> Espirito de Equipe</li>
-        </ul>
-      </div>
+
+    <div class="max-w-5xl mx-auto mb-20">
+        <div class="grid md:grid-cols-12 gap-12 items-start">
+            <div class="md:col-span-7 space-y-6 text-lg leading-relaxed text-slate-600">
+                <p>
+                    A <strong class="text-slate-900">Sono Show Móveis</strong> é uma empresa carioca com mais de 30 anos de mercado. Temos o orgulho de transformar milhares de lares com produtos que unem design moderno, conforto e organização.
+                </p>
+                <p>
+                    Com <span class="font-semibold text-blue-600">23 lojas</span> no Rio de Janeiro e Baixada Fluminense, consolidamos nossa marca através de um atendimento de excelência, conquistando prêmios como o <span class="italic font-medium">Marcas dos Cariocas (O Globo)</span> e o <span class="italic font-medium">Troféu Reclame Aqui</span>.
+                </p>
+                <p>
+                    Nosso objetivo é simples: oferecer móveis bonitos e práticos com preços atrativos, garantindo a confiança de cada família que nos escolhe.
+                </p>
+            </div>
+            
+            <div class="md:col-span-5 bg-slate-50 p-8 rounded-3xl border border-slate-100 shadow-sm">
+                <h4 class="text-slate-900 font-bold mb-4">Reconhecimento</h4>
+                <div class="space-y-4">
+                    <div class="flex items-center gap-4">
+                        <div class="bg-yellow-100 text-yellow-600 p-3 rounded-full">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <span class="text-sm font-medium text-slate-700">Troféu Reclame Aqui (2020)</span>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="bg-blue-100 text-blue-600 p-3 rounded-full">
+                            <i class="fas fa-award"></i>
+                        </div>
+                        <span class="text-sm font-medium text-slate-700">Marcas dos Cariocas (O Globo)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
+
+    <div class="max-w-6xl mx-auto">
+        <div class="grid md:grid-cols-3 gap-8">
+            <div class="bg-white p-8 rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-50 transition-transform hover:-translate-y-2">
+                <div class="w-12 h-12 bg-blue-600 text-white rounded-lg flex items-center justify-center mb-6 shadow-lg shadow-blue-200">
+                    <i class="fas fa-bullseye text-xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 mb-3">Missão</h3>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    Proporcionar aos clientes produtos de qualidade e preços acessíveis, transformando sonhos em realidade através do conforto do lar.
+                </p>
+            </div>
+
+            <div class="bg-white p-8 rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-50 transition-transform hover:-translate-y-2">
+                <div class="w-12 h-12 bg-blue-600 text-white rounded-lg flex items-center justify-center mb-6 shadow-lg shadow-blue-200">
+                    <i class="fas fa-eye text-xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 mb-3">Visão</h3>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    Ser reconhecida como referência no mercado varejista de móveis, através da qualidade e excelência na prestação de serviço oferecido.
+                </p>
+            </div>
+
+            <div class="bg-blue-600 p-8 rounded-2xl shadow-xl shadow-blue-200 transition-transform hover:-translate-y-2 text-white">
+                <div class="w-12 h-12 bg-white text-blue-600 rounded-lg flex items-center justify-center mb-6">
+                    <i class="fas fa-heart text-xl"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-3">Nossos Valores</h3>
+                <ul class="text-sm space-y-2 opacity-90">
+                    <li class="flex items-center gap-2"><i class="fas fa-check"></i> Ética e Criatividade</li>
+                    <li class="flex items-center gap-2"><i class="fas fa-check"></i> Respeito aos clientes</li>
+                    <li class="flex items-center gap-2"><i class="fas fa-check"></i> Comprometimento</li>
+                    <li class="flex items-center gap-2"><i class="fas fa-check"></i> Espírito de Equipe</li>
+                </ul>
+            </div>
+        </div>
+    </div>
 </main>
 
 <main id="tab-faq" class="tab-content container mx-auto p-4 animate-fadeIn">
