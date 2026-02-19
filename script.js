@@ -503,8 +503,10 @@ async function loadContatosData() {
             <div class="space-y-8">
                 <div class="text-center">
                     <div class="relative inline-block">
-                        <img src="${sup.foto}"  onerror="this.src='https://ui-avatars.com/api/?name=${sup.nome}&background=0D8ABC&color=fff'" 
-                         class="w-32 h-32 aspect-square rounded-full border-4 border-blue-600 object-cover object-center shadow-xl mx-auto mb-4">
+                     
+                    <img src="${sup.foto}"   onclick="openImageModal('${sup.foto}')"
+                         class="w-32 h-32 aspect-square rounded-full border-4 border-blue-600 object-cover object-center shadow-xl mx-auto mb-4 cursor-pointer hover:scale-105 transition-transform"
+                         onerror="this.src='https://ui-avatars.com/api/?name=${sup.nome}&background=0D8ABC&color=fff'">
                         <div class="absolute bottom-4 right-0 bg-blue-600 text-white w-8 h-8 rounded-full flex items-center justify-center border-2 border-white">
                             <i class="fas fa-star text-[10px]"></i>
                         </div>
@@ -520,8 +522,10 @@ async function loadContatosData() {
                     <h4 class="text-[10px] font-black text-slate-400 tracking-[0.3em] uppercase border-b pb-2">Filiais Sob Gestão</h4>
                     ${sup.lojas.map(loja => `
                         <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-all flex items-center gap-4">
-                            <img src="${loja.fotoGerente}"   onerror="this.src='https://ui-avatars.com/api/?name=${loja.gerente}&background=f1f5f9&color=64748b'" 
-                           class="w-14 h-14 aspect-square rounded-full border-2 border-slate-200 object-cover object-center bg-gray-50">
+                            
+                          <img src="${loja.fotoGerente}"  onclick="openImageModal('${loja.fotoGerente}')"
+                               class="w-14 h-14 aspect-square rounded-full border-2 border-slate-200 object-cover object-center bg-gray-50 cursor-pointer hover:opacity-80 transition-opacity"
+                               onerror="this.src='https://ui-avatars.com/api/?name=${loja.gerente}&background=f1f5f9&color=64748b'">
                             <div class="flex-1 min-w-0">
                                 <h5 class="font-bold text-slate-800 text-sm truncate uppercase">${loja.nome}</h5>
                                 <p class="text-[10px] text-slate-500 truncate mb-1">${loja.endereco}</p>
@@ -544,6 +548,28 @@ async function loadContatosData() {
         container.innerHTML = "<p class='col-span-full text-center text-red-500 p-10'>Não foi possível carregar os dados. Verifique o arquivo equipe.json.</p>";
     }
 }
+
+function openImageModal(src) {
+    const modal = document.getElementById('image-modal');
+    const modalImg = document.getElementById('modal-img');
+    
+    modalImg.src = src;
+    modal.classList.remove('hidden');
+    // Impede o scroll do fundo ao abrir o modal
+    document.body.style.overflow = 'hidden';
+}
+
+function closeImageModal() {
+    const modal = document.getElementById('image-modal');
+    modal.classList.add('hidden');
+    // Devolve o scroll ao fechar
+    document.body.style.overflow = 'auto';
+}
+
+// Opcional: Fechar ao clicar fora da imagem
+document.getElementById('image-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeImageModal();
+});
 
 // --- INICIALIZAÇÃO E EVENTOS ---
 
