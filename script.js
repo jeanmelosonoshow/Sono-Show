@@ -469,7 +469,8 @@ function switchTab(tabId) {
   if (tabId === "treinamento") loadFiles("Manuais");
   if (tabId === "encartes") loadEncartes("Encartes");
   if (tabId === "rh") loadRHData(); 
-  if (tabId === "contatos") loadContatosData();
+  if (tabId === "contatos") { loadContatosData(); 
+                            }
   if (tabId === "catalogo" && !loadedTabs.catalogo) {
     document.getElementById('catalogo-wrapper').innerHTML = `<iframe src="https://catalogo.sonoshowmoveis.com.br/" class="w-full h-full border-none"></iframe>`;
     loadedTabs.catalogo = true;
@@ -484,27 +485,33 @@ function switchTab(tabId) {
    slides.style.transform = `translateX(-${currentSlide * 100}%)`;
   }
 
+// Adicione 'contatos: false' ao seu objeto loadedTabs no topo do script
+// loadedTabs = { home: false, treinamento: false, encartes: false, catalogo: false, contatos: false };
+
 async function loadContatosData() {
     if (loadedTabs.contatos) return;
     const container = document.getElementById("container-equipe");
 
     try {
+        // Certifique-se que o arquivo equipe.json está na mesma pasta
         const response = await fetch('equipe.json');
+        if (!response.ok) throw new Error('Erro ao carregar JSON');
+        
         const data = await response.json();
 
         container.innerHTML = data.supervisores.map(sup => `
             <div class="space-y-8">
                 <div class="text-center">
                     <div class="relative inline-block">
-                        <img src="${sup.foto}" onerror="this.src='https://ui-avatars.com/api/?name=${sup.nome}'" 
+                        <img src="${sup.foto}" onerror="this.src='https://ui-avatars.com/api/?name=${sup.nome}&background=0D8ABC&color=fff'" 
                              class="w-32 h-32 rounded-full border-4 border-blue-600 object-cover shadow-xl mx-auto mb-4">
                         <div class="absolute bottom-4 right-0 bg-blue-600 text-white w-8 h-8 rounded-full flex items-center justify-center border-2 border-white">
                             <i class="fas fa-star text-[10px]"></i>
                         </div>
                     </div>
-                    <h3 class="text-xl font-bold text-slate-800 uppercase">${sup.nome}</h3>
-                    <p class="text-blue-600 font-bold text-xs mb-2">SUPERVISOR REGIONAL</p>
-                    <p class="text-sm text-slate-500 font-mono italic underline">
+                    <h3 class="text-xl font-bold text-slate-800 uppercase leading-tight">${sup.nome}</h3>
+                    <p class="text-blue-600 font-bold text-[10px] mb-2 tracking-widest">SUPERVISOR REGIONAL</p>
+                    <p class="text-sm text-slate-500 font-mono italic">
                         <i class="fab fa-whatsapp mr-1 text-green-500"></i> ${sup.contato}
                     </p>
                 </div>
@@ -513,8 +520,8 @@ async function loadContatosData() {
                     <h4 class="text-[10px] font-black text-slate-400 tracking-[0.3em] uppercase border-b pb-2">Filiais Sob Gestão</h4>
                     ${sup.lojas.map(loja => `
                         <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-all flex items-center gap-4">
-                            <img src="${loja.fotoGerente}" onerror="this.src='https://ui-avatars.com/api/?name=${loja.gerente}'" 
-                                 class="w-14 h-14 rounded-full border-2 border-slate-200 object-cover">
+                            <img src="${loja.fotoGerente}" onerror="this.src='https://ui-avatars.com/api/?name=${loja.gerente}&background=f1f5f9&color=64748b'" 
+                                 class="w-14 h-14 rounded-full border-2 border-slate-200 object-cover bg-gray-50">
                             <div class="flex-1 min-w-0">
                                 <h5 class="font-bold text-slate-800 text-sm truncate uppercase">${loja.nome}</h5>
                                 <p class="text-[10px] text-slate-500 truncate mb-1">${loja.endereco}</p>
@@ -533,8 +540,8 @@ async function loadContatosData() {
 
         loadedTabs.contatos = true;
     } catch (e) {
-        console.error("Erro ao carregar contatos:", e);
-        container.innerHTML = "<p class='col-span-full text-center text-red-500'>Erro ao carregar os dados das filiais.</p>";
+        console.error("Erro:", e);
+        container.innerHTML = "<p class='col-span-full text-center text-red-500 p-10'>Não foi possível carregar os dados. Verifique o arquivo equipe.json.</p>";
     }
 }
 
