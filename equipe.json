@@ -7,6 +7,13 @@
       "contato": "(21) 99196-3530",
       "lojas": [
         {
+          "nome": "14 - TIJUCA (Sono Show)",
+          "endereco": "R CONDE DE BONFIM, 391",
+          "telefone": "(21) 3408-9120 / 97405-9958 / 98143-4833",
+          "gerente": "´(RESPONSÁVEL) LUIZ HENRIQUE",
+          "fotoGerente": "foto_funcionario/luiz_14.jpeg"
+        },
+        {
           "nome": "20 - BOTAFOGO (Casa Terrazi)",
           "endereco": "R GENERAL SEVERIANO, 97",
           "telefone": "(21) 99757-2108",
@@ -41,6 +48,20 @@
           "telefone": "(21) 2113-9866 / 97355-8865 / 97060-2314",
           "gerente": "THAIS DE MAGALHAES AMOEDO",
           "fotoGerente": "foto_funcionario/thais_01.jpeg"
+        },        
+        {
+          "nome": "08 - TAQUARA (Sono Show)",
+          "endereco": "ESTRADA TINDIBA, 2284",
+          "telefone": "(21) 3495-9076 / 98476-5117 / 98949-9201",
+          "gerente": "DAYANA PEIXOTO DA LUZ",
+          "fotoGerente": "foto_funcionario/dayana_08.jpeg"
+        },
+        {
+          "nome": "11 - CAMPO GRANDE (Sono Show)",
+          "endereco": "RUA MAJOR ALMEIDA COSTA, 16",
+          "telefone": "(21) 2495-5528 / 97378-0227 / 97258-0193",
+          "gerente": "ROSIMERI DOS ANJOS FAGUNDES",
+          "fotoGerente": "foto_funcionario/rosimere_11.jpeg"
         },
         {
           "nome": "17 - ITAGUAI (Sono Show)",
@@ -50,11 +71,11 @@
           "fotoGerente": "foto_funcionario/eloise_17.jpeg"
         },
         {
-          "nome": "08 - TAQUARA (Sono Show)",
-          "endereco": "ESTRADA TINDIBA, 2284",
-          "telefone": "(21) 3495-9076 / 98476-5117 / 98949-9201",
-          "gerente": "DAYANA PEIXOTO DA LUZ",
-          "fotoGerente": "foto_funcionario/dayana_08.jpeg"
+          "nome": "32 - TAQUARA (Sono Show)",
+          "endereco": "RUA APIACAS, 422",
+          "telefone": "(21) 2147-2842 / 97427-6704",
+          "gerente": "VANILSON LINDOSO CAMPOS",
+          "fotoGerente": "foto_funcionario/vanilson_32.jpeg"
         }
       ]
     },
