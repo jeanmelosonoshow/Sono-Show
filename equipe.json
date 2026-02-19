@@ -56,6 +56,13 @@
           "telefone": "(21) 3215-6119 / (21) 97968-6891",
           "gerente": "FLAVIO JOSE LOPES DA SILVA",
           "fotoGerente": "foto_funcionario/FLAVIO_LOPES_03.jpeg"
+        } ,
+        {
+          "nome": "04 - DUQUE DE CAXIAS (Sono Show)",
+          "endereco": "AV GOVERNADOR LEONEL DE MOURA BRIZOLA, 1749",
+          "telefone": "(21) 2775-4469 / (21) 97035-6818",
+          "gerente": "FERNANDO HENRIQUE CORREIA SOUZA",
+          "fotoGerente": "foto_funcionario/FERNANDO_04.jpeg"
         } 
       ]
     }
