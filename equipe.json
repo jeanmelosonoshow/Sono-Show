@@ -2,8 +2,8 @@
   "supervisores": [
     {
       "id": 1,
-      "nome": "NOME SUPERVISOR 1",
-      "foto": "fotos/supervisor1.jpg",
+      "nome": "MARCIO ALVES DOS SANTOS",
+      "foto": "foto_funcionario/Marcio.png",
       "contato": "(21) 99999-9999",
       "lojas": [
         {
