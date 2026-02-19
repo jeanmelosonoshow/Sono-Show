@@ -7,6 +7,13 @@
       "contato": "(21) 99196-3530",
       "lojas": [
         {
+          "nome": "20 - BOTAFOGO (Casa Terrazi)",
+          "endereco": "R GENERAL SEVERIANO, 97",
+          "telefone": "(21) 99757-2108",
+          "gerente": "LUCILA APARECIDA BERTOLI DOS SANTOS",
+          "fotoGerente": "foto_funcionario/lucila_20.jpeg"
+        },
+        {
           "nome": "24 - CAMPO GRANDE (Sono Show)",
           "endereco": "EST CACHAMORRA, 795",
           "telefone": "(21) 3408-9120 / 97563-3694 / 99695-0479",
@@ -28,6 +35,13 @@
       "foto": "foto_funcionario/YGOR.png",
       "contato": "(21) 97603-5800",
       "lojas": [
+        {
+          "nome": "01 - SANTA CRUZ (Sono Show)",
+          "endereco": "RUA FELIPE CARDOSO, 17",
+          "telefone": "(21) 2113-9866 / 97355-8865 / 97060-2314",
+          "gerente": "THAIS DE MAGALHAES AMOEDO",
+          "fotoGerente": "foto_funcionario/thais_01.jpeg"
+        },
         {
           "nome": "17 - ITAGUAI (Sono Show)",
           "endereco": "RUA DOUTOR CURVELO CAVALCANTE, 304",
