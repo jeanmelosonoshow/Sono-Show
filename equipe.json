@@ -7,10 +7,17 @@
       "contato": "(21) 99196-3530",
       "lojas": [
         {
+          "nome": "05 - CACHAMBI (Sono Show)",
+          "endereco": "AVENIDA DOM HELDER CAMARA, 5241",
+          "telefone": "(21) 97364-9033 / 96962-8415",
+          "gerente": "CLAUDIA REGINA BRAGA OLIVEIRA",
+          "fotoGerente": "foto_funcionario/claudia_05.jpeg"
+        },
+        {
           "nome": "14 - TIJUCA (Sono Show)",
           "endereco": "R CONDE DE BONFIM, 391",
           "telefone": "(21) 3408-9120 / 97405-9958 / 98143-4833",
-          "gerente": "´(RESPONSÁVEL) LUIZ HENRIQUE",
+          "gerente": "(RESPONSÁVEL) LUIZ HENRIQUE",
           "fotoGerente": "foto_funcionario/luiz_14.jpeg"
         },
         {
@@ -69,6 +76,20 @@
           "telefone": "(21) 2687-2600 / 97420-6580 / 96454-2093",
           "gerente": "ELOISE HELENI DA SILVA SAMANIEGO",
           "fotoGerente": "foto_funcionario/eloise_17.jpeg"
+        },
+         {
+          "nome": "27 - BANGU (Sono Show Outlet)",
+          "endereco": "AVENIDA CONEGO VASCONCELOS, 240",
+          "telefone": "(21) 3019-8810 / 98476-4617 / 96591-5566",
+          "gerente": "MARCUS FERREIRA SANTOS",
+          "fotoGerente": "foto_funcionario/marcus_28.jpeg"
+        },
+        {
+          "nome": "28 - BANGU (Sono Show)",
+          "endereco": "AVENIDA CONEGO VASCONCELOS, 472",
+          "telefone": "(21) 3019-8810 / 98476-4617 / 96591-5566",
+          "gerente": "MARCUS FERREIRA SANTOS",
+          "fotoGerente": "foto_funcionario/marcus_28.jpeg"
         },
         {
           "nome": "32 - TAQUARA (Sono Show)",
