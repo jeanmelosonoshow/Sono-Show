@@ -24,9 +24,9 @@
     },
     {
       "id": 2,
-      "nome": "NOME SUPERVISOR 2",
-      "foto": "fotos/supervisor2.jpg",
-      "contato": "(21) 88888-8888",
+      "nome": "IGOR DE CASTRO PEREIRA",
+      "foto": "foto_funcionario/YGOR.png",
+      "contato": "(21) 97603-5800",
       "lojas": [
         {
           "nome": "Bangu",
@@ -40,7 +40,7 @@
         {
       "id": 3,
       "nome": "ANDRE MOREIRA VALENTE",
-      "foto": "foto_funcionario/YGOR.png",
+      "foto": "foto_funcionario/Andre.png",
       "contato": "(21) 97603-5800",
       "lojas": [
         {
