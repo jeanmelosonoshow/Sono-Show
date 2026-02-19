@@ -7,11 +7,11 @@
       "contato": "(21) 99196-3530",
       "lojas": [
         {
-          "nome": "Campo Grande 1",
-          "endereco": "Rua Exemplo, 123 - Centro",
-          "telefone": "(21) 3333-4444",
-          "gerente": "Gerente Nome",
-          "fotoGerente": "fotos/gerente1.jpg"
+          "nome": "24 - CAMPO GRANDE (Sono Show)",
+          "endereco": "EST CACHAMORRA, 795",
+          "telefone": "(21) 3408-9120 / 97563-3694 / 99695-0479",
+          "gerente": "MANUELA NASCIMENTO CORTES CARUSO DE SA",
+          "fotoGerente": "foto_funcionario/manuela_24.jpg"
         },
         {
           "nome": "29 - UPTOWN (Casa Terrazi)",
@@ -34,6 +34,13 @@
           "telefone": "(21) 2687-2600 / 97420-6580 / 96454-2093",
           "gerente": "ELOISE HELENI DA SILVA SAMANIEGO",
           "fotoGerente": "foto_funcionario/eloise_17.jpeg"
+        },
+        {
+          "nome": "08 - TAQUARA (Sono Show)",
+          "endereco": "ESTRADA TINDIBA, 2284",
+          "telefone": "(21) 3495-9076 / 98476-5117 / 98949-9201",
+          "gerente": "DAYANA PEIXOTO DA LUZ",
+          "fotoGerente": "foto_funcionario/dayana_08.jpeg"
         }
       ]
     },
@@ -64,6 +71,13 @@
           "gerente": "FERNANDO HENRIQUE CORREIA SOUZA",
           "fotoGerente": "foto_funcionario/FERNANDO_04.jpeg"
         } ,
+         {
+          "nome": "15 - BONSUCESSO (Sono Show)",
+          "endereco": "R CARDOSO DE MORAIS, 173",
+          "telefone": "(21) 97410-8048 / (21) 97283-8057",
+          "gerente": "FRANCISCO SARMENTO LOBO",
+          "fotoGerente": "foto_funcionario/francisco_15.jpeg"
+        } ,
         {
           "nome": "22 - SHOPPING GRANDE RIO (Sono Show)",
           "endereco": "R MARIA SOARES SENDAS, 111",
@@ -71,6 +85,7 @@
           "gerente": "MICHELE DE OLIVEIRA COELHO",
           "fotoGerente": "foto_funcionario/michele_22.jpeg"
         } 
+       
       ]
     }
   ]
