@@ -48,14 +48,14 @@
           "endereco": "AVENIDA GETULIO VARGAS, 1502",
           "telefone": "(21) 3408-9120 / (21) 97087-4411/97189-2907",
           "gerente": "CRISTIANE RODRIGUES FERREIRA DIAS",
-          "fotoGerente": "fotos/Cristiane_02.jpeg"
+          "fotoGerente": "foto_funcionario/Cristiane_02.jpeg"
         },
         {
           "nome": "03 - PENHA (Sono Show)",
           "endereco": "AV BRAZ DE PINA, 301",
           "telefone": "(21) 3215-6119 / (21) 97968-6891",
           "gerente": "FLAVIO JOSE LOPES DA SILVA",
-          "fotoGerente": "fotos/FLAVIO_LOPES_03.jpeg"
+          "fotoGerente": "foto_funcionario/FLAVIO_LOPES_03.jpeg"
         } 
       ]
     }
