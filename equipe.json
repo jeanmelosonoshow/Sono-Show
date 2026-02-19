@@ -39,14 +39,14 @@
     },
         {
       "id": 3,
-      "nome": "NOME SUPERVISOR 2",
-      "foto": "fotos/supervisor2.jpg",
-      "contato": "(21) 88888-8888",
+      "nome": "ANDRE MOREIRA VALENTE",
+      "foto": "fotos/YGOR.png",
+      "contato": "(21) 97603-5800",
       "lojas": [
         {
-          "nome": "Bangu",
-          "endereco": "Rua Bangu, 789",
-          "telefone": "(21) 3333-6666",
+          "nome": "NILÓPOLIS",
+          "endereco": "AVENIDA GETULIO VARGAS, 1502",
+          "telefone": "(21) 3408-9120",
           "gerente": "Gerente Nome",
           "fotoGerente": "fotos/gerente3.jpg"
         }
