@@ -510,7 +510,7 @@ async function loadContatosData() {
                         </div>
                     </div>
                     <h3 class="text-xl font-bold text-slate-800 uppercase leading-tight">${sup.nome}</h3>
-                    <p class="text-blue-600 font-bold text-[10px] mb-2 tracking-widest">SUPERVISOR REGIONAL</p>
+                    <p class="text-blue-600 font-bold text-[10px] mb-2 tracking-widest"> ${sup.id} === 1 ? SUPERVISOR GERAL : SUPERVISOR REGIONAL</p>
                     <p class="text-sm text-slate-500 font-mono italic">
                         <i class="fab fa-whatsapp mr-1 text-green-500"></i> ${sup.contato}
                     </p>
