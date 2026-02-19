@@ -4,7 +4,7 @@
       "id": 1,
       "nome": "MARCIO ALVES DOS SANTOS",
       "foto": "foto_funcionario/Marcio.png",
-      "contato": "(21) 99999-9999",
+      "contato": "(21) 99196-3530",
       "lojas": [
         {
           "nome": "Campo Grande 1",
@@ -41,15 +41,22 @@
       "id": 3,
       "nome": "ANDRE MOREIRA VALENTE",
       "foto": "foto_funcionario/Andre.png",
-      "contato": "(21) 97603-5800",
+      "contato": "(21) 97240-9496",
       "lojas": [
         {
           "nome": "02 - NILÓPOLIS (Sono Show)",
           "endereco": "AVENIDA GETULIO VARGAS, 1502",
-          "telefone": "(21) 3408-9120",
+          "telefone": "(21) 3408-9120 / (21) 97087-4411/97189-2907",
           "gerente": "CRISTIANE RODRIGUES FERREIRA DIAS",
           "fotoGerente": "fotos/gerente3.jpg"
-        }
+        },
+        {
+          "nome": "03 - PENHA (Sono Show)",
+          "endereco": "AV BRAZ DE PINA, 301",
+          "telefone": "(21) 3215-6119 / (21) 97968-6891",
+          "gerente": "FLAVIO JOSE LOPES DA SILVA",
+          "fotoGerente": "fotos/FLAVIO_LOPES_03.jpeg"
+        } q
       ]
     }
   ]
