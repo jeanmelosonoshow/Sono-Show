@@ -63,6 +63,13 @@
           "telefone": "(21) 2775-4469 / (21) 97035-6818",
           "gerente": "FERNANDO HENRIQUE CORREIA SOUZA",
           "fotoGerente": "foto_funcionario/FERNANDO_04.jpeg"
+        } ,
+        {
+          "nome": "22 - SHOPPING GRANDE RIO (Sono Show)",
+          "endereco": "R MARIA SOARES SENDAS, 111",
+          "telefone": "(21) 98476-2902 / (21) 96986-0215",
+          "gerente": "MICHELE DE OLIVEIRA COELHO",
+          "fotoGerente": "foto_funcionario/michele_22.jpeg"
         } 
       ]
     }
