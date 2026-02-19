@@ -503,8 +503,8 @@ async function loadContatosData() {
             <div class="space-y-8">
                 <div class="text-center">
                     <div class="relative inline-block">
-                        <img src="${sup.foto}" onerror="this.src='https://ui-avatars.com/api/?name=${sup.nome}&background=0D8ABC&color=fff'" 
-                             class="w-32 h-32 rounded-full border-4 border-blue-600 object-cover shadow-xl mx-auto mb-4">
+                        <img src="${sup.foto}"  onerror="this.src='https://ui-avatars.com/api/?name=${sup.nome}&background=0D8ABC&color=fff'" 
+                         class="w-32 h-32 aspect-square rounded-full border-4 border-blue-600 object-cover object-center shadow-xl mx-auto mb-4">
                         <div class="absolute bottom-4 right-0 bg-blue-600 text-white w-8 h-8 rounded-full flex items-center justify-center border-2 border-white">
                             <i class="fas fa-star text-[10px]"></i>
                         </div>
@@ -520,8 +520,8 @@ async function loadContatosData() {
                     <h4 class="text-[10px] font-black text-slate-400 tracking-[0.3em] uppercase border-b pb-2">Filiais Sob Gestão</h4>
                     ${sup.lojas.map(loja => `
                         <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-all flex items-center gap-4">
-                            <img src="${loja.fotoGerente}" onerror="this.src='https://ui-avatars.com/api/?name=${loja.gerente}&background=f1f5f9&color=64748b'" 
-                                 class="w-14 h-14 rounded-full border-2 border-slate-200 object-cover bg-gray-50">
+                            <img src="${loja.fotoGerente}"   onerror="this.src='https://ui-avatars.com/api/?name=${loja.gerente}&background=f1f5f9&color=64748b'" 
+                           class="w-14 h-14 aspect-square rounded-full border-2 border-slate-200 object-cover object-center bg-gray-50">
                             <div class="flex-1 min-w-0">
                                 <h5 class="font-bold text-slate-800 text-sm truncate uppercase">${loja.nome}</h5>
                                 <p class="text-[10px] text-slate-500 truncate mb-1">${loja.endereco}</p>
