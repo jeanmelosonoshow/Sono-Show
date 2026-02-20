@@ -556,56 +556,64 @@ async function loadContatosData() {
     try {
         const response = await fetch('equipe.json');
         if (!response.ok) throw new Error('Erro ao carregar JSON');
-        
         const data = await response.json();
 
-        // Layout de Grid: 1 coluna no mobile, 2 no desktop
-        container.className = "grid grid-cols-1 md:grid-cols-2 gap-8";
+        // Container principal como Grid de 2 colunas
+        container.className = "grid grid-cols-1 md:grid-cols-2 gap-10";
 
         container.innerHTML = data.supervisores.map(sup => {
             const isGeral = sup.id === 1;
-            
+
             return `
-            <div class="${isGeral ? 'col-span-full glow-supervisor-geral bg-white p-8 rounded-[2rem] border-2 mb-4' : 'bg-slate-50/50 p-6 rounded-3xl border border-slate-100'} transition-all duration-500">
+            <div class="${isGeral ? 'col-span-full glow-master bg-blue-50/30 p-8 rounded-[2.5rem] mb-6' : 'space-y-8 p-4'}">
                 
-                <div class="flex flex-col ${isGeral ? 'md:flex-row' : ''} items-center gap-6 mb-8">
-                    <div class="relative">
+                <div class="text-center mb-10">
+                    <div class="relative inline-block">
                         <img src="${sup.foto}" onclick="openImageModal('${sup.foto}')"
-                             class="${isGeral ? 'w-44 h-44' : 'w-32 h-32'} aspect-square rounded-full border-4 ${isGeral ? 'border-blue-600' : 'border-slate-300'} object-cover shadow-2xl cursor-pointer hover:scale-105 transition-transform"
+                             class="${isGeral ? 'w-40 h-40' : 'w-32 h-32'} aspect-square rounded-full border-4 border-blue-600 object-cover shadow-xl mx-auto mb-4 cursor-pointer hover:scale-105 transition-transform"
                              onerror="this.src='https://ui-avatars.com/api/?name=${sup.nome}&background=0D8ABC&color=fff'">
                         
-                        <div class="absolute bottom-2 right-2 ${isGeral ? 'bg-amber-500 w-12 h-12' : 'bg-blue-600 w-8 h-8'} text-white rounded-full flex items-center justify-center border-4 border-white shadow-lg">
-                            <i class="fas ${isGeral ? 'fa-crown text-xl' : 'fa-star text-[10px]'}"></i>
+                        <div class="absolute bottom-4 right-0 ${isGeral ? 'bg-amber-500 w-12 h-12' : 'bg-blue-600 w-8 h-8'} text-white rounded-full flex items-center justify-center border-2 border-white shadow-lg">
+                            <i class="fas ${isGeral ? 'fa-crown text-lg' : 'fa-star text-[10px]'}"></i>
                         </div>
                     </div>
-
-                    <div class="${isGeral ? 'text-center md:text-left' : 'text-center'} flex-1">
-                        <h3 class="${isGeral ? 'text-3xl' : 'text-xl'} font-black text-slate-800 uppercase tracking-tight">${sup.nome}</h3>
-                        <div class="flex flex-wrap ${isGeral ? 'justify-center md:justify-start' : 'justify-center'} gap-2 mt-2">
-                            <span class="${isGeral ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-600'} text-[10px] font-bold px-3 py-1 rounded-full tracking-widest">
-                                ${isGeral ? 'SUPERVISOR GERAL' : 'SUPERVISOR REGIONAL'}
-                            </span>
-                        </div>
-                        <p class="text-md text-slate-500 font-mono mt-3">
-                            <i class="fab fa-whatsapp text-green-500 mr-2"></i><strong>${sup.contato}</strong>
-                        </p>
-                    </div>
+                    
+                    <h3 class="${isGeral ? 'text-3xl' : 'text-xl'} font-black text-slate-800 uppercase leading-tight">${sup.nome}</h3>
+                    <p class="${isGeral ? 'bg-blue-600 text-white px-6 py-1 rounded-full inline-block mt-2' : 'text-blue-600'} font-bold text-[10px] mb-2 tracking-widest uppercase">
+                        ${isGeral ? 'Supervisor Geral' : 'Supervisor Regional'}
+                    </p>
+                    <p class="text-md text-slate-500 font-mono italic mt-2">
+                        <i class="fab fa-whatsapp mr-1 text-green-500"></i> ${sup.contato}
+                    </p>
                 </div>
 
-                <div class="space-y-4">
-                    <h4 class="text-[10px] font-black text-slate-400 tracking-[0.4em] uppercase border-b border-slate-100 pb-3 flex items-center gap-2">
-                        <i class="fas fa-store-alt text-blue-500"></i> ${isGeral ? 'Gestão Estratégica de Filiais' : 'Filiais sob Supervisão'}
+                <div class="space-y-6">
+                    <h4 class="text-[11px] font-black text-slate-400 tracking-[0.3em] uppercase border-b pb-2 flex items-center gap-2">
+                        <i class="fas fa-map-marker-alt"></i> Filiais Sob Gestão
                     </h4>
                     
-                    <div class="grid grid-cols-1 ${isGeral ? 'md:grid-cols-2 lg:grid-cols-3' : ''} gap-4">
+                    <div class="grid grid-cols-1 ${isGeral ? 'lg:grid-cols-2' : ''} gap-6">
                         ${sup.lojas.map(loja => `
-                            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-50 hover:border-blue-200 hover:shadow-md transition-all flex items-center gap-4">
+                            <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 hover:shadow-xl hover:border-blue-200 transition-all flex flex-col sm:flex-row items-center sm:items-start gap-5">
+                                
                                 <img src="${loja.fotoGerente}" onclick="openImageModal('${loja.fotoGerente}')"
-                                     class="w-12 h-12 rounded-full border border-slate-100 object-cover bg-slate-50 cursor-pointer"
+                                     class="w-20 h-20 aspect-square rounded-2xl border-2 border-slate-100 object-cover bg-gray-50 cursor-pointer hover:opacity-90"
                                      onerror="this.src='https://ui-avatars.com/api/?name=${loja.gerente}&background=f1f5f9&color=64748b'">
-                                <div class="flex-1 min-w-0">
-                                    <h5 class="font-bold text-slate-800 text-[12px] truncate uppercase">${loja.nome}</h5>
-                                    <p class="text-[10px] text-blue-600 font-medium truncate">Gerente: ${loja.gerente}</p>
+                                
+                                <div class="flex-1 min-w-0 text-center sm:text-left">
+                                    <h5 class="font-black text-slate-800 text-base uppercase mb-1 leading-tight">${loja.nome}</h5>
+                                    <p class="text-[11px] text-slate-400 mb-3 leading-relaxed">
+                                        <i class="fas fa-location-dot mr-1"></i> ${loja.endereco}
+                                    </p>
+                                    
+                                    <div class="bg-slate-50 rounded-2xl p-3 border border-slate-50">
+                                        <p class="text-[10px] text-blue-600 font-black uppercase mb-1">
+                                            Gerente: <span class="text-slate-700 font-bold">${loja.gerente}</span>
+                                        </p>
+                                        <p class="text-[11px] font-mono text-slate-500 flex items-center justify-center sm:justify-start gap-2">
+                                            <i class="fas fa-phone-alt text-[9px]"></i> ${loja.telefone}
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                         `).join('')}
@@ -618,7 +626,7 @@ async function loadContatosData() {
         loadedTabs.contatos = true;
     } catch (e) {
         console.error("Erro:", e);
-        container.innerHTML = "<p class='col-span-full text-center text-red-500 p-10'>Erro ao carregar os dados da equipe.</p>";
+        container.innerHTML = "<p class='col-span-full text-center text-red-500 p-10'>Não foi possível carregar os dados.</p>";
     }
 }
 
