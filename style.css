@@ -61,3 +61,20 @@
     0% { box-shadow: 0 0 10px rgba(37, 99, 235, 0.2); }
     100% { box-shadow: 0 0 30px rgba(37, 99, 235, 0.5); }
   }
+
+
+/* Estilização da scrollbar interna dos setores */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #3b82f6;
+}
