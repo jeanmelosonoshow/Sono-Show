@@ -106,3 +106,24 @@
     z-index: 50;
     box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
 }
+
+/* Estilo das Rajadas */
+.ray-effect {
+    position: absolute;
+    transform: skewY(-5deg); /* Dá o efeito inclinado de rajada */
+    filter: blur(60px);      /* Suaviza as bordas para não ficar agressivo */
+    pointer-events: none;
+}
+
+/* Otimização do container pai para garantir que o fundo branco não cubra tudo */
+#tab-sobre {
+    position: relative;
+    background-color: #ffffff; /* Fundo base */
+    z-index: 0;
+}
+
+/* Ajuste de opacidade para o texto não perder contraste */
+#tab-sobre .container {
+    position: relative;
+    z-index: 10;
+}
