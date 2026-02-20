@@ -488,7 +488,7 @@ function switchTab(tabId) {
 // Adicione 'contatos: false' ao seu objeto loadedTabs no topo do script
 // loadedTabs = { home: false, treinamento: false, encartes: false, catalogo: false, contatos: false };
 
-async function loadContatosData() {
+/*async function loadContatosData() {
     if (loadedTabs.contatos) return;
     const container = document.getElementById("container-equipe");
 
@@ -546,6 +546,79 @@ async function loadContatosData() {
     } catch (e) {
         console.error("Erro:", e);
         container.innerHTML = "<p class='col-span-full text-center text-red-500 p-10'>Não foi possível carregar os dados. Verifique o arquivo equipe.json.</p>";
+    }
+}*/
+
+async function loadContatosData() {
+    if (loadedTabs.contatos) return;
+    const container = document.getElementById("container-equipe");
+
+    try {
+        const response = await fetch('equipe.json');
+        if (!response.ok) throw new Error('Erro ao carregar JSON');
+        
+        const data = await response.json();
+
+        // Layout de Grid: 1 coluna no mobile, 2 no desktop
+        container.className = "grid grid-cols-1 md:grid-cols-2 gap-8";
+
+        container.innerHTML = data.supervisores.map(sup => {
+            const isGeral = sup.id === 1;
+            
+            return `
+            <div class="${isGeral ? 'col-span-full glow-supervisor-geral bg-white p-8 rounded-[2rem] border-2 mb-4' : 'bg-slate-50/50 p-6 rounded-3xl border border-slate-100'} transition-all duration-500">
+                
+                <div class="flex flex-col ${isGeral ? 'md:flex-row' : ''} items-center gap-6 mb-8">
+                    <div class="relative">
+                        <img src="${sup.foto}" onclick="openImageModal('${sup.foto}')"
+                             class="${isGeral ? 'w-44 h-44' : 'w-32 h-32'} aspect-square rounded-full border-4 ${isGeral ? 'border-blue-600' : 'border-slate-300'} object-cover shadow-2xl cursor-pointer hover:scale-105 transition-transform"
+                             onerror="this.src='https://ui-avatars.com/api/?name=${sup.nome}&background=0D8ABC&color=fff'">
+                        
+                        <div class="absolute bottom-2 right-2 ${isGeral ? 'bg-amber-500 w-12 h-12' : 'bg-blue-600 w-8 h-8'} text-white rounded-full flex items-center justify-center border-4 border-white shadow-lg">
+                            <i class="fas ${isGeral ? 'fa-crown text-xl' : 'fa-star text-[10px]'}"></i>
+                        </div>
+                    </div>
+
+                    <div class="${isGeral ? 'text-center md:text-left' : 'text-center'} flex-1">
+                        <h3 class="${isGeral ? 'text-3xl' : 'text-xl'} font-black text-slate-800 uppercase tracking-tight">${sup.nome}</h3>
+                        <div class="flex flex-wrap ${isGeral ? 'justify-center md:justify-start' : 'justify-center'} gap-2 mt-2">
+                            <span class="${isGeral ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-600'} text-[10px] font-bold px-3 py-1 rounded-full tracking-widest">
+                                ${isGeral ? 'SUPERVISOR GERAL' : 'SUPERVISOR REGIONAL'}
+                            </span>
+                        </div>
+                        <p class="text-md text-slate-500 font-mono mt-3">
+                            <i class="fab fa-whatsapp text-green-500 mr-2"></i><strong>${sup.contato}</strong>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <h4 class="text-[10px] font-black text-slate-400 tracking-[0.4em] uppercase border-b border-slate-100 pb-3 flex items-center gap-2">
+                        <i class="fas fa-store-alt text-blue-500"></i> ${isGeral ? 'Gestão Estratégica de Filiais' : 'Filiais sob Supervisão'}
+                    </h4>
+                    
+                    <div class="grid grid-cols-1 ${isGeral ? 'md:grid-cols-2 lg:grid-cols-3' : ''} gap-4">
+                        ${sup.lojas.map(loja => `
+                            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-50 hover:border-blue-200 hover:shadow-md transition-all flex items-center gap-4">
+                                <img src="${loja.fotoGerente}" onclick="openImageModal('${loja.fotoGerente}')"
+                                     class="w-12 h-12 rounded-full border border-slate-100 object-cover bg-slate-50 cursor-pointer"
+                                     onerror="this.src='https://ui-avatars.com/api/?name=${loja.gerente}&background=f1f5f9&color=64748b'">
+                                <div class="flex-1 min-w-0">
+                                    <h5 class="font-bold text-slate-800 text-[12px] truncate uppercase">${loja.nome}</h5>
+                                    <p class="text-[10px] text-blue-600 font-medium truncate">Gerente: ${loja.gerente}</p>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>
+            `;
+        }).join('');
+
+        loadedTabs.contatos = true;
+    } catch (e) {
+        console.error("Erro:", e);
+        container.innerHTML = "<p class='col-span-full text-center text-red-500 p-10'>Erro ao carregar os dados da equipe.</p>";
     }
 }
 
