@@ -197,16 +197,30 @@
     </div>
 </main>
 
-  <main id="tab-contatos" class="tab-content container mx-auto p-4 animate-fadeIn">
+<main id="tab-contatos" class="tab-content container mx-auto p-4 animate-fadeIn">
   <div class="text-center mb-12">
     <h2 class="text-3xl font-black text-slate-800 uppercase tracking-tighter italic">
-      Estrutura de <span class="text-blue-600">Vendas</span>
+      Estrutura de <span class="text-blue-600">Vendas e Apoio</span>
     </h2>
     <div class="h-1.5 w-24 bg-blue-600 mx-auto rounded-full mt-2"></div>
   </div>
 
-  <div id="container-equipe" class="grid md:grid-cols-3 gap-10">
-    <p class="col-span-full text-center text-slate-400 animate-pulse">Carregando contatos...</p>
+  <div class="flex flex-col lg:flex-row gap-8">
+    
+    <div id="container-equipe" class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-10 h-fit">
+      </div>
+
+    <aside class="w-full lg:w-80 shrink-0">
+      <div id="container-setores" class="bg-white rounded-[2rem] p-6 shadow-xl border border-slate-100 sticky top-24">
+        <h3 class="text-slate-800 font-black text-xs tracking-[0.3em] uppercase mb-6 border-b pb-4 flex items-center gap-2">
+          <i class="fas fa-network-wired text-blue-600"></i> Setores Internos
+        </h3>
+        <div id="lista-setores" class="space-y-6">
+          <p class="text-center text-slate-400 text-xs animate-pulse">Carregando setores...</p>
+        </div>
+      </div>
+    </aside>
+
   </div>
 </main>
 
