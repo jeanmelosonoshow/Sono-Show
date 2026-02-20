@@ -116,84 +116,151 @@
 <main id="tab-catalogo" class="tab-content container mx-auto p-4 animate-fadeIn">
   <div id="catalogo-wrapper" class="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col iframe-container"></div>
 </main>
-
-<main id="tab-sobre" class="tab-content container mx-auto p-4 md:p-12 animate-fadeIn">
-    <div class="max-w-4xl mx-auto text-center mb-16">
-        <h2 class="text-4xl md:text-5xl font-extrabold text-slate-900 mb-4 tracking-tight">
-            Nossa <span class="text-blue-600">História</span>
-        </h2>
-        <div class="h-1.5 w-24 bg-blue-600 mx-auto rounded-full"></div>
+<main id="tab-sobre" class="tab-content relative overflow-hidden bg-white animate-fadeIn">
+    
+    <div class="absolute top-0 left-0 w-full h-full -z-10 pointer-events-none opacity-20">
+        <div class="absolute -top-24 -left-24 w-96 h-96 bg-blue-600 rounded-full blur-[120px]"></div>
+        <div class="absolute top-1/2 -right-24 w-80 h-80 bg-yellow-400 rounded-full blur-[100px]"></div>
+        <div class="absolute -bottom-24 left-1/4 w-96 h-96 bg-blue-400 rounded-full blur-[130px]"></div>
     </div>
 
-    <div class="max-w-5xl mx-auto mb-20">
-        <div class="grid md:grid-cols-12 gap-12 items-start">
-            <div class="md:col-span-7 space-y-6 text-lg leading-relaxed text-slate-600">
-                <p>
-                    A <strong class="text-slate-900">Sono Show Móveis</strong> é uma empresa carioca com mais de 30 anos de mercado. Temos o orgulho de transformar milhares de lares com produtos que unem design moderno, conforto e organização.
-                </p>
-                <p>
-                    Com <span class="font-semibold text-blue-600">23 lojas</span> no Rio de Janeiro e Baixada Fluminense, consolidamos nossa marca através de um atendimento de excelência, conquistando prêmios como o <span class="italic font-medium">Marcas dos Cariocas (O Globo)</span> e o <span class="italic font-medium">Troféu Reclame Aqui</span>.
-                </p>
-                <p>
-                    Nosso objetivo é simples: oferecer móveis bonitos e práticos com preços atrativos, garantindo a confiança de cada família que nos escolhe.
-                </p>
-            </div>
-            
-            <div class="md:col-span-5 bg-slate-50 p-8 rounded-3xl border border-slate-100 shadow-sm">
-                <h4 class="text-slate-900 font-bold mb-4">Reconhecimento</h4>
-                <div class="space-y-4">
-                    <div class="flex items-center gap-4">
-                        <div class="bg-yellow-100 text-yellow-600 p-3 rounded-full">
-                            <i class="fas fa-trophy"></i>
+    <div class="container mx-auto p-4 md:p-12 relative">
+        
+        <div class="hidden lg:block">
+            <img src="https://via.placeholder.com/200x250" class="absolute top-10 left-0 w-48 rounded-xl shadow-lg rotate-[-6deg] hover:rotate-0 transition-transform duration-300" alt="Mural 1">
+            <img src="https://via.placeholder.com/220x150" class="absolute top-1/3 -left-10 w-56 rounded-xl shadow-lg rotate-[4deg] hover:rotate-0 transition-transform duration-300 border-4 border-white" alt="Mural 2">
+            <img src="https://via.placeholder.com/180x240" class="absolute top-20 right-0 w-44 rounded-xl shadow-lg rotate-[8deg] hover:rotate-0 transition-transform duration-300" alt="Mural 3">
+            <img src="https://via.placeholder.com/250x180" class="absolute top-1/2 -right-12 w-60 rounded-xl shadow-lg rotate-[-3deg] hover:rotate-0 transition-transform duration-300 border-4 border-white" alt="Mural 4">
+        </div>
+
+        <div class="max-w-4xl mx-auto text-center mb-16 relative z-10">
+            <h2 class="text-4xl md:text-5xl font-extrabold text-slate-900 mb-4 tracking-tight">
+                Nossa <span class="text-blue-600">História</span>
+            </h2>
+            <div class="h-1.5 w-24 bg-blue-600 mx-auto rounded-full"></div>
+        </div>
+
+        <div class="max-w-5xl mx-auto mb-20 relative z-10">
+            <div class="grid md:grid-cols-12 gap-12 items-start">
+                <div class="md:col-span-7 space-y-6 text-lg leading-relaxed text-slate-600">
+                    <p>
+                        A <strong class="text-slate-900">Sono Show Móveis</strong> é uma empresa carioca com mais de 30 anos de mercado. Temos o orgulho de transformar milhares de lares com produtos que unem design moderno, conforto e organização.
+                    </p>
+                    <p>
+                        Com <span class="font-semibold text-blue-600">23 lojas</span> no Rio de Janeiro e Baixada Fluminense, consolidamos nossa marca através de um atendimento de excelência, conquistando prêmios como o <span class="italic font-medium">Marcas dos Cariocas (O Globo)</span> e o <span class="italic font-medium">Troféu Reclame Aqui</span>.
+                    </p>
+                    <p>
+                        Nosso objetivo é simples: oferecer móveis bonitos e práticos com preços atrativos, garantindo a confiança de cada família que nos escolhe.
+                    </p>
+                </div>
+                
+                <div class="md:col-span-5 bg-white/80 backdrop-blur-sm p-8 rounded-3xl border border-slate-100 shadow-sm">
+                    <h4 class="text-slate-900 font-bold mb-4">Reconhecimento</h4>
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-4">
+                            <div class="bg-yellow-100 text-yellow-600 p-3 rounded-full">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <span class="text-sm font-medium text-slate-700">Troféu Reclame Aqui (2020)</span>
                         </div>
-                        <span class="text-sm font-medium text-slate-700">Troféu Reclame Aqui (2020)</span>
-                    </div>
-                    <div class="flex items-center gap-4">
-                        <div class="bg-blue-100 text-blue-600 p-3 rounded-full">
-                            <i class="fas fa-award"></i>
+                        <div class="flex items-center gap-4">
+                            <div class="bg-blue-100 text-blue-600 p-3 rounded-full">
+                                <i class="fas fa-award"></i>
+                            </div>
+                            <span class="text-sm font-medium text-slate-700">Marcas dos Cariocas (O Globo)</span>
                         </div>
-                        <span class="text-sm font-medium text-slate-700">Marcas dos Cariocas (O Globo)</span>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="max-w-6xl mx-auto">
-        <div class="grid md:grid-cols-3 gap-8">
-            <div class="bg-white p-8 rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-50 transition-transform hover:-translate-y-2">
-                <div class="w-12 h-12 bg-blue-600 text-white rounded-lg flex items-center justify-center mb-6 shadow-lg shadow-blue-200">
-                    <i class="fas fa-bullseye text-xl"></i>
+        <div class="max-w-6xl mx-auto mb-24 relative z-10">
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white p-8 rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-50 transition-transform hover:-translate-y-2">
+                    <div class="w-12 h-12 bg-blue-600 text-white rounded-lg flex items-center justify-center mb-6 shadow-lg shadow-blue-200">
+                        <i class="fas fa-bullseye text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">Missão</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Proporcionar aos clientes produtos de qualidade e preços acessíveis, transformando sonhos em realidade.</p>
                 </div>
-                <h3 class="text-xl font-bold text-slate-900 mb-3">Missão</h3>
-                <p class="text-slate-600 text-sm leading-relaxed">
-                    Proporcionar aos clientes produtos de qualidade e preços acessíveis, transformando sonhos em realidade.
-                </p>
-            </div>
 
-            <div class="bg-white p-8 rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-50 transition-transform hover:-translate-y-2">
-                <div class="w-12 h-12 bg-blue-600 text-white rounded-lg flex items-center justify-center mb-6 shadow-lg shadow-blue-200">
-                    <i class="fas fa-eye text-xl"></i>
+                <div class="bg-white p-8 rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-50 transition-transform hover:-translate-y-2">
+                    <div class="w-12 h-12 bg-blue-600 text-white rounded-lg flex items-center justify-center mb-6 shadow-lg shadow-blue-200">
+                        <i class="fas fa-eye text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">Visão</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Ser reconhecida como referência no mercado varejista de móveis, através da qualidade e excelência na prestação de serviço oferecido.</p>
                 </div>
-                <h3 class="text-xl font-bold text-slate-900 mb-3">Visão</h3>
-                <p class="text-slate-600 text-sm leading-relaxed">
-                    Ser reconhecida como referência no mercado varejista de móveis, através da qualidade e excelência na prestação de serviço oferecido.
-                </p>
-            </div>
 
-            <div class="bg-blue-600 p-8 rounded-2xl shadow-xl shadow-blue-200 transition-transform hover:-translate-y-2 text-white">
-                <div class="w-12 h-12 bg-white text-blue-600 rounded-lg flex items-center justify-center mb-6">
-                    <i class="fas fa-heart text-xl"></i>
+                <div class="bg-blue-600 p-8 rounded-2xl shadow-xl shadow-blue-200 transition-transform hover:-translate-y-2 text-white">
+                    <div class="w-12 h-12 bg-white text-blue-600 rounded-lg flex items-center justify-center mb-6">
+                        <i class="fas fa-heart text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Nossos Valores</h3>
+                    <ul class="text-sm space-y-2 opacity-90">
+                        <li class="flex items-center gap-2"><i class="fas fa-check"></i> Ética e Criatividade</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-check"></i> Respeito aos clientes</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-check"></i> Comprometimento</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-check"></i> Espírito de Equipe</li>
+                    </ul>
                 </div>
-                <h3 class="text-xl font-bold mb-3">Nossos Valores</h3>
-                <ul class="text-sm space-y-2 opacity-90">
-                    <li class="flex items-center gap-2"><i class="fas fa-check"></i> Ética e Criatividade</li>
-                    <li class="flex items-center gap-2"><i class="fas fa-check"></i> Respeito aos clientes</li>
-                    <li class="flex items-center gap-2"><i class="fas fa-check"></i> Comprometimento</li>
-                    <li class="flex items-center gap-2"><i class="fas fa-check"></i> Espírito de Equipe</li>
-                </ul>
             </div>
         </div>
+
+        <hr class="border-slate-100 mb-20">
+
+        <section class="max-w-6xl mx-auto pb-12">
+            <div class="flex items-end justify-between mb-10">
+                <div>
+                    <h3 class="text-3xl font-bold text-slate-900">Nossos Álbuns</h3>
+                    <p class="text-slate-500">Inspire-se com ambientes reais montados por nossa equipe.</p>
+                </div>
+                <a href="#" class="text-blue-600 font-semibold hover:underline hidden md:block">Ver todos os álbuns →</a>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="group cursor-pointer">
+                    <div class="relative overflow-hidden rounded-2xl mb-3 aspect-square">
+                        <img src="https://via.placeholder.com/400x400" class="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110" alt="Sala de Estar">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+                            <span class="text-white text-sm font-medium">12 Fotos</span>
+                        </div>
+                    </div>
+                    <h5 class="font-bold text-slate-800 group-hover:text-blue-600 transition-colors">Salas de Estar</h5>
+                </div>
+
+                <div class="group cursor-pointer">
+                    <div class="relative overflow-hidden rounded-2xl mb-3 aspect-square">
+                        <img src="https://via.placeholder.com/401x401" class="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110" alt="Dormitórios">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+                            <span class="text-white text-sm font-medium">8 Fotos</span>
+                        </div>
+                    </div>
+                    <h5 class="font-bold text-slate-800 group-hover:text-blue-600 transition-colors">Dormitórios</h5>
+                </div>
+
+                <div class="group cursor-pointer">
+                    <div class="relative overflow-hidden rounded-2xl mb-3 aspect-square">
+                        <img src="https://via.placeholder.com/402x402" class="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110" alt="Cozinhas">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+                            <span class="text-white text-sm font-medium">15 Fotos</span>
+                        </div>
+                    </div>
+                    <h5 class="font-bold text-slate-800 group-hover:text-blue-600 transition-colors">Cozinhas Planejadas</h5>
+                </div>
+
+                <div class="group cursor-pointer">
+                    <div class="relative overflow-hidden rounded-2xl mb-3 aspect-square">
+                        <img src="https://via.placeholder.com/403x403" class="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110" alt="Escritórios">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+                            <span class="text-white text-sm font-medium">6 Fotos</span>
+                        </div>
+                    </div>
+                    <h5 class="font-bold text-slate-800 group-hover:text-blue-600 transition-colors">Home Office</h5>
+                </div>
+            </div>
+        </section>
+
     </div>
 </main>
 
