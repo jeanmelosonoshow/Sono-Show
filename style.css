@@ -77,4 +77,32 @@
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: #3b82f6;
+},
+
+/* Efeito de Rajadas Abstratas no Fundo */
+#tab-sobre::before {
+    content: "";
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    top: -50%;
+    left: -50%;
+    background-image: 
+        radial-gradient(circle at 20% 30%, rgba(59, 130, 246, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 80% 70%, rgba(250, 204, 21, 0.05) 0%, transparent 40%);
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* Melhoria na visibilidade das fotos do mural */
+.hidden.lg\:block img {
+    filter: saturate(0.9);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.hidden.lg\:block img:hover {
+    filter: saturate(1.1);
+    transform: scale(1.05) rotate(0deg);
+    z-index: 50;
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
 }
