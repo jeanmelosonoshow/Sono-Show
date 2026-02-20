@@ -207,7 +207,7 @@ function toggleCortina() {
    } catch (e) { console.error("Erro miniatura:", e); }
   }
 
-  async function loadHomeData() {
+  /*async function loadHomeData() {
    if(loadedTabs.home) return;
    try {
     const response = await fetch(`https://raw.githubusercontent.com/${USER}/${REPO}/main/comunicados.json?t=${Date.now()}`);
@@ -226,7 +226,50 @@ function toggleCortina() {
      </div>`).join("");
     loadedTabs.home = true;
    } catch (e) { console.error(e); }
+  }*/
+
+async function loadHomeData() {
+  if (loadedTabs.home) return;
+  try {
+    const response = await fetch(`https://raw.githubusercontent.com/${USER}/${REPO}/main/comunicados.json?t=${Date.now()}`);
+    const data = await response.json();
+    const carousel = document.getElementById("carousel-slides");
+
+    // 1. Lógica dos Banners
+    if (data.banners) {
+      totalSlides = data.banners.length;
+      carousel.innerHTML = data.banners.map(img => `
+        <div class="min-w-full h-full flex items-center justify-center bg-slate-900" style="background: #160b30">
+          <img src="${img}" class="max-w-full max-h-full object-contain">
+        </div>`).join("");
+    }
+
+    // 2. Lógica dos Avisos (Filtro e Ordenação)
+    const hoje = new Date();
+    hoje.setHours(0, 0, 0, 0); // Zera as horas para comparar apenas os dias
+
+    const avisosValidos = data.avisos
+      .filter(c => {
+        if (!c.expira) return true; // Se não tiver expiração, exibe sempre
+        const dataExpira = new Date(c.expira);
+        return dataExpira >= hoje; // Só mantém se a expiração for hoje ou no futuro
+      })
+      .sort((a, b) => new Date(b.data_iso) - new Date(a.data_iso)); // Mais recente primeiro
+
+    // 3. Renderização do HTML
+    document.getElementById("grid-comunicados").innerHTML = avisosValidos.map(c => `
+      <div class="bg-white p-6 rounded-xl shadow-sm border-t-4 border-${c.cor}-500 card-zoom">
+        <span class="text-[10px] font-bold text-${c.cor}-600 bg-${c.cor}-50 px-2 py-1 rounded uppercase">${c.categoria}</span>
+        <h4 class="font-bold text-lg mt-3 text-slate-800 leading-tight">${c.titulo}</h4>
+        <p class="text-gray-500 text-sm mt-2">${c.descricao}</p>
+        <div class="mt-4 pt-4 border-t border-gray-50 text-[10px] text-gray-400 font-bold uppercase">${c.data}</div>
+      </div>`).join("");
+
+    loadedTabs.home = true;
+  } catch (e) {
+    console.error("Erro ao carregar dados:", e);
   }
+}
 
 async function loadEncartes(path) {
   if (loadedTabs.encartes) return;
