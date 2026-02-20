@@ -137,30 +137,37 @@
         {
           "nome": "02 - NILÓPOLIS (Sono Show)",
           "endereco": "AVENIDA GETULIO VARGAS, 1502",
-          "telefone": "(21) 3408-9120 / (21) 97087-4411/97189-2907",
+          "telefone": "(21) 3408-9120 / 97087-4411 / 97189-2907",
           "gerente": "CRISTIANE RODRIGUES FERREIRA DIAS",
           "fotoGerente": "foto_funcionario/Cristiane_02.jpeg"
         },
         {
           "nome": "03 - PENHA (Sono Show)",
           "endereco": "AV BRAZ DE PINA, 301",
-          "telefone": "(21) 3215-6119 / (21) 97968-6891",
+          "telefone": "(21) 3215-6119 / 97968-6891",
           "gerente": "FLAVIO JOSE LOPES DA SILVA",
           "fotoGerente": "foto_funcionario/FLAVIO_LOPES_03.jpeg"
         } ,
         {
           "nome": "04 - DUQUE DE CAXIAS (Sono Show)",
           "endereco": "AV GOVERNADOR LEONEL DE MOURA BRIZOLA, 1749",
-          "telefone": "(21) 2775-4469 / (21) 97035-6818",
+          "telefone": "(21) 2775-4469 / 97035-6818",
           "gerente": "FERNANDO HENRIQUE CORREIA SOUZA",
           "fotoGerente": "foto_funcionario/FERNANDO_04.jpeg"
         } ,
         {
           "nome": "10 - NOVA IGUACU (Sono Show)",
           "endereco": "RUA CORONEL FRANCISCO SOARES, 172",
-          "telefone": "(21) 3408-9120 / (21) 97726-2571 ",
+          "telefone": "(21) 3408-9120 / 97726-2571 ",
           "gerente": "FABIANA DE SOUZA PAES SANTOS",
           "fotoGerente": "foto_funcionario/fabiana_10.jpeg"
+        } ,
+         {
+          "nome": "13 - MADUREIRA (Sono Show)",
+          "endereco": "RUA CORONEL FRANCISCO SOARES, 172",
+          "telefone": "(21) 97400-9318 / 98741-7961 ",
+          "gerente": "NATHALIA DOS SANTOS CARDOSO",
+          "fotoGerente": "foto_funcionario/nathalia_13.jpeg"
         } ,
          {
           "nome": "15 - BONSUCESSO (Sono Show)",
