@@ -256,7 +256,11 @@ async function loadHomeData() {
         const dataExpira = new Date(partes[0], partes[1] - 1, partes[2]);
         return dataExpira >= hoje;
       })
-      .sort((a, b) => new Date(b.data_iso) - new Date(a.data_iso));
+      .sort((a, b) => {
+          const dataA = new Date(a.data_iso).getTime();
+          const dataB = new Date(b.data_iso).getTime();
+          return dataB - dataA; // Garante que o maior número (mais recente) venha primeiro
+        });
 
     // --- OPÇÃO 2: MAPEAMENTO DE CORES PARA O TAILWIND ---
     // Adicione aqui as cores que você pretende usar no JSON
