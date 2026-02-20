@@ -1,0 +1,29 @@
+{
+  "Departamento": [
+    {
+      "nomedepartamento": "Financeiro",
+      "Equipe": [
+        {
+          "nome": "João Carlos",
+          "Cargo": "Gerente Financeiro",
+          "contato": "(21) 98888-7777"
+        },
+        {
+          "nome": "Maria Eduarda",
+          "Cargo": "Analista de Contas",
+          "contato": "(21) 97777-6666"
+        }
+      ]
+    },
+    {
+      "nomedepartamento": "Departamento Pessoal",
+      "Equipe": [
+        {
+          "nome": "Ricardo Souza",
+          "Cargo": "Coordenador de RH",
+          "contato": "(21) 96666-5555"
+        }
+      ]
+    }
+  ]
+}
