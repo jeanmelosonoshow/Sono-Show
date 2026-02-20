@@ -470,6 +470,7 @@ function switchTab(tabId) {
   if (tabId === "encartes") loadEncartes("Encartes");
   if (tabId === "rh") loadRHData(); 
   if (tabId === "contatos") { loadContatosData(); 
+                              loadSetoresData();
                             }
   if (tabId === "catalogo" && !loadedTabs.catalogo) {
     document.getElementById('catalogo-wrapper').innerHTML = `<iframe src="https://catalogo.sonoshowmoveis.com.br/" class="w-full h-full border-none"></iframe>`;
@@ -645,6 +646,46 @@ function closeImageModal() {
     modal.classList.add('hidden');
     // Devolve o scroll ao fechar
     document.body.style.overflow = 'auto';
+}
+
+async function loadSetoresData() {
+    // Evita recarregar se já estiver preenchido (opcional, dependendo da sua lógica de tabs)
+    const container = document.getElementById("lista-setores");
+    
+    try {
+        const response = await fetch('setores.json');
+        if (!response.ok) throw new Error('Erro ao carregar setores');
+        const data = await response.json();
+
+        container.innerHTML = data.Departamento.map(depto => `
+            <div class="depto-group">
+                <h4 class="text-blue-600 font-black text-[10px] tracking-widest uppercase mb-3 flex items-center gap-2">
+                    <span class="w-1.5 h-1.5 bg-blue-600 rounded-full"></span>
+                    ${depto.nomedepartamento}
+                </h4>
+                <div class="space-y-3 pl-3 border-l-2 border-slate-100 ml-0.5">
+                    ${depto.Equipe.map(membro => `
+                        <div class="group">
+                            <p class="text-slate-800 font-bold text-xs uppercase leading-tight group-hover:text-blue-600 transition-colors">
+                                ${membro.nome}
+                            </p>
+                            <p class="text-slate-400 text-[9px] uppercase font-medium mb-1">
+                                ${membro.Cargo}
+                            </p>
+                            <a href="https://wa.me/55${membro.contato.replace(/\D/g,'')}" target="_blank" class="text-blue-500 font-mono text-[10px] hover:underline flex items-center gap-1">
+                                <i class="fab fa-whatsapp text-green-500 text-xs"></i> 
+                                ${membro.contato}
+                            </a>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `).join('<hr class="my-4 border-slate-50">');
+
+    } catch (e) {
+        console.error("Erro ao carregar setores:", e);
+        container.innerHTML = "<p class='text-red-500 text-xs'>Erro ao carregar departamentos.</p>";
+    }
 }
 
 // Opcional: Fechar ao clicar fora da imagem
