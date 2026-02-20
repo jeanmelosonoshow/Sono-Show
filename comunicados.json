@@ -13,8 +13,19 @@
       "categoria": "NOTÍCIAS",
       "titulo": "Intranet Sono Show",
       "descricao": "Conheça a nova Intranet Sono Show: sua fonte central de treinamentos, comunicados e informações úteis. Um espaço feito para facilitar sua rotina e integrar nosso time. 2026 - Orgulho de ser Sono Show!",
-      "data": "Hoje",
+      "data": "19 de Fev",
+      "data_iso": "2026-02-19",
+      "expira": "2026-06-30",
       "cor": "blue"
+    },
+    {
+      "categoria": "AVISO",
+      "titulo": "Manutenção Sistema",
+      "descricao": "Ocorrerá no domingo.",
+      "data": "16 de Fev",
+      "data_iso": "2026-02-16",
+      "expira": "2026-02-16",
+      "cor": "red"
     }
   ]
 }
