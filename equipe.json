@@ -27,6 +27,13 @@
           "gerente": "LUCILA APARECIDA BERTOLI DOS SANTOS",
           "fotoGerente": "foto_funcionario/lucila_20.jpeg"
         },
+         {
+          "nome": "21 - CACHAMBI (Sono Show)",
+          "endereco": "AV DOM HELDER CAMARA, 5357",
+          "telefone": "(21) 99395-7328 / 98877-5960",
+          "gerente": "ANTONIA HERLANDIA LIMA NUNES",
+          "fotoGerente": "foto_funcionario/antonia_21.jpeg"
+        },
         {
           "nome": "24 - CAMPO GRANDE (Sono Show)",
           "endereco": "EST CACHAMORRA, 795",
@@ -64,6 +71,13 @@
           "fotoGerente": "foto_funcionario/dayana_08.jpeg"
         },
         {
+          "nome": "09 - BANGU SHOPPING (Sono Show)",
+          "endereco": "RUA FONSECA, 240",
+          "telefone": "(21) 3256-5236 / 97375-4319 / 97652-7351",
+          "gerente": "MARTA VITORIA DE MOURA GOMES",
+          "fotoGerente": "foto_funcionario/marta_09.jpeg"
+        },
+        {
           "nome": "11 - CAMPO GRANDE (Sono Show)",
           "endereco": "RUA MAJOR ALMEIDA COSTA, 16",
           "telefone": "(21) 2495-5528 / 97378-0227 / 97258-0193",
@@ -76,6 +90,13 @@
           "telefone": "(21) 2687-2600 / 97420-6580 / 96454-2093",
           "gerente": "ELOISE HELENI DA SILVA SAMANIEGO",
           "fotoGerente": "foto_funcionario/eloise_17.jpeg"
+        },
+        {
+          "nome": "18 - SANTA CRUZ (Sono Show)",
+          "endereco": "R FELIPE CARDOSO, 505",
+          "telefone": "(21) 97345-9216 / 96677-5348 / 97680-2123",
+          "gerente": "KETHELEN DA CONCEICAO JUSTO",
+          "fotoGerente": "foto_funcionario/kethelen_18.jpeg"
         },
          {
           "nome": "27 - BANGU (Sono Show Outlet)",
@@ -127,19 +148,40 @@
           "gerente": "FERNANDO HENRIQUE CORREIA SOUZA",
           "fotoGerente": "foto_funcionario/FERNANDO_04.jpeg"
         } ,
+        {
+          "nome": "10 - NOVA IGUACU (Sono Show)",
+          "endereco": "RUA CORONEL FRANCISCO SOARES, 172",
+          "telefone": "(21) 3408-9120 / (21) 97726-2571 ",
+          "gerente": "FABIANA DE SOUZA PAES SANTOS",
+          "fotoGerente": "foto_funcionario/fabiana_10.jpeg"
+        } ,
          {
           "nome": "15 - BONSUCESSO (Sono Show)",
           "endereco": "R CARDOSO DE MORAIS, 173",
-          "telefone": "(21) 97410-8048 / (21) 97283-8057",
+          "telefone": "(21) 97410-8048 / 97283-8057",
           "gerente": "FRANCISCO SARMENTO LOBO",
           "fotoGerente": "foto_funcionario/francisco_15.jpeg"
         } ,
         {
           "nome": "22 - SHOPPING GRANDE RIO (Sono Show)",
           "endereco": "R MARIA SOARES SENDAS, 111",
-          "telefone": "(21) 98476-2902 / (21) 96986-0215",
+          "telefone": "(21) 98476-2902 / 96986-0215",
           "gerente": "MICHELE DE OLIVEIRA COELHO",
           "fotoGerente": "foto_funcionario/michele_22.jpeg"
+        } ,
+        {
+          "nome": "23 - PIABETA (Sono Show)",
+          "endereco": "AVENIDA CAIOABA, 341",
+          "telefone": "(21) 97566-6467 / 98415-4241",
+          "gerente": "ITAGILMAR GOMES DA FONSECA JUNIOR",
+          "fotoGerente": "foto_funcionario/itagilmar_23.jpeg"
+        },
+        {
+          "nome": "25 - DUQUE DE CAXIAS (Sono Show)",
+          "endereco": "AVENIDA PRESIDENTE KENNEDY, 1597",
+          "telefone": "(21) 2759-6897 / 98476-6585 / 99425-0087",
+          "gerente": "ALEXANDRE DA SILVA LIMA",
+          "fotoGerente": "foto_funcionario/alexandre_25.jpeg"
         } 
        
       ]
