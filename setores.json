@@ -39,9 +39,19 @@
       "nomedepartamento": "Logística",
       "Equipe": [
         {
-          "nome": "Ricardo Souza",
-          "Cargo": "Coordenador de RH",
-          "contato": "(21) 96666-5555"
+          "nome": "Marcelo Campos",
+          "Cargo": "Gerente de Logística",
+          "contato": "(21) 99844-2113"
+        },
+         {
+          "nome": "Samantha",
+          "Cargo": "Lider PCE",
+          "contato": "(21) 97224-9712"
+        },
+         {
+          "nome": "PCE",
+          "Cargo": "Equipe PCE",
+          "contato": "(21) 98476-4300 / 98476-4615"
         }
       ]
     },
