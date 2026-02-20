@@ -24,6 +24,106 @@
           "contato": "(21) 96666-5555"
         }
       ]
+    },
+    {
+      "nomedepartamento": "Recursos Humanos",
+      "Equipe": [
+        {
+          "nome": "Ricardo Souza",
+          "Cargo": "Coordenador de RH",
+          "contato": "(21) 96666-5555"
+        }
+      ]
+    },
+    {
+      "nomedepartamento": "Logística",
+      "Equipe": [
+        {
+          "nome": "Ricardo Souza",
+          "Cargo": "Coordenador de RH",
+          "contato": "(21) 96666-5555"
+        }
+      ]
+    },
+    {
+      "nomedepartamento": "Pós Venda",
+      "Equipe": [
+        {
+          "nome": "Ricardo Souza",
+          "Cargo": "Coordenador de RH",
+          "contato": "(21) 96666-5555"
+        }
+      ]
+    },
+    {
+      "nomedepartamento": "Jurídico",
+      "Equipe": [
+        {
+          "nome": "Ricardo Souza",
+          "Cargo": "Coordenador de RH",
+          "contato": "(21) 96666-5555"
+        }
+      ]
+    },
+    {
+      "nomedepartamento": "Comercial/Compras",
+      "Equipe": [
+        {
+          "nome": "Ricardo Souza",
+          "Cargo": "Coordenador de RH",
+          "contato": "(21) 96666-5555"
+        }
+      ]
+    },
+    {
+      "nomedepartamento": "Suprimentos",
+      "Equipe": [
+        {
+          "nome": "Ricardo Souza",
+          "Cargo": "Coordenador de RH",
+          "contato": "(21) 96666-5555"
+        }
+      ]
+    },
+    {
+      "nomedepartamento": "Marketing",
+      "Equipe": [
+        {
+          "nome": "Ricardo Souza",
+          "Cargo": "Coordenador de RH",
+          "contato": "(21) 96666-5555"
+        }
+      ]
+    },
+    {
+      "nomedepartamento": "Ecommerce",
+      "Equipe": [
+        {
+          "nome": "Ricardo Souza",
+          "Cargo": "Coordenador de RH",
+          "contato": "(21) 96666-5555"
+        }
+      ]
+    },
+    {
+      "nomedepartamento": "Tecnologia da Informação",
+      "Equipe": [
+        {
+          "nome": "Ricardo Souza",
+          "Cargo": "Coordenador de RH",
+          "contato": "(21) 96666-5555"
+        }
+      ]
+    },
+    {
+      "nomedepartamento": "Contabil/Fiscal",
+      "Equipe": [
+        {
+          "nome": "Ricardo Souza",
+          "Cargo": "Coordenador de RH",
+          "contato": "(21) 96666-5555"
+        }
+      ]
     }
   ]
 }
