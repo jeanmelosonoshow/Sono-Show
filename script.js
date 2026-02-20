@@ -246,24 +246,41 @@ async function loadHomeData() {
 
     // 2. Lógica dos Avisos (Filtro e Ordenação)
     const hoje = new Date();
-    hoje.setHours(0, 0, 0, 0); // Zera as horas para comparar apenas os dias
+    hoje.setHours(0, 0, 0, 0);
 
     const avisosValidos = data.avisos
       .filter(c => {
-        if (!c.expira) return true; // Se não tiver expiração, exibe sempre
-        const dataExpira = new Date(c.expira);
-        return dataExpira >= hoje; // Só mantém se a expiração for hoje ou no futuro
+        if (!c.expira) return true;
+        // Tratamento para evitar erro de fuso horário (converte AAAA-MM-DD corretamente)
+        const partes = c.expira.split('-');
+        const dataExpira = new Date(partes[0], partes[1] - 1, partes[2]);
+        return dataExpira >= hoje;
       })
-      .sort((a, b) => new Date(b.data_iso) - new Date(a.data_iso)); // Mais recente primeiro
+      .sort((a, b) => new Date(b.data_iso) - new Date(a.data_iso));
+
+    // --- OPÇÃO 2: MAPEAMENTO DE CORES PARA O TAILWIND ---
+    // Adicione aqui as cores que você pretende usar no JSON
+    const listaCores = {
+      blue:   { border: 'border-blue-500',   text: 'text-blue-600',   bg: 'bg-blue-50' },
+      red:    { border: 'border-red-500',    text: 'text-red-600',    bg: 'bg-red-50' },
+      green:  { border: 'border-green-500',  text: 'text-green-600',  bg: 'bg-green-50' },
+      orange: { border: 'border-orange-500', text: 'text-orange-600', bg: 'bg-orange-50' },
+      purple: { border: 'border-purple-500', text: 'text-purple-600', bg: 'bg-purple-50' }
+    };
 
     // 3. Renderização do HTML
-    document.getElementById("grid-comunicados").innerHTML = avisosValidos.map(c => `
-      <div class="bg-white p-6 rounded-xl shadow-sm border-t-4 border-${c.cor}-500 card-zoom">
-        <span class="text-[10px] font-bold text-${c.cor}-600 bg-${c.cor}-50 px-2 py-1 rounded uppercase">${c.categoria}</span>
-        <h4 class="font-bold text-lg mt-3 text-slate-800 leading-tight">${c.titulo}</h4>
-        <p class="text-gray-500 text-sm mt-2">${c.descricao}</p>
-        <div class="mt-4 pt-4 border-t border-gray-50 text-[10px] text-gray-400 font-bold uppercase">${c.data}</div>
-      </div>`).join("");
+    document.getElementById("grid-comunicados").innerHTML = avisosValidos.map(c => {
+      // Busca as classes baseada na cor do JSON, ou usa azul como padrão
+      const estilo = listaCores[c.cor] || listaCores.blue;
+
+      return `
+        <div class="bg-white p-6 rounded-xl shadow-sm border-t-4 ${estilo.border} card-zoom">
+          <span class="text-[10px] font-bold ${estilo.text} ${estilo.bg} px-2 py-1 rounded uppercase">${c.categoria}</span>
+          <h4 class="font-bold text-lg mt-3 text-slate-800 leading-tight">${c.titulo}</h4>
+          <p class="text-gray-500 text-sm mt-2">${c.descricao}</p>
+          <div class="mt-4 pt-4 border-t border-gray-50 text-[10px] text-gray-400 font-bold uppercase">${c.data}</div>
+        </div>`;
+    }).join("");
 
     loadedTabs.home = true;
   } catch (e) {
