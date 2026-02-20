@@ -7,6 +7,7 @@
   const REPO = "Sono-Show";
   let currentSlide = 0, totalSlides = 0, allFiles = [];
   let allEncartes = [];
+  let setoresDataGlobal = [];
   const loadedTabs = { home: false, treinamento: false, encartes: false, catalogo: false };
 
    // --- LÓGICA DE LOGIN E SESSÃO ---
@@ -649,38 +650,63 @@ function closeImageModal() {
 }
 
 async function loadSetoresData() {
-    // Evita recarregar se já estiver preenchido (opcional, dependendo da sua lógica de tabs)
     const container = document.getElementById("lista-setores");
+    const searchInput = document.getElementById("search-setores");
     
     try {
         const response = await fetch('setores.json');
         if (!response.ok) throw new Error('Erro ao carregar setores');
         const data = await response.json();
+        setoresDataGlobal = data.Departamento;
 
-        container.innerHTML = data.Departamento.map(depto => `
-            <div class="depto-group">
-                <h4 class="text-blue-600 font-black text-[10px] tracking-widest uppercase mb-3 flex items-center gap-2">
-                    <span class="w-1.5 h-1.5 bg-blue-600 rounded-full"></span>
-                    ${depto.nomedepartamento}
-                </h4>
-                <div class="space-y-3 pl-3 border-l-2 border-slate-100 ml-0.5">
-                    ${depto.Equipe.map(membro => `
-                        <div class="group">
-                            <p class="text-slate-800 font-bold text-xs uppercase leading-tight group-hover:text-blue-600 transition-colors">
-                                ${membro.nome}
-                            </p>
-                            <p class="text-slate-400 text-[9px] uppercase font-medium mb-1">
-                                ${membro.Cargo}
-                            </p>
-                            <a href="https://wa.me/55${membro.contato.replace(/\D/g,'')}" target="_blank" class="text-blue-500 font-mono text-[10px] hover:underline flex items-center gap-1">
-                                <i class="fab fa-whatsapp text-green-500 text-xs"></i> 
-                                ${membro.contato}
-                            </a>
-                        </div>
-                    `).join('')}
-                </div>
-            </div>
-        `).join('<hr class="my-4 border-slate-50">');
+        // Função interna para renderizar
+        const renderSetores = (filtro = "") => {
+            const termo = filtro.toLowerCase();
+            
+            const html = setoresDataGlobal.map(depto => {
+                // Filtra a equipe dentro do departamento
+                const equipeFiltrada = depto.Equipe.filter(membro => 
+                    depto.nomedepartamento.toLowerCase().includes(termo) ||
+                    membro.nome.toLowerCase().includes(termo) ||
+                    membro.Cargo.toLowerCase().includes(termo)
+                );
+
+                if (equipeFiltrada.length === 0) return "";
+
+                return `
+                <div class="depto-group mb-6">
+                    <h4 class="text-blue-600 font-black text-[11px] tracking-widest uppercase mb-4 flex items-center gap-2">
+                        <span class="w-2 h-2 bg-blue-600 rounded-full"></span>
+                        ${depto.nomedepartamento}
+                    </h4>
+                    <div class="space-y-4 pl-4 border-l-2 border-slate-100 ml-1">
+                        ${equipeFiltrada.map(membro => `
+                            <div class="group">
+                                <p class="text-slate-800 font-bold text-sm uppercase leading-tight group-hover:text-blue-600 transition-colors">
+                                    ${membro.nome}
+                                </p>
+                                <p class="text-slate-500 text-[10px] uppercase font-semibold mb-1 tracking-tight">
+                                    ${membro.Cargo}
+                                </p>
+                                <a href="https://wa.me/55${membro.contato.replace(/\D/g,'')}" target="_blank" 
+                                   class="text-blue-600 font-mono text-[11px] hover:underline flex items-center gap-1.5 mt-1">
+                                    <i class="fab fa-whatsapp text-green-500 text-sm"></i> 
+                                    <strong>${membro.contato}</strong>
+                                </a>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>`;
+            }).join('<hr class="my-4 border-slate-50">');
+
+            container.innerHTML = html || "<p class='text-center text-slate-400 text-xs py-10'>Nenhum contato encontrado.</p>";
+        };
+
+        // Renderização inicial
+        renderSetores();
+
+        // Listener para a busca
+        searchInput.addEventListener("input", (e) => renderSetores(e.target.value));
 
     } catch (e) {
         console.error("Erro ao carregar setores:", e);
