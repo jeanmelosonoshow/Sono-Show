@@ -1,56 +1,83 @@
-const Firebird = require('node-firebird');
-const crypto = require('crypto');
+const crypto = require("node:crypto");
+const {
+  missingGatewayEnv,
+  queryFirebirdGateway,
+} = require("../lib/firebird-gateway");
+
+const AUTH_SQL = `
+  SELECT LOGIN
+  FROM FUNCIONARIO
+  WHERE LOGIN = ?
+    AND SENHAWEB = ?
+    AND STATUS = 'A'
+`;
 
 export default async function handler(req, res) {
-    // 1. Headers de CORS para o GitHub Pages
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
-    if (req.method === 'OPTIONS') return res.status(200).end();
-    if (req.method !== 'POST') return res.status(405).json({ message: 'Método não permitido' });
+  if (req.method === "OPTIONS") return res.status(200).end();
+  if (req.method !== "POST") {
+    return res.status(405).json({ message: "Método não permitido" });
+  }
 
-    const { usuario, senha } = req.body;
-
-    // 2. Transforma a senha digitada em MD5 (Maiúsculo)
-    const senhaHash = crypto.createHash('md5').update(senha).digest('hex').toLowerCase();
-
-    // 3. Configurações usando suas variáveis da Vercel
-    const options = {
-        host: process.env.DB_HOST_FB,
-        port: process.env.DB_PORT_FB,
-        database: process.env.DB_PATH_FB,
-        user: process.env.DB_USER_FB,
-        password: process.env.DB_PASSWORD_FB,
-        lowercase_keys: false,
-        pageSize: 4096 // Padrão Firebird
-    };
-
-    // 4. Conexão e Consulta
-    Firebird.attach(options, function(err, db) {
-        if (err) {
-            console.error("Erro de Conexão:", err.message);
-            return res.status(500).json({ autorizado: false, erro: "Falha ao conectar no servidor remoto." });
-        }
-
-        const sql = "SELECT LOGIN FROM FUNCIONARIO WHERE LOGIN = ? AND SENHAWEB = ? AND STATUS = 'A'";
-        
-        db.query(sql, [usuario, senhaHash], function(err, result) {
-            db.detach(); // Fecha a conexão imediatamente
-
-            if (err) {
-                console.error("Erro na Query:", err.message);
-                return res.status(500).json({ autorizado: false, erro: "Erro ao consultar banco de dados." });
-            }
-
-            if (result && result.length > 0) {
-                return res.status(200).json({ 
-                    autorizado: true, 
-                    nome: result[0].LOGIN 
-                });
-            } else {
-                return res.status(401).json({ autorizado: false, mensagem: "Usuário ou senha inválidos ou inativos." });
-            }
-        });
+  const usuario = typeof req.body?.usuario === "string" ? req.body.usuario.trim() : "";
+  const senha = typeof req.body?.senha === "string" ? req.body.senha : "";
+  if (!usuario || !senha) {
+    return res.status(400).json({
+      autorizado: false,
+      mensagem: "Informe usuário e senha.",
     });
+  }
+
+  const missingEnv = missingGatewayEnv();
+  if (missingEnv.length) {
+    console.error("Variáveis do Gateway ausentes:", missingEnv.join(", "));
+    return res.status(500).json({
+      autorizado: false,
+      erro: "A conexão com o ERP não está configurada.",
+    });
+  }
+
+  const senhaHash = crypto.createHash("md5").update(senha).digest("hex").toLowerCase();
+
+  try {
+    const rows = await queryFirebirdGateway(AUTH_SQL, [usuario, senhaHash], {
+      timeoutMs: 25000,
+    });
+
+    if (!rows.length) {
+      return res.status(401).json({
+        autorizado: false,
+        mensagem: "Usuário ou senha inválidos ou inativos.",
+      });
+    }
+
+    const row = rows[0];
+    const loginField = Object.keys(row).find((name) => name.toUpperCase() === "LOGIN");
+    return res.status(200).json({
+      autorizado: true,
+      nome: loginField ? row[loginField] : usuario,
+    });
+  } catch (error) {
+    const status = error?.status === 504
+      ? 504
+      : error?.status === 503 || error?.status === 429
+        ? 503
+        : 502;
+    console.error("Erro ao consultar autenticação pelo Gateway:", {
+      code: error?.code,
+      status,
+      gatewayStatus: error?.gatewayStatus,
+      message: error?.message,
+    });
+    if (status === 503) res.setHeader("Retry-After", "1");
+    return res.status(status).json({
+      autorizado: false,
+      erro: status === 504
+        ? "A consulta ao ERP excedeu o tempo limite."
+        : "Não foi possível consultar o ERP no momento.",
+    });
+  }
 }
